@@ -10,15 +10,11 @@ public record MultiplePopularCommentInfoDto(
         int likeCount,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        WriterInfoDto writerInfo,
         boolean isLike
 ) {
 
     public static MultiplePopularCommentInfoDto from(PopularCommentInfoDto dto) {
-        PronunciationInfoDto pronunciationInfo = new PronunciationInfoDto(
-                dto.pronunciation().getKorean(),
-                dto.pronunciation().getEnglish()
-        );
+        PronunciationInfoDto pronunciationInfo = new PronunciationInfoDto(dto.pronunciation().getEnglish());
 
         return new MultiplePopularCommentInfoDto(
                 dto.commentId(),
@@ -27,17 +23,13 @@ public record MultiplePopularCommentInfoDto(
                 dto.likeCount(),
                 dto.createdAt(),
                 dto.updatedAt(),
-                new WriterInfoDto(dto.writerId(), dto.writerNickname(), dto.writerProfileImage()),
                 dto.likeAccountId() != null
         );
-    }
-
-    public record WriterInfoDto(Long id, String nickname, String profileImage) {
     }
 
     public record WordInfoDto(Long id, String name, String categoryName, PronunciationInfoDto pronunciationInfo) {
     }
 
-    public record PronunciationInfoDto(String korean, String english) {
+    public record PronunciationInfoDto(String english) {
     }
 }

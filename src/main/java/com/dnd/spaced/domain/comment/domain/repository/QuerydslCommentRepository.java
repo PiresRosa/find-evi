@@ -7,6 +7,8 @@ import static com.dnd.spaced.domain.word.domain.QWord.word;
 
 import com.dnd.spaced.domain.comment.domain.Comment;
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByLikedConditionDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByWrittenConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
 import com.dnd.spaced.domain.comment.domain.repository.util.CommentSortConditionConverter;
@@ -69,7 +71,7 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .where(calculateFindAllBooleanExpression(dto), comment.wordId.eq(dto.wordId()))
                            .orderBy(
                                    CommentSortConditionConverter.convert(findOrder(dto.pageable()))
-                                                                 .toArray(OrderSpecifier[]::new)
+                                                                .toArray(OrderSpecifier[]::new)
                            )
                            .limit(dto.pageable().getPageSize())
                            .fetch();
@@ -81,9 +83,6 @@ public class QuerydslCommentRepository implements CommentRepository {
                                    Projections.constructor(
                                            PopularCommentInfoDto.class,
                                            comment.id,
-                                           comment.accountId,
-                                           account.nickname,
-                                           account.profileImage,
                                            word.id,
                                            word.name,
                                            word.category,
@@ -112,6 +111,46 @@ public class QuerydslCommentRepository implements CommentRepository {
         return commentCrudRepository.existsById(commentId);
     }
 
+    @Override
+    public List<Comment> findAllByLiked(FindCommentAllByLikedConditionDto dto) {
+        record CommentWithLikeDto(Long likeId, Comment comment) {
+
+        }
+
+        List<CommentWithLikeDto> result = queryFactory.select(
+                                                              Projections.constructor(
+                                                                      CommentWithLikeDto.class,
+                                                                      like.id,
+                                                                      comment
+                                                              )
+                                                      )
+                                                      .from(like)
+                                                      .join(comment).on(like.commentId.eq(comment.id))
+                                                      .where(
+                                                              account.id.eq(dto.accountId()),
+                                                              lastCommentIdFromLikeLt(dto.lastCommentId())
+                                                      )
+                                                      .orderBy(like.id.desc())
+                                                      .limit(dto.pageable().getPageSize())
+                                                      .fetch();
+
+        return result.stream()
+                     .map(CommentWithLikeDto::comment)
+                     .toList();
+    }
+
+    @Override
+    public List<Comment> findAllByWritten(FindCommentAllByWrittenConditionDto dto) {
+        return queryFactory.selectFrom(comment)
+                           .where(
+                                   comment.accountId.eq(dto.accountId()),
+                                   lastCommentIdFromCommentLt(dto.lastCommentId())
+                           )
+                           .orderBy(comment.id.desc())
+                           .limit(dto.pageable().getPageSize())
+                           .fetch();
+    }
+
     private BooleanExpression calculateFindAllBooleanExpression(CommentConditionDto dto) {
         Order order = findOrder(dto.pageable());
 
@@ -123,7 +162,7 @@ public class QuerydslCommentRepository implements CommentRepository {
             return null;
         }
         if (dto.lastLikeCount() == null) {
-            return ltLastCommentId(dto.lastCommentId());
+            return lastCommentIdFromCommentLt(dto.lastCommentId());
         }
 
         return calculatePaginationBooleanExpression(dto, order);
@@ -140,7 +179,7 @@ public class QuerydslCommentRepository implements CommentRepository {
     private BooleanExpression calculateLastCommentAfterFirstPaginationBooleanExpression(CommentConditionDto dto) {
         return comment.likeCount.lt(dto.lastLikeCount())
                                 .or(comment.likeCount.eq(dto.lastLikeCount())
-                                                     .and(ltLastCommentId(dto.lastCommentId()))
+                                                     .and(lastCommentIdFromCommentLt(dto.lastCommentId()))
                                 );
     }
 
@@ -149,13 +188,13 @@ public class QuerydslCommentRepository implements CommentRepository {
             Order order
     ) {
         if (order.isAscending()) {
-            return gtLastCommentId(dto.lastCommentId());
+            return lastCommentIdFromCommentGt(dto.lastCommentId());
         }
 
-        return ltLastCommentId(dto.lastCommentId());
+        return lastCommentIdFromCommentLt(dto.lastCommentId());
     }
 
-    private BooleanExpression ltLastCommentId(Long lastCommentId) {
+    private BooleanExpression lastCommentIdFromCommentLt(Long lastCommentId) {
         if (lastCommentId == null) {
             return null;
         }
@@ -163,12 +202,20 @@ public class QuerydslCommentRepository implements CommentRepository {
         return comment.id.lt(lastCommentId);
     }
 
-    private BooleanExpression gtLastCommentId(Long lastCommentId) {
+    private BooleanExpression lastCommentIdFromCommentGt(Long lastCommentId) {
         if (lastCommentId == null) {
             return null;
         }
 
         return comment.id.gt(lastCommentId);
+    }
+
+    private BooleanExpression lastCommentIdFromLikeLt(Long lastCommentId) {
+        if (lastCommentId == null) {
+            return null;
+        }
+
+        return like.commentId.lt(lastCommentId);
     }
 
     private Order findOrder(Pageable pageable) {

@@ -10,6 +10,8 @@ public record DetailWordInfoDto(
         String meaning,
         String category,
         int viewCount,
+        int commentCount,
+        int bookmarkCount,
         String example,
         boolean isMarked,
         LocalDateTime createdAt,
@@ -20,10 +22,12 @@ public record DetailWordInfoDto(
         return new DetailWordInfoDto(
                 dto.wordId(),
                 dto.name(),
-                new PronunciationInfoDto(dto.pronunciation().getKorean(), dto.pronunciation().getEnglish()),
+                new PronunciationInfoDto(dto.pronunciation().getEnglish()),
                 dto.meaning(),
                 dto.category().getName(),
                 dto.viewCount() + 1,
+                dto.commentCount(),
+                dto.bookmarkCount(),
                 dto.example(),
                 dto.bookmarkId() != null,
                 dto.createdAt(),
@@ -31,6 +35,6 @@ public record DetailWordInfoDto(
         );
     }
 
-    public record PronunciationInfoDto(String korean, String english) {
+    public record PronunciationInfoDto(String english) {
     }
 }

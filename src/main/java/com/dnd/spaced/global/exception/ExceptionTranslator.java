@@ -26,6 +26,11 @@ public enum ExceptionTranslator {
             ExceptionCode.INVALID_PATH_VARIABLE,
             "유효한 path variable 값을 입력해주세요."
     ),
+    REFRESH_TOKEN_NOT_FOUND_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.REFRESH_TOKEN_NOT_FOUND,
+            "리프레시 토큰을 입력해주세요."
+    ),
     INVALID_TOKEN_EXCEPTION(
             HttpStatus.UNAUTHORIZED,
             ExceptionCode.INVALID_TOKEN,
@@ -165,6 +170,36 @@ public enum ExceptionTranslator {
             HttpStatus.NOT_FOUND,
             ExceptionCode.REPORTED_COMMENT_NOT_FOUND,
             "신고 대상 댓글을 찾지 못했습니다."
+    ),
+    POPULAR_WORD_SCHEDULE_NOT_FOUND_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.POPULAR_WORD_SCHEDULE_NOT_FOUND,
+            "많이 찾아본 실무 용어와 관련된 서버 문제가 발생했습니다."
+    ),
+    INVALID_OPTION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_OPTION,
+            "유효한 선택지를 선택해 주세요."
+    ),
+    QUIZ_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.QUIZ_NOT_FOUND,
+            "해당 퀴즈를 찾을 수 없습니다."
+    ),
+    NOT_ENOUGH_QUESTIONS_FOR_CATEGORY(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.NOT_ENOUGH_QUESTIONS_FOR_CATEGORY,
+            "해당 카테고리로 가져올 수 있는 질문이 4개 이하 입니다."
+    ),
+    ACCOUNT_UNAUTHORIZED_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.ACCOUNT_UNAUTHORIZED,
+            "로그인이 필요한 기능입니다."
+    ),
+    REPORT_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.REPORT_NOT_FOUND,
+            "해당 신고를 찾을 수 없습니다."
     )
     ;
 

@@ -46,12 +46,13 @@ public class Word extends BaseTimeEntity {
 
     private int viewCount = 0;
 
+    private int bookmarkCount = 0;
+
     private int commentCount = 0;
 
     @Builder
     private Word(
             String name,
-            String koreanPronunciation,
             String englishPronunciation,
             String meaning,
             String categoryName,
@@ -61,7 +62,6 @@ public class Word extends BaseTimeEntity {
 
         this.name = name;
         this.pronunciation = Pronunciation.builder()
-                                          .korean(koreanPronunciation)
                                           .english(englishPronunciation)
                                           .build();
         this.meaning = meaning;
@@ -103,5 +103,15 @@ public class Word extends BaseTimeEntity {
         int length = example.length();
 
         return MIN_EXAMPLE_LENGTH > length || MAX_EXAMPLE_LENGTH < length;
+    }
+
+    public void updateDetails(String name, String englishPronunciation, String meaning, String categoryName, String example) {
+        this.name = name;
+        this.pronunciation = Pronunciation.builder()
+                .english(englishPronunciation)
+                .build();
+        this.meaning = meaning;
+        this.category = Category.findBy(categoryName);
+        this.example = example;
     }
 }

@@ -9,4 +9,9 @@ public record WordSearchRequest(
         String category,
         Pageable pageable
 ) {
+    public WordSearchRequest {
+        if (category == null || category.isBlank()) {
+            category = "전체";
+        }
+    }
 }

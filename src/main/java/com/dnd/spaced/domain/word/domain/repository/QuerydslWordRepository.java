@@ -7,11 +7,11 @@ import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
+import com.dnd.spaced.domain.word.domain.repository.dto.request.SearchWordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedWordSortConditionException;
-import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -104,16 +104,16 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<Word> searchWords(WordSearchRequest request, Long accountId) {
+    public List<Word> searchWords(SearchWordConditionDto searchWordConditionDto) {
         return queryFactory.selectFrom(word)
                 .where(
-                        nameContains(request.name()),
-                        pronunciationContains(request.pronunciation()),
-                        categoryEq(request.category()),
-                        lastWordNameLt(request.lastWordName())
+                        nameContains(searchWordConditionDto.name()),
+                        pronunciationContains(searchWordConditionDto.pronunciation()),
+                        categoryEq(searchWordConditionDto.category()),
+                        lastWordNameLt(searchWordConditionDto.lastWordName())
                 )
                 .orderBy(word.name.asc())
-                .limit(request.pageable().getPageSize())
+                .limit(searchWordConditionDto.pageable().getPageSize())
                 .fetch();
     }
 

@@ -6,6 +6,7 @@ import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.CommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.word.SearchWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +31,7 @@ public class AppConfig implements WebMvcConfigurer {
     private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
     private final WordSortConditionArgumentResolver wordSortConditionArgumentResolver;
     private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
+    private final SearchWordSortConditionArgumentResolver searchWordSortConditionArgumentResolver;
     private final PopularCommentSortConditionArgumentResolver popularCommentSortConditionArgumentResolver;
 
     @Bean
@@ -45,6 +47,7 @@ public class AppConfig implements WebMvcConfigurer {
         resolvers.add(authAccountInfoArgumentResolver);
         resolvers.add(wordSortConditionArgumentResolver);
         resolvers.add(commentSortConditionArgumentResolver);
+        resolvers.add(searchWordSortConditionArgumentResolver);
         resolvers.add(popularCommentSortConditionArgumentResolver);
     }
 

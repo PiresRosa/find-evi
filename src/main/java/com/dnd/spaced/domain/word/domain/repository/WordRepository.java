@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public interface WordRepository {
 
+    void save(Word word);
+
+    void delete(Word word);
+
     Optional<Word> findBy(Long wordId);
 
     Optional<WordInfoWithBookmarkDto> findWithBookmarkBy(Long wordId, Long accountId);

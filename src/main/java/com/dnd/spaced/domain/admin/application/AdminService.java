@@ -12,6 +12,7 @@ import com.dnd.spaced.domain.report.domain.Report;
 import com.dnd.spaced.domain.report.domain.repository.QuerydslReportRepository;
 import com.dnd.spaced.domain.report.domain.repository.ReportRepository;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
+import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import jakarta.transaction.Transactional;
@@ -45,9 +46,18 @@ public class AdminService {
     }
 
     @Transactional
-    public void updateWord(Long wordId, AdminWordRequestDto wordRequestDto) {
-        Word word = AdminServiceMapper.fromUpdateRequest(wordRequestDto);
-        wordRepository.save(word);
+    public void updateWord(Long wordId, AdminWordRequestDto dto) {
+        Word existingWord = findWordById(wordId);
+
+        existingWord.updateDetails(
+                dto.name(),
+                dto.pronunciation().getEnglish(),
+                dto.meaning(),
+                Category.findBy(dto.category()).getName(),
+                dto.example()
+        );
+
+        wordRepository.save(existingWord);
     }
 
     @Transactional

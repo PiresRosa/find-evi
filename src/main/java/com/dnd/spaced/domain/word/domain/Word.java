@@ -104,4 +104,14 @@ public class Word extends BaseTimeEntity {
 
         return MIN_EXAMPLE_LENGTH > length || MAX_EXAMPLE_LENGTH < length;
     }
+
+    public void updateDetails(String name, String englishPronunciation, String meaning, String categoryName, String example) {
+        this.name = name;
+        this.pronunciation = Pronunciation.builder()
+                .english(englishPronunciation)
+                .build();
+        this.meaning = meaning;
+        this.category = Category.findBy(categoryName);
+        this.example = example;
+    }
 }

@@ -3,6 +3,8 @@ package com.dnd.spaced.domain.word.presentation.dto.response;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 public record DetailWordInfoResponse(
 
         @Schema(description = "용어 ID")
@@ -33,7 +35,14 @@ public record DetailWordInfoResponse(
         int bookmarkCount,
 
         @Schema(description = "북마크 여부")
-        boolean isMarked
+        boolean isMarked,
+
+        @Schema(description = "용어 등록일")
+        LocalDateTime createdAt,
+
+        @Schema(description = "출처")
+        String resource
+
 ) {
 
     private record PronunciationInfoResponse(@Schema(description = "용어 영어 발음 기호") String english) {
@@ -50,7 +59,9 @@ public record DetailWordInfoResponse(
                 dto.viewCount(),
                 dto.commentCount(),
                 dto.bookmarkCount(),
-                dto.isMarked()
+                dto.isMarked(),
+                dto.createdAt(),
+                dto.resource()
         );
     }
 }

@@ -16,95 +16,101 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class SkillService {
+
     private final SkillRepository skillRepository;
 
+    /**
+     * 스킬 저장 로직.
+     * 기존에 스킬 정보가 있으면 업데이트하고, 없으면 새로 저장.
+     * @param info 유저 정보
+     * @param skillRequest 카테고리와 맞춘 문제 개수
+     */
     public void addSkill(AuthAccountInfo info, SkillRequest skillRequest) {
-        if (skillRepository.existsByCategoryAndEmail(skillRequest.category(), info.email())) {
-            // 이미 해당 카테고리의 스킬 정보가 있는 경우 업데이트
-            Skill skill = skillRepository.findByCategoryAndEmail(skillRequest.category(), info.email());
-            skill.addCorrectCount(skillRequest.correctCount());
-            skillRepository.save(skill);
-
+        Skill skill = skillRepository.findByCategoryAndEmail(skillRequest.category(), info.email());
+        if (skill != null) {
+            skill.updateSkill(skillRequest.correctCount());
         } else {
-            // 새로운 스킬 정보 저장
-            skillRepository.save(Skill.builder()
+            skill = Skill.builder()
                     .email(info.email())
                     .correctCount(skillRequest.correctCount())
                     .category(skillRequest.category())
-                    .totalCount(5L) // 기본 총 문제 수
-                    .build());
+                    .totalCount(5L)
+                    .build();
         }
+        // 저장된 스킬 정보 DB에 저장
+        skillRepository.save(skill);
     }
 
-    public Map<Category, SkillTotalScoreResponse> getSkillTotalScore(AuthAccountInfo info){
-        List<Skill> skill = skillRepository.findByEmail(info.email());
+    /**
+     * 유저의 카테고리별 스킬 점수를 계산하고 반환.
+     * @param info 유저 정보
+     * @return 카테고리별 스킬 점수 응답
+     */
+    public Map<Category, SkillTotalScoreResponse> getSkillTotalScore(AuthAccountInfo info) {
+        List<Skill> skills = skillRepository.findByEmail(info.email());
         Map<Category, SkillTotalScoreResponse> response = new HashMap<>();
 
-        Long totalScoreResult = 0L;
-        Long score = 0L;
-
-        // 카테고리별 스킬 점수 계산
-        for (Skill sl : skill) {
-            Long totalCount = sl.getTotalCount() / sl.getCorrectCount() * 100;
-            score+=sl.getCorrectCount();
-            response.put(sl.getCategory(), SkillTotalScoreResponse.builder()
-                    .totalScore(totalCount)
-                    .currentCount(sl.getCorrectCount())
-                    .totalCount(sl.getTotalCount())
-                    .build());
-
-            totalScoreResult += totalCount;
-
+        // 각 카테고리별로 점수 계산
+        for (Skill skill : skills) {
+            Long totalCount = calculateTotalScore(skill);  // 스킬의 정답 비율 계산
+            response.put(skill.getCategory(), createSkillTotalScoreResponse(skill, totalCount));  // 결과 맵에 추가
         }
 
-        Long peopleTotalCount = 0L;
-
-        List<Skill> peoplies = skillRepository.findAll();
-
-        for (Skill sl : peoplies){
-            peopleTotalCount+=sl.getCorrectCount();
-        }
-
-        Long res = peopleTotalCount/peoplies.size()/score; // 전체 인원 정답수/전체 인원/내가 맞춘 답
-
-        Long result =totalScoreResult/3; // 전체 %
-
-        return response;
+        return response;  // 최종 응답 반환
     }
 
+    /**
+     * 유저의 총점에 따라 상위 몇 퍼센트인지 계산.
+     * @param info 유저 정보
+     * @return 유저의 상위 퍼센트
+     */
     public Long getTotalMyScore(AuthAccountInfo info) {
-        List<Skill> skill = skillRepository.findByEmail(info.email());
-        Map<Category, SkillTotalScoreResponse> response = new HashMap<>();
+        List<Skill> skills = skillRepository.findByEmail(info.email());
 
-        Long totalScoreResult = 0L;
-        Long score = 0L;
+        // 유저의 총 스킬 점수 합계 계산
+        Long userTotalScore = skills.stream()
+                .mapToLong(this::calculateTotalScore)  // 스킬 점수를 합산
+                .sum();
 
-        // 자신의 스킬 정보를 바탕으로 총점 계산
-        for (Skill sl : skill) {
-            Long totalCount = sl.getCorrectCount() == 0 ? 0 : sl.getTotalCount() / sl.getCorrectCount() * 100;
-            score += sl.getCorrectCount();
-            response.put(sl.getCategory(), SkillTotalScoreResponse.builder()
-                    .totalScore(totalCount)
-                    .currentCount(sl.getCorrectCount())
-                    .totalCount(sl.getTotalCount())
-                    .build());
+        // 전체 평균 점수 계산
+        Long averagePeopleScore = calculateAveragePeopleScore();
 
-            totalScoreResult += totalCount;
-        }
+        // 상위 퍼센트 계산 (평균이 0이면 0 반환)
+        return (averagePeopleScore == 0) ? 0 : (userTotalScore * 100) / averagePeopleScore;
+    }
 
-        // 전체 유저의 총점 계산
-        List<Skill> allSkills = skillRepository.findAll();
-        Long totalPeopleScore = 0L;
-        for (Skill sl : allSkills) {
-            totalPeopleScore += sl.getCorrectCount();
-        }
+    /**
+     * 개별 스킬의 정답 비율을 계산하는 메서드.
+     * @param skill 스킬 정보
+     * @return 정답 비율 (총점)
+     */
+    private Long calculateTotalScore(Skill skill) {
+        return (skill.getCorrectCount() == 0) ? 0 : (skill.getTotalCount() * 100) / skill.getCorrectCount();
+    }
 
-        // 평균을 통해 전체 유저의 평균 점수 계산
-        Long averagePeopleScore = totalPeopleScore / allSkills.size();
+    /**
+     * 스킬 응답을 생성하는 메서드.
+     * @param skill 스킬 정보
+     * @param totalCount 계산된 총점
+     * @return 카테고리별 스킬 응답 DTO
+     */
+    private SkillTotalScoreResponse createSkillTotalScoreResponse(Skill skill, Long totalCount) {
+        return SkillTotalScoreResponse.builder()
+                .totalScore(totalCount)           // 계산된 총점
+                .currentCount(skill.getCorrectCount())  // 맞춘 문제 개수
+                .totalCount(skill.getTotalCount())      // 총 문제 개수
+                .build();
+    }
 
-        // 자신의 점수가 상위 몇 퍼센트인지 계산
-        Long topPercent = (score * 100) / averagePeopleScore;
-
-        return topPercent;
+    /**
+     * 전체 유저의 평균 스킬 점수를 계산하는 메서드.
+     * @return 평균 스킬 점수
+     */
+    private Long calculateAveragePeopleScore() {
+        List<Skill> allSkills = skillRepository.findAll();  // 모든 유저의 스킬 정보 조회
+        Long totalPeopleScore = allSkills.stream()
+                .mapToLong(Skill::getCorrectCount)  // 전체 유저의 맞춘 문제 수 합산
+                .sum();
+        return (allSkills.size() == 0) ? 0 : totalPeopleScore / allSkills.size();  // 평균 점수 계산
     }
 }

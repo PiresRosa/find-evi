@@ -3,6 +3,7 @@ package com.dnd.spaced.domain.admin.presentation;
 import com.dnd.spaced.domain.admin.application.AdminService;
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
 import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
+import com.dnd.spaced.domain.admin.presentation.dto.AdminControllerMapper;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
 import com.dnd.spaced.domain.admin.presentation.dto.response.ReportListResponse;
 import jakarta.validation.Valid;
@@ -66,9 +67,7 @@ public class AdminController {
     public ResponseEntity<ReportListResponse> findReports(@RequestParam(required = false) Long lastReportId) {
         List<ReportInfoDto> reports = adminService.findReports(lastReportId);
 
-        Long newLastReportId = reports.isEmpty() ? lastReportId : reports.get(reports.size() - 1).id();
-
-        ReportListResponse response = new ReportListResponse(reports, newLastReportId);
+        ReportListResponse response = AdminControllerMapper.toReportListResponse(reports, lastReportId);
         return ResponseEntity.ok(response);
     }
 }

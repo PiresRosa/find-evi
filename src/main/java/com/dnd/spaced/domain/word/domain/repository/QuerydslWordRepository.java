@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
 public class QuerydslWordRepository implements WordRepository {
 
     private static final String SORT_CONDITION = "name";
-    private static final String IGNORE_CATEGORY = "전체";
+    private static final String IGNORE_CATEGORY = "전체 실무";
 
     private final JPAQueryFactory queryFactory;
     private final WordCrudRepository wordCrudRepository;

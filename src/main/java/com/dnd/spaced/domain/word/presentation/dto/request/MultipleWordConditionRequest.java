@@ -7,7 +7,7 @@ public record MultipleWordConditionRequest(
 
         @Schema(
                 description = "용어 카테고리",
-                allowableValues = {"전체", "디자인", "개발", "비즈니스"},
+                allowableValues = {"전체 실무", "디자인", "개발", "비즈니스"},
                 requiredMode = RequiredMode.NOT_REQUIRED
         )
         String category,

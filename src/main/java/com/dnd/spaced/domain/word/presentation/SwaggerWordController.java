@@ -29,7 +29,7 @@ public interface SwaggerWordController {
     @ExcludeCommonHeaderSpec
     @Operation(summary = "용어 사전 목록 조회", description = "용어 사전 목록 조회 API")
     @Parameters({
-            @Parameter(name = "category", description = "용어 카테고리", schema = @Schema(defaultValue = "전체", allowableValues = {"전체", "비즈니스", "개발", "디자인"}, requiredMode = RequiredMode.NOT_REQUIRED)),
+            @Parameter(name = "category", description = "용어 카테고리", schema = @Schema(defaultValue = "전체 실무", allowableValues = {"전체 실무", "비즈니스", "개발", "디자인"}, requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "lastWordName", description = "마지막으로 조회한 용어 이름", schema = @Schema(requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "size", description = "한 페이지에 조회 가능한 용어 개수", schema = @Schema(defaultValue = "15", requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "sortBy", description = "정렬 기준(사전순 고정)", schema = @Schema(defaultValue = "name", allowableValues = "name", requiredMode = RequiredMode.NOT_REQUIRED))
@@ -71,7 +71,7 @@ public interface SwaggerWordController {
     @Parameters({
             @Parameter(name = "name", description = "검색할 용어 이름", schema = @Schema(requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "pronunciation", description = "검색할 용어 발음", schema = @Schema(requiredMode = RequiredMode.NOT_REQUIRED)),
-            @Parameter(name = "category", description = "검색할 용어 카테고리", schema = @Schema(defaultValue = "전체", allowableValues = {"전체", "비즈니스", "개발", "디자인"}, requiredMode = RequiredMode.NOT_REQUIRED)),
+            @Parameter(name = "category", description = "검색할 용어 카테고리", schema = @Schema(defaultValue = "전체 실무", allowableValues = {"전체 실무", "비즈니스", "개발", "디자인"}, requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "lastWordName", description = "마지막으로 조회한 용어 이름", schema = @Schema(requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "size", description = "한 페이지에 조회 가능한 용어 개수", schema = @Schema(defaultValue = "15", requiredMode = RequiredMode.NOT_REQUIRED)),
             @Parameter(name = "sortBy", description = "정렬 기준(사전순 고정)", schema = @Schema(defaultValue = "name", allowableValues = "name", requiredMode = RequiredMode.NOT_REQUIRED))

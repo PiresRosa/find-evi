@@ -15,8 +15,8 @@ public enum Category {
         this.name = name;
     }
 
-    public static com.dnd.spaced.domain.quiz.domain.Category findBy(String name) {
-        return Arrays.stream(com.dnd.spaced.domain.quiz.domain.Category.values())
+    public static Category findBy(String name) {
+        return Arrays.stream(Category.values())
                 .filter(category -> category.name.equals(name))
                 .findAny()
                 .orElseThrow(InvalidCategoryException::new);

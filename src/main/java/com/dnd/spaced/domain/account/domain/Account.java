@@ -44,6 +44,9 @@ public class Account extends CreateTimeEntity {
     @Embedded
     CareerInfo careerInfo;
 
+    @Embedded
+    QuizInfo quizInfo;
+
     @Builder
     private Account(String email, String nickname, String profileImage, String roleName) {
         validateContent(email, nickname, profileImage);
@@ -52,10 +55,27 @@ public class Account extends CreateTimeEntity {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.role = Role.findBy(roleName);
+        this.quizInfo = new QuizInfo();
     }
 
     public void changeCareerInfo(String jobGroup, String company, String experience) {
         this.careerInfo = CareerInfo.builder().jobGroup(jobGroup).company(company).experience(experience).build();
+    }
+
+    public void updateBusinessTryCount() {
+        this.quizInfo.updateBusinessTryCount();
+    }
+
+    public void updateDevelopTryCount() {
+        this.quizInfo.updateDevelopTryCount();
+    }
+
+    public void updateDesignTryCount() {
+        this.quizInfo.updateDesignTryCount();
+    }
+
+    public void updateTotalCategoryTryCount() {
+        this.quizInfo.updateTotalCategoryTryCount();
     }
 
     public void withdrawal() {

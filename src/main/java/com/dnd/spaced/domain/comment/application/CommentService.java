@@ -6,9 +6,13 @@ import com.dnd.spaced.domain.comment.application.dto.CommentServiceMapper;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.CreateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByLikedDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByWrittenDto;
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.response.LikedCommentDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.response.WrittenCommentDto;
 import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.CommentWordNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.ForbiddenDeleteCommentException;
@@ -125,6 +129,32 @@ public class CommentService {
         List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
 
         return CommentServiceMapper.fromPopularComment(result);
+    }
+
+    public List<LikedCommentDto> findAllByLiked(ReadCommentAllByLikedDto dto) {
+        Account account = findAccount(dto.email());
+        List<Comment> result = commentRepository.findAllByLiked(
+                CommentServiceMapper.ofLiked(
+                        account.getId(),
+                        dto.lastCommentId(),
+                        dto.pageable()
+                )
+        );
+
+        return CommentServiceMapper.ofLiked(result, account);
+    }
+
+    public List<WrittenCommentDto> findAllByWritten(ReadCommentAllByWrittenDto dto) {
+        Account account = findAccount(dto.email());
+        List<Comment> result = commentRepository.findAllByWritten(
+                CommentServiceMapper.ofWritten(
+                        account.getId(),
+                        dto.lastCommentId(),
+                        dto.pageable()
+                )
+        );
+
+        return CommentServiceMapper.ofWritten(result, account);
     }
 
     private Long findAccountId(String email) {

@@ -190,6 +190,11 @@ public enum ExceptionTranslator {
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.NOT_ENOUGH_QUESTIONS_FOR_CATEGORY,
             "해당 카테고리로 가져올 수 있는 질문이 4개 이하 입니다."
+    ),
+    ACCOUNT_UNAUTHORIZED_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.ACCOUNT_UNAUTHORIZED,
+            "로그인이 필요한 기능입니다."
     )
     ;
 

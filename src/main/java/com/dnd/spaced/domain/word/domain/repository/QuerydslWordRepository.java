@@ -55,6 +55,8 @@ public class QuerydslWordRepository implements WordRepository {
                                 word.category,
                                 word.example,
                                 word.viewCount,
+                                word.commentCount,
+                                word.bookmarkCount,
                                 bookmark.id,
                                 word.createdAt,
                                 word.updatedAt
@@ -101,6 +103,14 @@ public class QuerydslWordRepository implements WordRepository {
                 .set(word.viewCount, word.viewCount.add(1))
                 .where(word.id.eq(wordId))
                 .execute();
+    }
+
+    @Override
+    public void updateBookmarkCount(Long wordId, int count) {
+        queryFactory.update(word)
+                    .set(word.bookmarkCount, word.bookmarkCount.add(count))
+                    .where(word.id.eq(wordId))
+                    .execute();
     }
 
     @Override

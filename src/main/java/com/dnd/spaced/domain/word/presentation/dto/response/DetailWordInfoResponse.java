@@ -11,6 +11,9 @@ public record DetailWordInfoResponse(
         @Schema(description = "용어 이름")
         String name,
 
+        @Schema(description = "용어 예문")
+        String example,
+
         @Schema(description = "용어 발음 정보")
         PronunciationInfoResponse pronunciationInfo,
 
@@ -23,6 +26,12 @@ public record DetailWordInfoResponse(
         @Schema(description = "조회수")
         int viewCount,
 
+        @Schema(description = "댓글 개수")
+        int commentCount,
+
+        @Schema(description = "북마크 개수")
+        int bookmarkCount,
+
         @Schema(description = "북마크 여부")
         boolean isMarked
 ) {
@@ -34,10 +43,13 @@ public record DetailWordInfoResponse(
         return new DetailWordInfoResponse(
                 dto.id(),
                 dto.name(),
+                dto.example(),
                 new PronunciationInfoResponse(dto.pronunciationInfo().english()),
                 dto.meaning(),
                 dto.category(),
                 dto.viewCount(),
+                dto.commentCount(),
+                dto.bookmarkCount(),
                 dto.isMarked()
         );
     }

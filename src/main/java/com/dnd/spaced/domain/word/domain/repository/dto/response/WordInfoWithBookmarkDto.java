@@ -12,9 +12,10 @@ public record WordInfoWithBookmarkDto(
         Category category,
         String example,
         int viewCount,
+        int commentCount,
+        int bookmarkCount,
         Long bookmarkId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-
 }

@@ -7,7 +7,7 @@ import com.dnd.spaced.domain.word.application.dto.request.SearchWordConditionInf
 import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
-import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.ListWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordPopularViewCountEvent;
@@ -42,7 +42,7 @@ public class WordService {
     private final PopularWordRepository popularWordRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
+    public List<ListWordInfoDto> findAllBy(WordConditionInfoDto dto) {
         WordConditionDto wordConditionDto = WordRepositoryMapper.to(
                 dto.categoryName(),
                 dto.lastWordName(),

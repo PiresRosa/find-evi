@@ -1,8 +1,8 @@
-package com.dnd.spaced.domain.word.domain.repository;
+package com.dnd.spaced.domain.bookmark.domain.repository;
 
-import static com.dnd.spaced.domain.word.domain.QBookmark.bookmark;
+import static com.dnd.spaced.domain.bookmark.domain.QBookmark.bookmark;
 
-import com.dnd.spaced.domain.word.domain.Bookmark;
+import com.dnd.spaced.domain.bookmark.domain.Bookmark;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

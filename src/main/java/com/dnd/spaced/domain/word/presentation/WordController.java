@@ -12,17 +12,17 @@ import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoRespon
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
-import com.dnd.spaced.global.controller.ResponseEntityConst;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import com.dnd.spaced.global.resolver.word.WordSortCondition;
-
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/words")
@@ -57,16 +57,6 @@ public class WordController {
         DetailWordInfoDto result = wordService.findBy(accountInfo.email(), id);
 
         return ResponseEntity.ok(WordControllerMapper.to(result));
-    }
-
-    @PostMapping("/{id}/bookmark")
-    public ResponseEntity<Void> processBookmark(
-            @AuthAccount AuthAccountInfo accountInfo,
-            @PathVariable Long id
-    ) {
-        wordService.processBookmark(accountInfo.email(), id);
-
-        return ResponseEntityConst.NO_CONTENT;
     }
 
     @GetMapping("/candidates")

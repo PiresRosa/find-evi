@@ -2,28 +2,23 @@ package com.dnd.spaced.domain.word.application;
 
 import com.dnd.spaced.domain.account.domain.Account;
 import com.dnd.spaced.domain.account.domain.repository.AccountRepository;
+import com.dnd.spaced.domain.bookmark.domain.repository.BookmarkRepository;
 import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordInfoEvent;
-import com.dnd.spaced.domain.word.application.exception.ForbiddenBookmarkException;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
-import com.dnd.spaced.domain.word.domain.Bookmark;
-import com.dnd.spaced.domain.word.domain.Word;
-import com.dnd.spaced.domain.word.domain.repository.BookmarkRepository;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-
-import java.util.List;
-
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -60,17 +55,6 @@ public class WordService {
         eventPublisher.publishEvent(new FoundWordInfoEvent(wordId));
 
         return WordServiceMapper.to(result);
-    }
-
-    public void processBookmark(String email, Long wordId) {
-        Account account = accountRepository.findBy(email).orElseThrow(ForbiddenBookmarkException::new);
-        Word word = wordRepository.findBy(wordId).orElseThrow(WordNotFoundException::new);
-
-        bookmarkRepository.findBy(account.getId(), word.getId()).ifPresentOrElse(bookmarkRepository::delete, () -> {
-            Bookmark bookmark = Bookmark.builder().accountId(account.getId()).wordId(word.getId()).build();
-
-            bookmarkRepository.save(bookmark);
-        });
     }
 
     public InputWordCandidateDto findCandidateAllBy(String target) {

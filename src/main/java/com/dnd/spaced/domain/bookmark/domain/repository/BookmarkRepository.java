@@ -1,6 +1,6 @@
-package com.dnd.spaced.domain.word.domain.repository;
+package com.dnd.spaced.domain.bookmark.domain.repository;
 
-import com.dnd.spaced.domain.word.domain.Bookmark;
+import com.dnd.spaced.domain.bookmark.domain.Bookmark;
 import java.util.Optional;
 
 public interface BookmarkRepository {

@@ -1,11 +1,10 @@
-package com.dnd.spaced.domain.word.domain;
+package com.dnd.spaced.domain.bookmark.domain;
 
 import com.dnd.spaced.global.entity.CreateTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,10 +23,8 @@ public class Bookmark extends CreateTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "account_id")
     private Long accountId;
 
-    @JoinColumn(name = "word_id")
     private Long wordId;
 
     @Builder

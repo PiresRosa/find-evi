@@ -64,7 +64,7 @@ public class QuerydslWordRepository implements WordRepository {
                                 word.pronunciation,
                                 word.meaning,
                                 word.category,
-                                word.example,
+                                word.examples,
                                 word.viewCount,
                                 word.commentCount,
                                 word.bookmarkCount,

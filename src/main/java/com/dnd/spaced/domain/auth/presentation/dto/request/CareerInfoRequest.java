@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 public record CareerInfoRequest(
-        @Schema(description = "직군", allowableValues = {"개발자", "디자이너"})
+        @Schema(description = "직군", allowableValues = {"개발자", "디자이너", "기타"})
         @NotBlank String jobGroup,
 
         @Schema(description = "회사", allowableValues = {"비공개", "대기업", "중견기업", "중소기업", "스타트업", "외국계", "취준생/인턴"})

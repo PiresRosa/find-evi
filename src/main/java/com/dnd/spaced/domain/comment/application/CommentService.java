@@ -26,6 +26,7 @@ import com.dnd.spaced.domain.comment.domain.repository.dto.CommentRepositoryMapp
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentWithoutIsLikeDto;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import java.util.List;
@@ -125,10 +126,16 @@ public class CommentService {
     }
 
     public List<MultiplePopularCommentInfoDto> findPopularAllBy(Pageable pageable, String email) {
-        Long accountId = findAccountId(email);
-        List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
+        if (email != null) {
+            Long accountId = findAccountId(email);
+            List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
 
-        return CommentServiceMapper.fromPopularComment(result);
+            return CommentServiceMapper.fromPopularComment(result);
+        } else {
+            List<PopularCommentWithoutIsLikeDto> result = commentRepository.findPopularAll(pageable);
+
+            return CommentServiceMapper.fromPopularCommentWithOutIsLike(result);
+        }
     }
 
     public List<LikedCommentDto> findAllByLiked(ReadCommentAllByLikedDto dto) {

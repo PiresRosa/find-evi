@@ -57,7 +57,6 @@ public class BookmarkService {
         wordRepository.updateBookmarkCount(bookmark.getWordId(), DELETE_BOOKMARK_COUNT);
     }
 
-
     public List<BookmarkWordInfoDto> findAllBy(BookmarkConditionInfoDto dto) {
         Account account = findAccount(dto.email());
         BookmarkConditionDto bookmarkConditionDto = BookmarkRepositoryMapper.of(

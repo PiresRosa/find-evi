@@ -24,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookmarkService {
 
+    private static final int ADD_BOOKMARK_COUNT = 1;
+    private static final int DELETE_BOOKMARK_COUNT = -1;
+
     private final WordRepository wordRepository;
     private final AccountRepository accountRepository;
     private final BookmarkRepository bookmarkRepository;
@@ -32,11 +35,26 @@ public class BookmarkService {
         Account account = findAccount(email);
         Word word = wordRepository.findBy(wordId).orElseThrow(WordNotFoundException::new);
 
-        bookmarkRepository.findBy(account.getId(), word.getId()).ifPresentOrElse(bookmarkRepository::delete, () -> {
-            Bookmark bookmark = Bookmark.builder().accountId(account.getId()).wordId(word.getId()).build();
+        bookmarkRepository.findBy(account.getId(), word.getId())
+                          .ifPresentOrElse(
+                                  this::processDeleteBookmark,
+                                  () -> processAddBookmark(account.getId(), wordId)
+                          );
+    }
 
-            bookmarkRepository.save(bookmark);
-        });
+    private void processAddBookmark(Long accountId, Long wordId) {
+        Bookmark bookmark = Bookmark.builder()
+                                    .accountId(accountId)
+                                    .wordId(wordId)
+                                    .build();
+
+        bookmarkRepository.save(bookmark);
+        wordRepository.updateBookmarkCount(bookmark.getWordId(), ADD_BOOKMARK_COUNT);
+    }
+
+    private void processDeleteBookmark(Bookmark bookmark) {
+        bookmarkRepository.delete(bookmark);
+        wordRepository.updateBookmarkCount(bookmark.getWordId(), DELETE_BOOKMARK_COUNT);
     }
 
     public List<BookmarkWordInfoDto> findAllBy(BookmarkConditionInfoDto dto) {

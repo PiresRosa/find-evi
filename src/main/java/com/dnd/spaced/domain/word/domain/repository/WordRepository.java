@@ -20,5 +20,7 @@ public interface WordRepository {
 
     void updateViewCount(Long wordId);
 
+    void updateBookmarkCount(Long wordId, int count);
+
     List<Word> searchWords(SearchWordConditionDto searchWordConditionDto);
 }

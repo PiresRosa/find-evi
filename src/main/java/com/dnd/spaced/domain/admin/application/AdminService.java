@@ -32,7 +32,7 @@ public class AdminService {
     @Transactional
     public void deleteWord(Long wordId) {
         Word word = wordRepository.findBy(wordId)
-                .orElseThrow(() -> new WordNotFoundException());
+                .orElseThrow(WordNotFoundException::new);
         wordRepository.delete(word);
     }
 
@@ -51,7 +51,7 @@ public class AdminService {
 
     public AdminWordResponse getWord(Long wordId) {
         Word word = wordRepository.findBy(wordId)
-                .orElseThrow(() -> new WordNotFoundException());
+                .orElseThrow(WordNotFoundException::new);
         return new AdminWordResponse(
                 word.getId(),
                 word.getName(),

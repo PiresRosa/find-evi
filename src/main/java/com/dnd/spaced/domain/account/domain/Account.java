@@ -4,6 +4,7 @@ import com.dnd.spaced.domain.account.domain.exception.InvalidEmailException;
 import com.dnd.spaced.domain.account.domain.exception.InvalidNicknameException;
 import com.dnd.spaced.domain.account.domain.exception.InvalidProfileImageException;
 import com.dnd.spaced.global.entity.CreateTimeEntity;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,10 +41,8 @@ public class Account extends CreateTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    private JobGroup jobGroup;
-
-    private String company;
+    @Embedded
+    CareerInfo careerInfo;
 
     @Builder
     private Account(String email, String nickname, String profileImage, String roleName) {
@@ -55,9 +54,8 @@ public class Account extends CreateTimeEntity {
         this.role = Role.findBy(roleName);
     }
 
-    public void changeProfile(String jobGroupName, String company) {
-        this.jobGroup = JobGroup.find(jobGroupName);
-        this.company = company;
+    public void changeCareerInfo(String jobGroup, String company, String experience) {
+        this.careerInfo = CareerInfo.builder().jobGroup(jobGroup).company(company).experience(experience).build();
     }
 
     public void withdrawal() {

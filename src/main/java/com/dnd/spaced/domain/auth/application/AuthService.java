@@ -27,11 +27,10 @@ public class AuthService {
     private final AccountRepository accountRepository;
 
     @Transactional
-    public void initProfile(String email, String jobGroupName, String company) {
-        Account account = accountRepository.findBy(email)
-                                           .orElseThrow(ForbiddenAccountException::new);
+    public void saveCareerInfo(String email, String jobGroup, String company, String experience) {
+        Account account = findAccount(email);
 
-        account.changeProfile(jobGroupName, company);
+        account.changeCareerInfo(jobGroup, company, experience);
     }
 
     public TokenDto refreshToken(String refreshToken) {
@@ -53,9 +52,13 @@ public class AuthService {
 
     @Transactional
     public void withdrawal(String email) {
-        Account account = accountRepository.findBy(email)
-                                           .orElseThrow(ForbiddenAccountException::new);
+        Account account = findAccount(email);
 
         account.withdrawal();
+    }
+
+    private Account findAccount(String email) {
+        return accountRepository.findBy(email)
+                                .orElseThrow(ForbiddenAccountException::new);
     }
 }

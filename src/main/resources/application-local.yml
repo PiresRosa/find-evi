@@ -48,7 +48,7 @@ app:
         - 토성
         - 천왕성
         - 해왕성
-      format: "%s%03d"
+      format: '%s%03d'
     image:
       name:
         - dummy

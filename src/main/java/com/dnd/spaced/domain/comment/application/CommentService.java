@@ -113,14 +113,31 @@ public class CommentService {
     }
 
     public List<MultipleCommentInfoDto> findAllBy(CommentConditionInfoDto dto) {
-        CommentConditionDto commentConditionDto = CommentRepositoryMapper.to(
-                dto.wordId(),
-                findAccountId(dto.email()),
-                dto.lastCommentId(),
-                dto.lastLikeCount(),
-                dto.pageable()
-        );
-        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
+        List<CommentInfoWithLikeDto> result;
+
+        if (dto.email() != null) {
+            CommentConditionDto commentConditionDto = CommentRepositoryMapper.to(
+                    dto.wordId(),
+                    findAccountId(dto.email()),
+                    dto.lastCommentId(),
+                    dto.lastLikeCount(),
+                    dto.pageable()
+            );
+
+            result = commentRepository.findAllBy(commentConditionDto);
+        } else {
+            CommentConditionDto commentConditionDto = CommentRepositoryMapper.to(
+                    dto.wordId(),
+                    null,
+                    dto.lastCommentId(),
+                    dto.lastLikeCount(),
+                    dto.pageable()
+            );
+
+            result = CommentServiceMapper.toNonMemberCommentList(
+                    commentRepository.findAllBy(commentConditionDto)
+            );
+        }
 
         return CommentServiceMapper.fromComment(result);
     }

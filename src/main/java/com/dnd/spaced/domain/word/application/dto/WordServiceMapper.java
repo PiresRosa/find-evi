@@ -10,10 +10,10 @@ import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBoo
 import java.util.List;
 
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
+import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,11 +42,26 @@ public final class WordServiceMapper {
         return new InputWordCandidateDto(dto.candidates());
     }
 
-    public static WordSearchResponse to(Page<WordSearchDto> page) {
-        return new WordSearchResponse(page.getContent(), page.getTotalElements());
+    public static WordSearchResponse toWordSearchResponse(List<WordSearchDto> dtos, String lastWordName) {
+        List<WordSearchInfoResponse> words = dtos.stream()
+                .map(WordServiceMapper::toWordSearchInfoResponse)
+                .toList();
+        return new WordSearchResponse(words, lastWordName);
     }
 
-    public static WordSearchResponse search(List<WordSearchDto> wordSearchDtos) {
-        return new WordSearchResponse(wordSearchDtos, wordSearchDtos.size());
+    private static WordSearchInfoResponse toWordSearchInfoResponse(WordSearchDto dto) {
+        return new WordSearchInfoResponse(
+                dto.id(),
+                dto.name(),
+                new WordSearchInfoResponse.PronunciationInfo(
+                        dto.pronunciation().getKorean(),
+                        dto.pronunciation().getEnglish()
+                ),
+                dto.meaning(),
+                dto.category(),
+                dto.viewCount(),
+                dto.commentCount(),
+                dto.isMarked()
+        );
     }
 }

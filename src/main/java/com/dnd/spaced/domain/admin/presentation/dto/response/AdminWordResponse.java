@@ -17,7 +17,11 @@ public record AdminWordResponse(
         @Schema(description = "뜻")
         String meaning,
 
-        @Schema(description = "카테고리")
+        @Schema(
+                description = "용어 카테고리",
+                allowableValues = {"전체", "디자인", "개발", "비즈니스"},
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED
+        )
         String category,
 
         @Schema(description = "예문")

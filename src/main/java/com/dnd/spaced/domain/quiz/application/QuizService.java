@@ -13,6 +13,7 @@ import com.dnd.spaced.domain.quiz.domain.QuizResult;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizCrudRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizResultRepository;
+import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,9 @@ public class QuizService {
     private final QuizResultRepository quizResultRepository;
 
     public QuizResponseDto generateQuiz(QuizRequestDto requestDto) {
-        QuizQuestion category = findCategoryByName(requestDto.categoryName());
-        List<QuizQuestion> questions = findQuestionsByCategory(category);
+        Category category = findCategoryByName(requestDto.categoryName());
+        List<QuizQuestion> questions = findQuestionsByCategory(String.valueOf(category));
         validateQuestionCount(questions);
-
         List<QuizQuestion> selectedQuestions = selectRandomQuestions(questions);
         Long quizId = saveQuiz(selectedQuestions);
 
@@ -53,13 +53,16 @@ public class QuizService {
         return processResults(questions, requestDto);
     }
 
-    private QuizQuestion findCategoryByName(String categoryName) {
-        return quizRepository.findByName(categoryName)
-                .orElseThrow(InvalidCategoryException::new);
+    private Category findCategoryByName(String categoryName) {
+        try {
+            return Category.findBy(categoryName);
+        } catch (InvalidCategoryException e) {
+            throw new InvalidCategoryException();
+        }
     }
 
-    private List<QuizQuestion> findQuestionsByCategory(QuizQuestion category) {
-        return quizRepository.findQuestionsByCategory(category.getCategory());
+    public List<QuizQuestion> findQuestionsByCategory(String categoryName) {
+        return quizRepository.findQuestionsByCategory(categoryName);
     }
 
     private void validateQuestionCount(List<QuizQuestion> questions) {

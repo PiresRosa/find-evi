@@ -189,7 +189,7 @@ public enum ExceptionTranslator {
     NOT_ENOUGH_QUESTIONS_FOR_CATEGORY(
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.INVALID_NICKNAME,
-            "선택지가 4개 이하 입니다."
+            "해당 카테고리로 가져올 수 있는 질문이 4개 이하 입니다."
     )
     ;
 

@@ -36,4 +36,8 @@ public class PopularWordMetadata {
         this.wordId = wordId;
         this.schedule = schedule;
     }
+
+    public void view() {
+        this.viewCount++;
+    }
 }

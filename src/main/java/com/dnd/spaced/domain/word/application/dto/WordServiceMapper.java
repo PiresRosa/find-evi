@@ -19,12 +19,11 @@ import org.springframework.data.domain.Pageable;
 public final class WordServiceMapper {
 
     public static WordConditionInfoDto to(
-            String email,
             String categoryName,
             String lastWordName,
             Pageable pageable
     ) {
-        return new WordConditionInfoDto(email, categoryName, lastWordName, pageable);
+        return new WordConditionInfoDto(categoryName, lastWordName, pageable);
     }
 
     public static List<MultipleWordInfoDto> to(List<Word> words) {

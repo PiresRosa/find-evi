@@ -35,13 +35,11 @@ public class WordController {
 
     @GetMapping
     public ResponseEntity<MultipleWordInfoResponse> findAllBy(
-            @AuthAccount(required = false) AuthAccountInfo accountInfo,
             MultipleWordConditionRequest request,
             @WordSortCondition Pageable pageable
     ) {
         List<MultipleWordInfoDto> result = wordService.findAllBy(
                 WordServiceMapper.to(
-                        accountInfo.email(),
                         request.categoryName(),
                         request.lastWordName(),
                         pageable

@@ -72,7 +72,7 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<Word> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
+    public List<Word> findAllBy(WordConditionDto wordConditionDto) {
         Order order = findOrder(wordConditionDto.pageable());
 
         return queryFactory.selectFrom(word)

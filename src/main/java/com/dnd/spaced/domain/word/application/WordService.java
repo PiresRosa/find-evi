@@ -2,7 +2,6 @@ package com.dnd.spaced.domain.word.application;
 
 import com.dnd.spaced.domain.account.domain.Account;
 import com.dnd.spaced.domain.account.domain.repository.AccountRepository;
-import com.dnd.spaced.domain.bookmark.domain.repository.BookmarkRepository;
 import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.request.SearchWordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
@@ -33,23 +32,23 @@ public class WordService {
 
     private final WordRepository wordRepository;
     private final AccountRepository accountRepository;
-    private final BookmarkRepository bookmarkRepository;
     private final ApplicationEventPublisher eventPublisher;
 
     public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
-        Long accountId = findAccountId(dto.email());
         WordConditionDto wordConditionDto = WordRepositoryMapper.to(
                 dto.categoryName(),
                 dto.lastWordName(),
                 dto.pageable()
         );
-        List<Word> result = wordRepository.findAllBy(wordConditionDto, accountId);
+        List<Word> result = wordRepository.findAllBy(wordConditionDto);
 
         return WordServiceMapper.to(result);
     }
 
     public DetailWordInfoDto findBy(String email, Long wordId) {
-        Long accountId = findAccountId(email);
+        Long accountId = accountRepository.findBy(email)
+                                          .map(Account::getId)
+                                          .orElse(UNAUTHORIZED_ACCOUNT_ID);
         WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId).orElseThrow(WordNotFoundException::new);
 
         eventPublisher.publishEvent(new FoundWordInfoEvent(wordId));
@@ -67,11 +66,5 @@ public class WordService {
         List<Word> results = wordRepository.searchWords(WordRepositoryMapper.to(dto));
 
         return WordServiceMapper.toWordSearchResponse(results);
-    }
-
-    private Long findAccountId(String email) {
-        return accountRepository.findBy(email)
-                .map(Account::getId)
-                .orElse(UNAUTHORIZED_ACCOUNT_ID);
     }
 }

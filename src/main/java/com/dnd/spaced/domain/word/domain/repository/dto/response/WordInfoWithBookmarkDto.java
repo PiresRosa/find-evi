@@ -16,6 +16,7 @@ public record WordInfoWithBookmarkDto(
         int bookmarkCount,
         Long bookmarkId,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String resource
 ) {
 }

@@ -16,7 +16,8 @@ public record DetailWordInfoDto(
         String example,
         boolean isMarked,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String resource
 ) {
 
     public static DetailWordInfoDto from(WordInfoWithBookmarkDto dto) {
@@ -32,7 +33,8 @@ public record DetailWordInfoDto(
                 dto.example(),
                 dto.bookmarkId() != null,
                 dto.createdAt(),
-                dto.updatedAt()
+                dto.updatedAt(),
+                dto.resource()
         );
     }
 
@@ -49,7 +51,8 @@ public record DetailWordInfoDto(
                 word.getExample(),
                 false,
                 word.getCreatedAt(),
-                word.getUpdatedAt()
+                word.getUpdatedAt(),
+                word.getResource()
         );
     }
 

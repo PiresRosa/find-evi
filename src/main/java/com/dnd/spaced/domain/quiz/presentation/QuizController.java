@@ -7,6 +7,7 @@ import com.dnd.spaced.domain.quiz.domain.QuizResult;
 import com.dnd.spaced.domain.quiz.presentation.dto.QuizControllerMapper;
 import com.dnd.spaced.domain.quiz.presentation.dto.request.QuizRequest;
 import com.dnd.spaced.domain.quiz.presentation.dto.response.QuizResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class QuizController {
     private final QuizService quizService;
 
     @PostMapping("/tests")
-    public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest request) {
+    public ResponseEntity<QuizResponse> createQuiz(@Valid @RequestBody QuizRequest request) {
         QuizRequestDto requestDto = QuizControllerMapper.to(request);
         QuizResponseDto responseDto = quizService.generateQuiz(requestDto);
 

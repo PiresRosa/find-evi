@@ -14,6 +14,8 @@ public interface WordRepository {
 
     void delete(Word word);
 
+    long countAllWords();
+
     List<Word> findRecentWords();
 
     List<Word> findRandomWords();

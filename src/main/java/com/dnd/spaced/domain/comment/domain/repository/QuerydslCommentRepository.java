@@ -52,30 +52,32 @@ public class QuerydslCommentRepository implements CommentRepository {
     @Override
     public List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto) {
         return queryFactory.select(
-                                   Projections.constructor(
-                                           CommentInfoWithLikeDto.class,
-                                           comment.id,
-                                           comment.accountId,
-                                           comment.wordId,
-                                           comment.content,
-                                           comment.likeCount,
-                                           comment.createdAt,
-                                           comment.updatedAt,
-                                           account.nickname,
-                                           account.profileImage,
-                                           like.id
-                                   )
-                           )
-                           .from(comment)
-                           .join(account).on(comment.accountId.eq(account.id))
-                           .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(dto.accountId()))
-                           .where(calculateFindAllBooleanExpression(dto), comment.wordId.eq(dto.wordId()))
-                           .orderBy(
-                                   CommentSortConditionConverter.convert(findOrder(dto.pageable()))
-                                                                .toArray(OrderSpecifier[]::new)
-                           )
-                           .limit(dto.pageable().getPageSize())
-                           .fetch();
+                        Projections.constructor(
+                                CommentInfoWithLikeDto.class,
+                                comment.id,
+                                comment.accountId,
+                                comment.wordId,
+                                comment.content,
+                                comment.likeCount,
+                                comment.createdAt,
+                                comment.updatedAt,
+                                account.nickname,
+                                account.profileImage,
+                                like.id,
+                                like.id.isNotNull()
+                        )
+                )
+                .from(comment)
+                .join(account).on(comment.accountId.eq(account.id))
+                .leftJoin(like).on(comment.id.eq(like.commentId),
+                        dto.accountId() != null ? like.accountId.eq(dto.accountId()) : like.accountId.isNull())
+                .where(calculateFindAllBooleanExpression(dto), comment.wordId.eq(dto.wordId()))
+                .orderBy(
+                        CommentSortConditionConverter.convert(findOrder(dto.pageable()))
+                                .toArray(OrderSpecifier[]::new)
+                )
+                .limit(dto.pageable().getPageSize())
+                .fetch();
     }
 
     @Override

@@ -1,19 +1,26 @@
 package com.dnd.spaced.domain.word.presentation.dto.response;
 
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
-public record PopularWordResponse(List<WordInfoResponse> words) {
+public record PopularWordResponse(@Schema(description = "용어 정보") List<PopularWordInfoResponse> words) {
 
     public static PopularWordResponse from(List<PopularWordInfoDto> dtos) {
-        List<WordInfoResponse> words = dtos.stream()
-                                           .map(dto -> new WordInfoResponse(dto.id(), dto.name()))
-                                           .toList();
+        List<PopularWordInfoResponse> words = dtos.stream()
+                                                  .map(dto -> new PopularWordInfoResponse(dto.id(), dto.name()))
+                                                  .toList();
 
         return new PopularWordResponse(words);
     }
 
-    public record WordInfoResponse(Long id, String name) {
+    private record PopularWordInfoResponse(
 
+            @Schema(description = "용어 ID")
+            Long id,
+
+            @Schema(description = "용어 이름")
+            String name
+    ) {
     }
 }

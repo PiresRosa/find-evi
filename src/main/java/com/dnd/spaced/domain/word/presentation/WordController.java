@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/words")
 @RequiredArgsConstructor
-public class WordController {
+public class WordController implements SwaggerWordController {
 
     private final WordService wordService;
 
@@ -43,7 +43,7 @@ public class WordController {
     ) {
         List<MultipleWordInfoDto> result = wordService.findAllBy(
                 WordServiceMapper.to(
-                        request.categoryName(),
+                        request.category(),
                         request.lastWordName(),
                         pageable
                 )

@@ -4,6 +4,8 @@ import com.dnd.spaced.domain.account.domain.Account;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.CreateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByLikedDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByWrittenDto;
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.LikedCommentDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
@@ -74,5 +76,13 @@ public final class CommentServiceMapper {
         return comments.stream()
                        .map(comment -> WrittenCommentDto.of(account, comment))
                        .toList();
+    }
+
+    public static ReadCommentAllByLikedDto ofLiked(String email, Long lastCommentId, Pageable pageable) {
+        return new ReadCommentAllByLikedDto(email, lastCommentId, pageable);
+    }
+
+    public static ReadCommentAllByWrittenDto ofWritten(String email, Long lastCommentId, Pageable pageable) {
+        return new ReadCommentAllByWrittenDto(email, lastCommentId, pageable);
     }
 }

@@ -3,20 +3,29 @@ package com.dnd.spaced.domain.comment.presentation;
 import com.dnd.spaced.domain.comment.application.CommentService;
 import com.dnd.spaced.domain.comment.application.dto.CommentServiceMapper;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByLikedDto;
+import com.dnd.spaced.domain.comment.application.dto.request.ReadCommentAllByWrittenDto;
+import com.dnd.spaced.domain.comment.application.dto.response.LikedCommentDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.response.WrittenCommentDto;
 import com.dnd.spaced.domain.comment.presentation.dto.CommentControllerMapper;
 import com.dnd.spaced.domain.comment.presentation.dto.request.CommentConditionRequest;
 import com.dnd.spaced.domain.comment.presentation.dto.request.CreateCommentRequest;
+import com.dnd.spaced.domain.comment.presentation.dto.request.ReadLikedCommentRequest;
 import com.dnd.spaced.domain.comment.presentation.dto.request.UpdateCommentRequest;
+import com.dnd.spaced.domain.comment.presentation.dto.response.LikedCommentResponse;
 import com.dnd.spaced.domain.comment.presentation.dto.response.MultipleCommentInfoResponse;
 import com.dnd.spaced.domain.comment.presentation.dto.response.MultiplePopularCommentInfoResponse;
+import com.dnd.spaced.domain.comment.presentation.dto.response.WrittenCommentResponse;
 import com.dnd.spaced.global.config.properties.UrlProperties;
 import com.dnd.spaced.global.controller.ResponseEntityConst;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import com.dnd.spaced.global.resolver.comment.CommentSortCondition;
+import com.dnd.spaced.global.resolver.comment.LikedCommentSortCondition;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortCondition;
+import com.dnd.spaced.global.resolver.comment.WrittenCommentSortCondition;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -109,5 +118,37 @@ public class CommentController implements SwaggerCommentController {
         List<MultiplePopularCommentInfoDto> result = commentService.findPopularAllBy(pageable, accountInfo.email());
 
         return ResponseEntity.ok(CommentControllerMapper.ofPopularComments(result, urlProperties));
+    }
+
+    @GetMapping("/comments/liked")
+    public ResponseEntity<LikedCommentResponse> findAllByLiked(
+            @AuthAccount AuthAccountInfo accountInfo,
+            ReadLikedCommentRequest request,
+            @LikedCommentSortCondition Pageable pageable
+    ) {
+        ReadCommentAllByLikedDto dto = CommentServiceMapper.ofLiked(
+                accountInfo.email(),
+                request.lastCommentId(),
+                pageable
+        );
+        List<LikedCommentDto> result = commentService.findAllByLiked(dto);
+
+        return ResponseEntity.ok(CommentControllerMapper.ofLiked(result, urlProperties));
+    }
+
+    @GetMapping("/comments/written")
+    public ResponseEntity<WrittenCommentResponse> findAllByWritten(
+            @AuthAccount AuthAccountInfo accountInfo,
+            ReadLikedCommentRequest request,
+            @WrittenCommentSortCondition Pageable pageable
+    ) {
+        ReadCommentAllByWrittenDto dto = CommentServiceMapper.ofWritten(
+                accountInfo.email(),
+                request.lastCommentId(),
+                pageable
+        );
+        List<WrittenCommentDto> result = commentService.findAllByWritten(dto);
+
+        return ResponseEntity.ok(CommentControllerMapper.ofWritten(result, urlProperties));
     }
 }

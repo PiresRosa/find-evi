@@ -10,11 +10,7 @@ import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.WordControllerMapper;
 import com.dnd.spaced.domain.word.presentation.dto.request.MultipleWordConditionRequest;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
-import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.*;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import com.dnd.spaced.global.resolver.word.PopularWordSortCondition;
@@ -87,16 +83,16 @@ public class WordController implements SwaggerWordController {
     }
 
     @GetMapping("/recent")
-    public ResponseEntity<ListWordInfoResponse> findRecentWords() {
+    public ResponseEntity<SimpleListWordInfoResponse> findRecentWords() {
         List<ListWordInfoDto> result = wordService.findRecentWords();
 
-        return ResponseEntity.ok(WordControllerMapper.too(result));
+        return ResponseEntity.ok(WordControllerMapper.toSimpleResponse(result));
     }
 
     @GetMapping("/todays")
-    public ResponseEntity<ListWordInfoResponse> findRandomWords() {
+    public ResponseEntity<SimpleListWordInfoResponse> findRandomWords() {
         List<ListWordInfoDto> result = wordService.findRandomWords();
 
-        return ResponseEntity.ok(WordControllerMapper.too(result));
+        return ResponseEntity.ok(WordControllerMapper.toSimpleResponse(result));
     }
 }

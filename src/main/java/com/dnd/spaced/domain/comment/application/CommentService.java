@@ -127,6 +127,12 @@ public class CommentService {
         return CommentServiceMapper.fromPopularComment(result);
     }
 
+    public List<Object> findAllByLiked(String email, Pageable pageable) {
+        Account account = findAccount(email);
+
+        return null;
+    }
+
     private Long findAccountId(String email) {
         return accountRepository.findBy(email)
                                 .map(Account::getId)

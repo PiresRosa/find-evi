@@ -71,14 +71,14 @@ public class QuizService {
 
     private List<QuizQuestion> selectRandomQuestions(List<QuizQuestion> questions) {
         Collections.shuffle(questions);
-        return questions.stream().limit(MIN_QUESTION_SIZE).collect(Collectors.toList());
+        return questions.stream().limit(MIN_QUESTION_SIZE).toList();
     }
 
     private Long saveQuiz(List<QuizQuestion> questions) {
         Quiz quiz = Quiz.builder()
                 .questions(questions)
                 .build();
-        return quizCrudRepository.save(quiz).getId()
+        return quizCrudRepository.save(quiz).getId();
     }
 
     private Quiz findQuizById(Long quizId) {

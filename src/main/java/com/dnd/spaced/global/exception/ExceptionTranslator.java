@@ -11,10 +11,20 @@ import org.springframework.validation.FieldError;
 
 @Getter
 public enum ExceptionTranslator {
+    EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INTERNAL_SERVER_ERROR,
+            "예상치 못한 예외가 발생했습니다."
+    ),
     METHOD_ARGUMENT_NOT_VALID_EXCEPTION(
             HttpStatus.BAD_REQUEST,
             ExceptionCode.VALIDATION_ERROR,
             "유효한 파라미터 값을 입력해주세요."
+    ),
+    INVALID_PATH_VARIABLE_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_PATH_VARIABLE,
+            "유효한 path variable 값을 입력해주세요."
     ),
     INVALID_TOKEN_EXCEPTION(
             HttpStatus.UNAUTHORIZED,
@@ -36,6 +46,16 @@ public enum ExceptionTranslator {
             ExceptionCode.INVALID_JOB_GROUP,
             "직군은 개발, 디자인만 선택 가능합니다."
     ),
+    INVALID_COMPANY_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_COMPANY,
+            "유효한 기업 선택지를 입력해주세요."
+    ),
+    INVALID_EXPERIENCE_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_EXPERIENCE,
+            "유효한 경력 선택지를 입력해주세요."
+    ),
     INVALID_EMAIL_EXCEPTION(
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.INVALID_EMAIL,
@@ -55,6 +75,96 @@ public enum ExceptionTranslator {
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.INVALID_ROLE,
             "유효한 권한을 설정해주세요."
+    ),
+    FORBIDDEN_BOOKMARK_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_BOOKMARK,
+            "권한이 없습니다."
+    ),
+    WORD_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.WORD_NOT_FOUND,
+            "지정한 용어를 찾을 수 없습니다."
+    ),
+    INVALID_CATEGORY_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_CATEGORY,
+            "카테고리는 개발, 디자인, 비즈니스만 입력할 수 있습니다."
+    ),
+    INVALID_EXCEPTION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_EXAMPLE,
+            "예문은 최소 1글자, 최대 50글자여야 합니다."
+    ),
+    INVALID_MEANING_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_MEANING,
+            "용어 뜻은 최소 10글자, 최대 70글자여야 합니다."
+    ),
+    INVALID_NAME_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_NAME,
+            "용어 이름을 입력해주세요."
+    ),
+    INVALID_PRONUNCIATION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_PRONUNCIATION,
+            "용어 발음을 입력해주세요."
+    ),
+    UNSUPPORTED_COMMENT_SORT_CONDITION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.UNSUPPORTED_COMMENT_SORT_CONDITION,
+            "지원하지 않는 정렬 방식입니다."
+    ),
+    COMMENT_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.COMMENT_NOT_FOUND,
+            "댓글을 찾을 수 없습니다."
+    ),
+    COMMENT_WORD_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.COMMENT_WORD_NOT_FOUND,
+            "댓글이 등록된 용어를 찾을 수 없습니다."
+    ),
+    FORBIDDEN_DELETE_COMMENT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_DELETE_COMMENT,
+            "댓글을 삭제할 수 있는 권한이 없습니다."
+    ),
+    FORBIDDEN_LIKE_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_LIKE,
+            "권한이 없습니다."
+    ),
+    FORBIDDEN_UPDATE_COMMENT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_UPDATE_COMMENT,
+            "댓글을 수정할 수 있는 권한이 없습니다."
+    ),
+    UNAUTHORIZED_COMMENT_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.UNAUTHORIZED_COMMENT,
+            "로그인이 필요한 기능입니다."
+    ),
+    INVALID_CONTENT_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_CONTENT,
+            "댓글은 최소 1글자, 최대 100글자여야 합니다."
+    ),
+    INVALID_REASON_NAME(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_REASON_NAME,
+            "유효한 신고 사유를 입력해주세요."
+    ),
+    FORBIDDEN_REPORT_ACCOUNT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_REPORT_ACCOUNT,
+            "신고하기 위한 권한이 없습니다."
+    ),
+    REPORTED_COMMENT_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.REPORTED_COMMENT_NOT_FOUND,
+            "신고 대상 댓글을 찾지 못했습니다."
     )
     ;
 

@@ -3,6 +3,7 @@ package com.dnd.spaced.global.config;
 import com.dnd.spaced.global.docs.ExampleHolder;
 import com.dnd.spaced.global.docs.annotation.ExceptionSpec;
 import com.dnd.spaced.global.docs.annotation.ExcludeCommonHeaderSpec;
+import com.dnd.spaced.global.docs.annotation.NotRequiredCommonHeaderSpec;
 import com.dnd.spaced.global.exception.ExceptionCode;
 import com.dnd.spaced.global.exception.ExceptionTranslator;
 import com.dnd.spaced.global.exception.dto.ExceptionDto;
@@ -51,13 +52,13 @@ public class DocsConfig {
     @Bean
     public OperationCustomizer customGlobalHeaders() {
         return (Operation operation, HandlerMethod handlerMethod) -> {
-            if (!isExcludedAPI(handlerMethod)) {
+            if (!isExcludedApi(handlerMethod)) {
                 Parameter commonHeader = new Parameter();
 
                 commonHeader.in("header")
                             .name("Authorization")
                             .description("access token 헤더, Bearer 타입만 허용")
-                            .required(true)
+                            .required(isNotRequiredHeader(handlerMethod))
                             .schema(new StringSchema())
                             .example("Bearer <access-token-value>");
                 operation.addParametersItem(commonHeader);
@@ -89,8 +90,12 @@ public class DocsConfig {
                 .version("1.0.0");
     }
 
-    private boolean isExcludedAPI(HandlerMethod handlerMethod) {
+    private boolean isExcludedApi(HandlerMethod handlerMethod) {
         return handlerMethod.hasMethodAnnotation(ExcludeCommonHeaderSpec.class);
+    }
+
+    private boolean isNotRequiredHeader(HandlerMethod handlerMethod) {
+        return !handlerMethod.hasMethodAnnotation(NotRequiredCommonHeaderSpec.class);
     }
 
     private void generateExceptionExample(Map<Integer, List<ExampleHolder>> result, ExceptionCode[] codes) {

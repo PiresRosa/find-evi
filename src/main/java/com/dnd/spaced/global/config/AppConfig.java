@@ -1,12 +1,18 @@
 package com.dnd.spaced.global.config;
 
+import com.dnd.spaced.global.config.properties.ImageStorePathProperties;
+import com.dnd.spaced.global.config.properties.UrlProperties;
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
+import com.dnd.spaced.global.resolver.comment.CommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -15,12 +21,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableConfigurationProperties(value = {UrlProperties.class, ImageStorePathProperties.class})
 public class AppConfig implements WebMvcConfigurer {
 
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
     private final AuthInterceptor authInterceptor;
+    private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
+    private final WordSortConditionArgumentResolver wordSortConditionArgumentResolver;
+    private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
+    private final PopularCommentSortConditionArgumentResolver popularCommentSortConditionArgumentResolver;
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
@@ -33,6 +43,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(authAccountInfoArgumentResolver);
+        resolvers.add(wordSortConditionArgumentResolver);
+        resolvers.add(commentSortConditionArgumentResolver);
+        resolvers.add(popularCommentSortConditionArgumentResolver);
     }
 
     @Override

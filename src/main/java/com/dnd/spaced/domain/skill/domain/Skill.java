@@ -29,7 +29,7 @@ public class Skill {
         this.category = category;
     }
 
-    public void addCorrectCount(Long correctCount){
+    public void updateSkill(Long correctCount){
         this.correctCount += correctCount;
         this.totalCount += 5;
     }

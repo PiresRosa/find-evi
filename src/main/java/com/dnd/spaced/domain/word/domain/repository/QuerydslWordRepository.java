@@ -55,6 +55,8 @@ public class QuerydslWordRepository implements WordRepository {
                                 word.category,
                                 word.example,
                                 word.viewCount,
+                                word.commentCount,
+                                word.bookmarkCount,
                                 bookmark.id,
                                 word.createdAt,
                                 word.updatedAt

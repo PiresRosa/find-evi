@@ -8,6 +8,5 @@ spring:
         - console-logging
         - file-error-logging
         - file-warn-logging
-    active: prod
 log:
   directory: /logs/spring

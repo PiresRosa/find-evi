@@ -2,11 +2,7 @@ package com.dnd.spaced.domain.word.presentation;
 
 import com.dnd.spaced.domain.word.presentation.dto.request.MultipleWordConditionRequest;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
-import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.*;
 import com.dnd.spaced.global.docs.annotation.ExceptionSpec;
 import com.dnd.spaced.global.docs.annotation.ExcludeCommonHeaderSpec;
 import com.dnd.spaced.global.docs.annotation.NotRequiredCommonHeaderSpec;
@@ -27,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Tag(name = "용어 관련 API", description = "용어 사전 목록 조회, 용어 상세 내용 조회, 용어 검색어에 따른 자동완성, 용어 검색, 많이 찾아본 용어 목록 조회")
+@Tag(name = "용어 관련 API", description = "용어 사전 목록 조회, 용어 상세 내용 조회, 최근 추가된 용어 목록 조회, 용어 검색어에 따른 자동완성, 용어 검색, 많이 찾아본 용어 목록 조회")
 public interface SwaggerWordController {
 
     @ExcludeCommonHeaderSpec
@@ -59,6 +55,16 @@ public interface SwaggerWordController {
     ResponseEntity<InputWordCandidateResponse> findCandidateAllBy(
             @Schema(description = "검색할 용어 이름") String name
     );
+
+    @ExcludeCommonHeaderSpec
+    @Operation(summary = "최근 등록된 용어 조회", description = "최근 등록된 용어 조회 API")
+    @ApiResponse(responseCode = "200", description = "OK")
+    ResponseEntity<SimpleListWordInfoResponse> findRecentWords();
+
+    @ExcludeCommonHeaderSpec
+    @Operation(summary = "오늘의 용어 조회", description = "오늘의 용어 조회 API")
+    @ApiResponse(responseCode = "200", description = "OK")
+    ResponseEntity<SimpleListWordInfoResponse> findRandomWords();
 
     @ExcludeCommonHeaderSpec
     @Operation(summary = "용어 검색", description = "용어 검색 API")

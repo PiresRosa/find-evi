@@ -159,14 +159,14 @@ public class CommentService {
         return CommentServiceMapper.ofWritten(result, account);
     }
 
-    public List<MultiplePopularCommentInfoDto> findPopularAllForMember(Pageable pageable, String email) {
+    private List<MultiplePopularCommentInfoDto> findPopularAllForMember(Pageable pageable, String email) {
         Long accountId = findAccountId(email);
         List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
 
         return CommentServiceMapper.fromPopularComment(result);
     }
 
-    public List<MultiplePopularCommentInfoDto> findPopularAllForNonMember(Pageable pageable) {
+    private List<MultiplePopularCommentInfoDto> findPopularAllForNonMember(Pageable pageable) {
         List<PopularCommentWithoutIsLikeDto> result = commentRepository.findPopularAll(pageable);
 
         return CommentServiceMapper.fromPopularCommentWithOutIsLike(result);

@@ -61,10 +61,8 @@ public class AdminService {
 
     @Transactional
     public void ignoreReport(Long reportId) {
-        if (!reportRepository.existsById(reportId)) {
-            throw new ReportNotFoundException();
-        }
-        reportRepository.deleteById(reportId);
+        validateReportExists(reportId);
+        deleteReport(reportId);
     }
 
     @Transactional
@@ -94,6 +92,16 @@ public class AdminService {
     private Word findWordById(Long wordId) {
         return wordRepository.findBy(wordId)
                 .orElseThrow(WordNotFoundException::new);
+    }
+
+    private void validateReportExists(Long reportId) {
+        if (!reportRepository.existsById(reportId)) {
+            throw new ReportNotFoundException();
+        }
+    }
+
+    private void deleteReport(Long reportId) {
+        reportRepository.deleteById(reportId);
     }
 }
 

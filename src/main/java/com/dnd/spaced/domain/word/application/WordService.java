@@ -82,7 +82,10 @@ public class WordService {
     public WordSearchResponse search(WordSearchRequest request, String email) {
         Long accountId = findAccountId(email);
         List<WordSearchDto> results = wordRepository.searchWords(request, accountId);
-        return WordServiceMapper.search(results);
+
+        String lastWordName = results.isEmpty() ? null : results.get(results.size() - 1).name();
+
+        return WordServiceMapper.toWordSearchResponse(results, lastWordName);
     }
 
     private Long findAccountId(String email) {

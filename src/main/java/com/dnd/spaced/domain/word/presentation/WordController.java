@@ -78,14 +78,9 @@ public class WordController {
 
     @GetMapping("/search")
     public ResponseEntity<WordSearchResponse> search(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String pronunciation,
-            @RequestParam(required = false) String lastWordName,
-            @RequestParam(defaultValue = "전체") String category,
-            Pageable pageable,
+            WordSearchRequest request,
             @AuthAccount AuthAccountInfo accountInfo
     ) {
-        WordSearchRequest request = new WordSearchRequest(name, pronunciation, lastWordName, category, pageable);
         return ResponseEntity.ok(wordService.search(request, accountInfo.email()));
     }
 }

@@ -27,7 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Tag(name = "용어 관련 API", description = "용어 사전 목록 조회, 용어 상세 내용 조회, 용어 검색어에 따른 자동완성, 용어 검색, ")
+@Tag(name = "용어 관련 API", description = "용어 사전 목록 조회, 용어 상세 내용 조회, 용어 검색어에 따른 자동완성, 용어 검색, 많이 찾아본 용어 목록 조회")
 public interface SwaggerWordController {
 
     @ExcludeCommonHeaderSpec

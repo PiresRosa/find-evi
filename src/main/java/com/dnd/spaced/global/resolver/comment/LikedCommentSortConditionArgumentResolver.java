@@ -20,8 +20,8 @@ public class LikedCommentSortConditionArgumentResolver implements HandlerMethodA
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(PopularCommentSortCondition.class) && parameter.getParameterType()
-                                                                                               .equals(Pageable.class);
+        return parameter.hasParameterAnnotation(LikedCommentSortCondition.class) && parameter.getParameterType()
+                                                                                             .equals(Pageable.class);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class WrittenCommentSortConditionArgumentResolver implements HandlerMetho
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(PopularCommentSortCondition.class) && parameter.getParameterType()
+        return parameter.hasParameterAnnotation(WrittenCommentSortCondition.class) && parameter.getParameterType()
                                                                                                .equals(Pageable.class);
     }
 

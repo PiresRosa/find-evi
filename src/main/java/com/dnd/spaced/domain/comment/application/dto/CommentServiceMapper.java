@@ -16,6 +16,7 @@ import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAl
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByWrittenConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentWithoutIsLikeDto;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -58,6 +59,12 @@ public final class CommentServiceMapper {
                    .toList();
     }
 
+    public static List<MultiplePopularCommentInfoDto> fromPopularCommentWithOutIsLike(List<PopularCommentWithoutIsLikeDto> dtos) {
+        return dtos.stream()
+                .map(MultiplePopularCommentInfoDto::from)
+                .toList();
+    }
+
     public static FindCommentAllByLikedConditionDto ofLiked(Long accountId, Long lastCommentId, Pageable pageable) {
         return new FindCommentAllByLikedConditionDto(accountId, lastCommentId, pageable);
     }
@@ -85,4 +92,23 @@ public final class CommentServiceMapper {
     public static ReadCommentAllByWrittenDto ofWritten(String email, Long lastCommentId, Pageable pageable) {
         return new ReadCommentAllByWrittenDto(email, lastCommentId, pageable);
     }
+
+    public static List<CommentInfoWithLikeDto> toNonMemberCommentList(List<CommentInfoWithLikeDto> comments) {
+        return comments.stream()
+                .map(comment -> new CommentInfoWithLikeDto(
+                        comment.commentId(),
+                        comment.writerId(),
+                        comment.wordId(),
+                        comment.content(),
+                        comment.likeCount(),
+                        comment.createdAt(),
+                        comment.updatedAt(),
+                        comment.writerNickname(),
+                        comment.writerProfileImage(),
+                        comment.likeAccountId(),
+                        false
+                ))
+                .toList();
+    }
+
 }

@@ -26,6 +26,7 @@ import com.dnd.spaced.domain.comment.domain.repository.dto.CommentRepositoryMapp
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentWithoutIsLikeDto;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import java.util.List;
@@ -112,23 +113,19 @@ public class CommentService {
     }
 
     public List<MultipleCommentInfoDto> findAllBy(CommentConditionInfoDto dto) {
-        CommentConditionDto commentConditionDto = CommentRepositoryMapper.to(
-                dto.wordId(),
-                findAccountId(dto.email()),
-                dto.lastCommentId(),
-                dto.lastLikeCount(),
-                dto.pageable()
-        );
-        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
-
-        return CommentServiceMapper.fromComment(result);
+        if (dto.email() != null) {
+            return findMemberComments(dto);
+        } else {
+            return findNonMemberComments(dto);
+        }
     }
 
     public List<MultiplePopularCommentInfoDto> findPopularAllBy(Pageable pageable, String email) {
-        Long accountId = findAccountId(email);
-        List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
-
-        return CommentServiceMapper.fromPopularComment(result);
+        if (email != null) {
+            return findPopularAllForMember(pageable, email);
+        } else {
+            return findPopularAllForNonMember(pageable);
+        }
     }
 
     public List<LikedCommentDto> findAllByLiked(ReadCommentAllByLikedDto dto) {
@@ -155,6 +152,46 @@ public class CommentService {
         );
 
         return CommentServiceMapper.ofWritten(result, account);
+    }
+
+    private List<MultiplePopularCommentInfoDto> findPopularAllForMember(Pageable pageable, String email) {
+        Long accountId = findAccountId(email);
+        List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
+
+        return CommentServiceMapper.fromPopularComment(result);
+    }
+
+    private List<MultiplePopularCommentInfoDto> findPopularAllForNonMember(Pageable pageable) {
+        List<PopularCommentWithoutIsLikeDto> result = commentRepository.findPopularAll(pageable);
+
+        return CommentServiceMapper.fromPopularCommentWithOutIsLike(result);
+    }
+
+    private List<MultipleCommentInfoDto> findMemberComments(CommentConditionInfoDto dto) {
+        CommentConditionDto commentConditionDto = CommentRepositoryMapper.toCommentConditionDto(
+                dto.wordId(),
+                findAccountId(dto.email()),
+                dto.lastCommentId(),
+                dto.lastLikeCount(),
+                dto.pageable()
+        );
+
+        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
+        return CommentServiceMapper.fromComment(result);
+    }
+
+    private List<MultipleCommentInfoDto> findNonMemberComments(CommentConditionInfoDto dto) {
+        CommentConditionDto commentConditionDto = CommentRepositoryMapper.toCommentConditionDto(
+                dto.wordId(),
+                null,
+                dto.lastCommentId(),
+                dto.lastLikeCount(),
+                dto.pageable()
+        );
+
+        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
+        List<CommentInfoWithLikeDto> nonMemberComments = CommentServiceMapper.toNonMemberCommentList(result);
+        return CommentServiceMapper.fromComment(nonMemberComments);
     }
 
     private Long findAccountId(String email) {

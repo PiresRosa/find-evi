@@ -23,7 +23,7 @@ public class CareerInfo {
     private Experience experience;
 
     @Builder
-    private CareerInfo(String jobGroup, String company, String experience) {
+    public CareerInfo(String jobGroup, String company, String experience) {
         this.jobGroup = JobGroup.find(jobGroup);
         this.company = Company.find(company);
         this.experience = Experience.find(experience);

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +64,7 @@ public class QuizService {
         }
     }
 
-    public List<QuizQuestion> findQuestionsByCategory(String categoryName) {
+    private List<QuizQuestion> findQuestionsByCategory(String categoryName) {
         return quizRepository.findQuestionsByCategory(categoryName);
     }
 

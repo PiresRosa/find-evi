@@ -54,15 +54,24 @@ public class WordService {
     }
 
     public DetailWordInfoDto findBy(String email, Long wordId) {
-        Long accountId = accountRepository.findBy(email)
-                                          .map(Account::getId)
-                                          .orElse(UNAUTHORIZED_ACCOUNT_ID);
-        WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId).orElseThrow(WordNotFoundException::new);
+        if (email != null) {
+            Long accountId = accountRepository.findBy(email)
+                    .map(Account::getId)
+                    .orElse(UNAUTHORIZED_ACCOUNT_ID);
+            WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId).orElseThrow(WordNotFoundException::new);
 
-        eventPublisher.publishEvent(new FoundWordViewCountEvent(wordId));
-        eventPublisher.publishEvent(new FoundWordPopularViewCountEvent(wordId));
+            eventPublisher.publishEvent(new FoundWordViewCountEvent(wordId));
+            eventPublisher.publishEvent(new FoundWordPopularViewCountEvent(wordId));
 
-        return WordServiceMapper.to(result);
+            return WordServiceMapper.to(result);
+        } else {
+            Word result = wordRepository.findBy(wordId).orElseThrow(WordNotFoundException::new);
+
+            eventPublisher.publishEvent(new FoundWordViewCountEvent(wordId));
+            eventPublisher.publishEvent(new FoundWordPopularViewCountEvent(wordId));
+
+            return WordServiceMapper.to(result);
+        }
     }
 
     public InputWordCandidateDto findCandidateAllBy(String target) {

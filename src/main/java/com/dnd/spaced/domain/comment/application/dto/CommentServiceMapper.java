@@ -49,8 +49,8 @@ public final class CommentServiceMapper {
 
     public static List<MultipleCommentInfoDto> fromComment(List<CommentInfoWithLikeDto> dtos) {
         return dtos.stream()
-                   .map(MultipleCommentInfoDto::from)
-                   .toList();
+                .map(dto -> MultipleCommentInfoDto.from(dto))
+                .toList();
     }
 
     public static List<MultiplePopularCommentInfoDto> fromPopularComment(List<PopularCommentInfoDto> dtos) {
@@ -106,9 +106,9 @@ public final class CommentServiceMapper {
                         comment.writerNickname(),
                         comment.writerProfileImage(),
                         comment.likeAccountId(),
-                        false
+                        false,
+                        comment.careerInfo()
                 ))
                 .toList();
     }
-
 }

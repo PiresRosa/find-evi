@@ -1,8 +1,11 @@
 package com.dnd.spaced.domain.quiz.presentation;
 
 import com.dnd.spaced.domain.quiz.application.QuizService;
-import com.dnd.spaced.domain.quiz.domain.QuizQuestion;
+import com.dnd.spaced.domain.quiz.application.dto.request.QuizRequestDto;
+import com.dnd.spaced.domain.quiz.application.dto.response.QuizResponseDto;
 import com.dnd.spaced.domain.quiz.domain.QuizResult;
+import com.dnd.spaced.domain.quiz.presentation.dto.request.QuizRequest;
+import com.dnd.spaced.domain.quiz.presentation.dto.response.QuizResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,29 +26,28 @@ public class QuizController {
     private final QuizService quizService;
 
     @PostMapping("/tests")
-    public ResponseEntity<Void> createQuiz(@RequestBody Map<String, String> request) {
-        String category = request.get("testType");
-        List<QuizQuestion> quiz = quizService.generateQuiz(category);
-
-        if (quiz.isEmpty()) {
+    public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest requestDto) {
+        QuizRequestDto request = new QuizRequestDto(requestDto.categoryName(), List.of()); // Assumes no answers needed for creation
+        QuizResponseDto quizResponse = quizService.generateQuiz(request);
+        if (quizResponse.questions().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        Long quizId = quizService.saveQuiz(quiz);
-        URI location = URI.create("/learnings/tests/" + quizId);
-        return ResponseEntity.created(location).build();
+        URI location = URI.create("/learnings/tests/" + quizResponse.quizId());
+        return ResponseEntity.created(location).body(new QuizResponse(quizResponse.quizId(), quizResponse.questions()));
     }
 
     @GetMapping("/tests/{id}")
-    public ResponseEntity<List<QuizQuestion>> getQuiz(@PathVariable Long id) {
-        List<QuizQuestion> quiz = quizService.getQuiz(id);
-        return ResponseEntity.ok(quiz);
+    public ResponseEntity<QuizResponse> getQuiz(@PathVariable Long id) {
+        QuizResponseDto quizResponse = quizService.getQuiz(id);
+        return ResponseEntity.ok(new QuizResponse(quizResponse.quizId(), quizResponse.questions()));
     }
 
     @PostMapping("/tests/{id}")
     public ResponseEntity<List<QuizResult>> submitQuiz(@PathVariable Long id,
-                                                       @RequestBody List<Long> answers) {
-        List<QuizResult> results = quizService.submitAnswers(id, answers);
+                                                       @RequestBody QuizRequest requestDto) {
+        QuizRequestDto request = new QuizRequestDto(requestDto.categoryName(), requestDto.answerIds());
+        List<QuizResult> results = quizService.submitAnswers(id, request);
         return ResponseEntity.ok(results);
     }
 }

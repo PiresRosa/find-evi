@@ -9,6 +9,7 @@ import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumen
 import com.dnd.spaced.global.resolver.word.SearchWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,13 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableScheduling
 @RequiredArgsConstructor
 @EnableConfigurationProperties(value = {UrlProperties.class, ImageStorePathProperties.class})
 public class AppConfig implements WebMvcConfigurer {
@@ -33,6 +36,11 @@ public class AppConfig implements WebMvcConfigurer {
     private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
     private final SearchWordSortConditionArgumentResolver searchWordSortConditionArgumentResolver;
     private final PopularCommentSortConditionArgumentResolver popularCommentSortConditionArgumentResolver;
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
+    }
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {

@@ -40,6 +40,9 @@ public record ListWordInfoResponse(
             @Schema(description = "용어 카테고리", allowableValues = {"개발", "비즈니스", "디자인"})
             String category,
 
+            @Schema(description = "댓글 개수")
+            int commentCount,
+
             @Schema(description = "조회수")
             int viewCount
     ) {
@@ -50,6 +53,7 @@ public record ListWordInfoResponse(
                     dto.name(),
                     dto.meaning(),
                     dto.category(),
+                    dto.commentCount(),
                     dto.viewCount()
             );
         }

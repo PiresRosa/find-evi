@@ -3,8 +3,6 @@ package com.dnd.spaced.domain.admin.presentation.dto.response;
 import com.dnd.spaced.domain.word.domain.Pronunciation;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
-
 public record AdminWordResponse(
 
         @Schema(description = "용어 ID")
@@ -23,5 +21,5 @@ public record AdminWordResponse(
         String category,
 
         @Schema(description = "예문")
-        List<String> examples
+        String example
 ) {}

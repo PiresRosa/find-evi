@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.quiz.domain.repository;
 
-import com.dnd.spaced.domain.quiz.domain.*;
+import com.dnd.spaced.domain.quiz.domain.QuizQuestion;
 import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -9,11 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.dnd.spaced.domain.quiz.domain.QQuizQuestion.quizQuestion;
-import static com.dnd.spaced.domain.quiz.domain.QQuizResult.quizResult;
-import static com.dnd.spaced.domain.word.domain.QWord.word;
 
 @Repository
 @RequiredArgsConstructor

@@ -11,7 +11,6 @@ import com.dnd.spaced.domain.report.domain.Report;
 import com.dnd.spaced.domain.report.domain.repository.QuerydslReportRepository;
 import com.dnd.spaced.domain.report.domain.repository.ReportRepository;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
-import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import jakarta.transaction.Transactional;
@@ -44,14 +43,7 @@ public class AdminService {
 
     @Transactional
     public void updateWord(Long wordId, AdminWordRequestDto wordRequestDto) {
-        Word word = Word.builder()
-                .name(wordRequestDto.name())
-                .englishPronunciation(wordRequestDto.pronunciation().getEnglish())
-                .meaning(wordRequestDto.meaning())
-                .categoryName(String.valueOf(Category.findBy(wordRequestDto.category())))
-                .example(wordRequestDto.example())
-                .build();
-
+        Word word = AdminServiceMapper.fromUpdateRequest(wordRequestDto);
         wordRepository.save(word);
     }
 
@@ -67,7 +59,6 @@ public class AdminService {
     @Transactional
     public void ignoreReport(Long reportId) {
         Report report = getReport(reportId);
-
         reportRepository.deleteById(reportId);
     }
 
@@ -77,8 +68,13 @@ public class AdminService {
         List<Report> reports = reportQuerydslRepository.findReportsAfterId(lastReportId, size);
 
         return reports.stream()
-                .map(report -> new ReportInfoDto(report.getId(), report.getReason().name()))
+                .map(AdminServiceMapper::toReportInfoDto)
                 .collect(Collectors.toList());
+    }
+
+    public AdminWordResponse getWord(Long wordId) {
+        Word word = findWordById(wordId);
+        return AdminServiceMapper.toResponseDto(word);
     }
 
     private Report getReport(Long reportId) {
@@ -91,13 +87,9 @@ public class AdminService {
                 .orElseThrow(CommentNotFoundException::new);
     }
 
-    public AdminWordResponse getWord(Long wordId) {
-        Word word = findWordById(wordId);
-        return AdminServiceMapper.toResponseDto(word);
-    }
-
     private Word findWordById(Long wordId) {
         return wordRepository.findBy(wordId)
                 .orElseThrow(WordNotFoundException::new);
     }
 }
+

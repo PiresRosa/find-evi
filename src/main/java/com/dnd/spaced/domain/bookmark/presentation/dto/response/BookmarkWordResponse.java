@@ -36,7 +36,7 @@ public record BookmarkWordResponse(List<BookmarkWordInfoResponse> words, Long la
             return new BookmarkWordInfoResponse(
                     dto.wordId(),
                     dto.name(),
-                    new PronunciationInfoResponse(dto.pronunciationInfo().korean(), dto.pronunciationInfo().english()),
+                    new PronunciationInfoResponse(dto.pronunciationInfo().english()),
                     dto.meaning(),
                     dto.category(),
                     dto.viewCount(),
@@ -47,7 +47,7 @@ public record BookmarkWordResponse(List<BookmarkWordInfoResponse> words, Long la
             );
         }
 
-        public record PronunciationInfoResponse(String korean, String english) {
+        public record PronunciationInfoResponse(String english) {
         }
     }
 }

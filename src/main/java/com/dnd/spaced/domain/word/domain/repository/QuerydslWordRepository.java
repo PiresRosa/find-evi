@@ -7,22 +7,18 @@ import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
+import com.dnd.spaced.domain.word.domain.repository.dto.request.SearchWordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedWordSortConditionException;
-import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.util.List;
-
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -76,32 +72,13 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<WordInfoWithBookmarkDto> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
+    public List<Word> findAllBy(WordConditionDto wordConditionDto) {
         Order order = findOrder(wordConditionDto.pageable());
 
-        return queryFactory.select(
-                        Projections.constructor(
-                                WordInfoWithBookmarkDto.class,
-                                word.id,
-                                word.name,
-                                word.pronunciation,
-                                word.meaning,
-                                word.category,
-                                word.example,
-                                word.viewCount,
-                                bookmark.id,
-                                word.createdAt,
-                                word.updatedAt
-                        )
-                )
-                .from(word)
-                .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId),
-                        bookmark.accountId.eq(accountId)
-                )
+        return queryFactory.selectFrom(word)
                 .where(
-                        eqCategory(wordConditionDto.categoryName()),
-                        ltLastWordName(wordConditionDto.lastWordName())
+                        categoryEq(wordConditionDto.categoryName()),
+                        lastWordNameLt(wordConditionDto.lastWordName())
                 )
                 .orderBy(orderByName(order))
                 .limit(wordConditionDto.pageable().getPageSize())
@@ -112,7 +89,7 @@ public class QuerydslWordRepository implements WordRepository {
     public WordCandidateDto findCandidateAllBy(String target) {
         List<String> result = queryFactory.select(word.name)
                 .from(word)
-                .where(word.name.like(target + "%"))
+                .where(word.name.endsWith(target))
                 .fetch();
 
         return WordRepositoryMapper.to(result);
@@ -127,45 +104,20 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<WordSearchDto> searchWords(WordSearchRequest request, Long accountId) {
-        return queryFactory
-                .select(
-                        Projections.constructor(
-                                WordSearchDto.class,
-                                word.id,
-                                word.name,
-                                word.pronunciation,
-                                word.meaning,
-                                word.category,
-                                word.viewCount,
-                                word.commentCount,
-                                bookmark.id.isNotNull()
-                        )
-                )
-                .from(word)
-                .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId).and(bookmark.accountId.eq(accountId))
-                )
+    public List<Word> searchWords(SearchWordConditionDto searchWordConditionDto) {
+        return queryFactory.selectFrom(word)
                 .where(
-                        nameContains(request.name()),
-                        pronunciationContains(request.pronunciation()),
-                        categoryEq(request.category()),
-                        ltLastWordName(request.lastWordName())
+                        nameContains(searchWordConditionDto.name()),
+                        pronunciationContains(searchWordConditionDto.pronunciation()),
+                        categoryEq(searchWordConditionDto.category()),
+                        lastWordNameLt(searchWordConditionDto.lastWordName())
                 )
                 .orderBy(word.name.asc())
-                .limit(request.pageable().getPageSize())
+                .limit(searchWordConditionDto.pageable().getPageSize())
                 .fetch();
     }
 
-    private BooleanExpression eqCategory(String categoryName) {
-        if (IGNORE_CATEGORY.equals(categoryName)) {
-            return null;
-        }
-
-        return word.category.eq(Category.findBy(categoryName));
-    }
-
-    private BooleanExpression ltLastWordName(String lastWordName) {
+    private BooleanExpression lastWordNameLt(String lastWordName) {
         if (lastWordName == null) {
             return null;
         }
@@ -179,12 +131,20 @@ public class QuerydslWordRepository implements WordRepository {
             return OrderByNull.DEFAULT;
         }
 
+        validateSortCondition(order);
+
+        return calculateOrderSpecifier(order);
+    }
+
+    private void validateSortCondition(Order order) {
         String sortCondition = order.getProperty();
 
         if (!SORT_CONDITION.equals(sortCondition)) {
             throw new UnsupportedWordSortConditionException();
         }
+    }
 
+    private OrderSpecifier<String> calculateOrderSpecifier(Order order) {
         String sortOrder = order.getDirection().toString();
 
         if (sortOrder == null || Direction.ASC.name().equalsIgnoreCase(sortOrder)) {
@@ -194,36 +154,40 @@ public class QuerydslWordRepository implements WordRepository {
         return word.name.desc();
     }
 
-    private Order findOrder(Pageable pageable) {
-        return pageable.getSort()
-                .get()
-                .findAny()
-                .orElse(null);
-    }
-
     private BooleanExpression nameContains(String name) {
         if (name == null) {
-              return null;
+            return null;
         }
+
         return word.name.containsIgnoreCase(name);
     }
 
     private BooleanExpression pronunciationContains(String pronunciation) {
-        if (pronunciation == null) return null;
-        return word.pronunciation.korean.containsIgnoreCase(pronunciation)
-                .or(word.pronunciation.english.containsIgnoreCase(pronunciation));
+        if (pronunciation == null) {
+            return null;
+        }
+
+        return word.pronunciation.english.containsIgnoreCase(pronunciation);
     }
 
     private BooleanExpression categoryEq(String category) {
-        if (IGNORE_CATEGORY.equals(category)) {
+        if (category == null || IGNORE_CATEGORY.equals(category)) {
             return null;
         }
 
         try {
             Category categoryEnum = Category.findBy(category);
+
             return word.category.eq(categoryEnum);
         } catch (InvalidCategoryException e) {
             return null;
         }
+    }
+
+    private Order findOrder(Pageable pageable) {
+        return pageable.getSort()
+                       .get()
+                       .findAny()
+                       .orElse(null);
     }
 }

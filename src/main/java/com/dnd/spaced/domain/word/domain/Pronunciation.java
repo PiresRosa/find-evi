@@ -12,19 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pronunciation {
 
-    private String korean;
     private String english;
 
     @Builder
-    private Pronunciation(String korean, String english) {
-        validatePronunciation(korean, english);
+    private Pronunciation(String english) {
+        validatePronunciation(english);
 
-        this.korean = korean;
         this.english = english;
     }
 
-    private void validatePronunciation(String korean, String english) {
-        if (isInvalidPronunciation(korean) || isInvalidPronunciation(english)) {
+    private void validatePronunciation(String english) {
+        if (isInvalidPronunciation(english)) {
             throw new InvalidPronunciationException();
         }
     }

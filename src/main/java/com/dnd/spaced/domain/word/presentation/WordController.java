@@ -5,15 +5,17 @@ import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.WordControllerMapper;
 import com.dnd.spaced.domain.word.presentation.dto.request.MultipleWordConditionRequest;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
+import com.dnd.spaced.global.resolver.word.SearchWordSortCondition;
 import com.dnd.spaced.global.resolver.word.WordSortCondition;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +35,11 @@ public class WordController {
 
     @GetMapping
     public ResponseEntity<MultipleWordInfoResponse> findAllBy(
-            @AuthAccount(required = false) AuthAccountInfo accountInfo,
             MultipleWordConditionRequest request,
             @WordSortCondition Pageable pageable
     ) {
         List<MultipleWordInfoDto> result = wordService.findAllBy(
                 WordServiceMapper.to(
-                        accountInfo.email(),
                         request.categoryName(),
                         request.lastWordName(),
                         pageable
@@ -67,10 +67,12 @@ public class WordController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<WordSearchResponse> search(
+    public ResponseEntity<MultipleSearchWordInfoResponse> search(
             WordSearchRequest request,
-            @AuthAccount AuthAccountInfo accountInfo
+            @SearchWordSortCondition Pageable pageable
     ) {
-        return ResponseEntity.ok(wordService.search(request, accountInfo.email()));
+        List<WordSearchInfoDto> result = wordService.search(WordServiceMapper.of(request, pageable));
+
+        return ResponseEntity.ok(WordControllerMapper.toResponse(result));
     }
 }

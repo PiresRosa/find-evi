@@ -78,8 +78,7 @@ public class QuizService {
         Quiz quiz = Quiz.builder()
                 .questions(questions)
                 .build();
-        quiz = quizCrudRepository.save(quiz);
-        return quiz.getId();
+        return quizCrudRepository.save(quiz).getId()
     }
 
     private Quiz findQuizById(Long quizId) {

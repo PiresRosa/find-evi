@@ -1,16 +1,13 @@
 package com.dnd.spaced.domain.skill.presentation;
 
 import com.dnd.spaced.domain.skill.application.SkillService;
-import com.dnd.spaced.domain.skill.domain.Category;
 import com.dnd.spaced.domain.skill.presentation.dto.request.SkillRequest;
-import com.dnd.spaced.domain.skill.presentation.dto.response.SkillTotalScoreResponse;
+import com.dnd.spaced.domain.skill.presentation.dto.response.SkillTotalResponse;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +26,7 @@ public class SkillController implements SwaggerSkillController {
     }
 
     @GetMapping("/ability")
-    public ResponseEntity<Map<Category, SkillTotalScoreResponse>> getAllAbility(@AuthAccount AuthAccountInfo accountInfo) {
+    public ResponseEntity<SkillTotalResponse> getAllAbility(@AuthAccount AuthAccountInfo accountInfo) {
         return ResponseEntity.ok(skillService.getSkillTotalScore(accountInfo));
     }
 

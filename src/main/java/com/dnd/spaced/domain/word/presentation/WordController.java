@@ -4,7 +4,7 @@ import com.dnd.spaced.domain.word.application.WordService;
 import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
-import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.ListWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.WordControllerMapper;
@@ -13,7 +13,7 @@ import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
@@ -37,11 +37,11 @@ public class WordController implements SwaggerWordController {
     private final WordService wordService;
 
     @GetMapping
-    public ResponseEntity<MultipleWordInfoResponse> findAllBy(
+    public ResponseEntity<ListWordInfoResponse> findAllBy(
             MultipleWordConditionRequest request,
             @WordSortCondition Pageable pageable
     ) {
-        List<MultipleWordInfoDto> result = wordService.findAllBy(
+        List<ListWordInfoDto> result = wordService.findAllBy(
                 WordServiceMapper.to(
                         request.category(),
                         request.lastWordName(),
@@ -49,7 +49,7 @@ public class WordController implements SwaggerWordController {
                 )
         );
 
-        return ResponseEntity.ok(WordControllerMapper.to(result));
+        return ResponseEntity.ok(WordControllerMapper.too(result));
     }
 
     @GetMapping("/{id}")

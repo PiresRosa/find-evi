@@ -4,7 +4,7 @@ import com.dnd.spaced.domain.word.application.dto.request.SearchWordConditionInf
 import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
-import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.ListWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.domain.Word;
@@ -27,9 +27,9 @@ public final class WordServiceMapper {
         return new WordConditionInfoDto(categoryName, lastWordName, pageable);
     }
 
-    public static List<MultipleWordInfoDto> to(List<Word> words) {
+    public static List<ListWordInfoDto> to(List<Word> words) {
         return words.stream()
-                    .map(MultipleWordInfoDto::from)
+                    .map(ListWordInfoDto::from)
                     .toList();
     }
 

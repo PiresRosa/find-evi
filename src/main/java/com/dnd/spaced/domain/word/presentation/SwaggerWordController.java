@@ -5,7 +5,7 @@ import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
 import com.dnd.spaced.global.docs.annotation.ExceptionSpec;
 import com.dnd.spaced.global.docs.annotation.ExcludeCommonHeaderSpec;
@@ -39,7 +39,7 @@ public interface SwaggerWordController {
             @Parameter(name = "sortBy", description = "정렬 기준(사전순 고정)", schema = @Schema(defaultValue = "name", allowableValues = "name", requiredMode = RequiredMode.NOT_REQUIRED))
     })
     @ApiResponse(responseCode = "200", description = "OK")
-    ResponseEntity<MultipleWordInfoResponse> findAllBy(
+    ResponseEntity<ListWordInfoResponse> findAllBy(
             @Parameter(hidden = true) MultipleWordConditionRequest request,
             @Parameter(hidden = true) @WordSortCondition Pageable pageable
     );

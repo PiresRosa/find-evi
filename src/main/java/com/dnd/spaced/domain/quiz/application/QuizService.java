@@ -103,7 +103,7 @@ public class QuizService {
             results.add(result);
         }
 
-        return (List<QuizResult>) quizResultRepository.saveAll(results);
+        return StreamSupport.stream(quizResultRepository.saveAll(results).spliterator(), false).toList();
     }
 
     private QuizOption findSelectedOption(QuizQuestion question, Long answerId) {

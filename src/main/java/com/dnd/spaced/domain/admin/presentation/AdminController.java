@@ -1,13 +1,17 @@
 package com.dnd.spaced.domain.admin.presentation;
 
 import com.dnd.spaced.domain.admin.application.AdminService;
+import com.dnd.spaced.domain.admin.application.AdminServiceMapper;
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
 import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
 import com.dnd.spaced.domain.admin.presentation.dto.AdminControllerMapper;
+import com.dnd.spaced.domain.admin.presentation.dto.request.AdminMultipleWordConditionRequest;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
 import com.dnd.spaced.domain.admin.presentation.dto.response.ReportListResponse;
+import com.dnd.spaced.global.resolver.word.WordSortCondition;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,22 @@ import java.util.List;
 public class AdminController implements SwaggerAdminController {
 
     private final AdminService adminService;
+
+    @GetMapping("/allwords")
+    public ResponseEntity<List<AdminWordResponse>> findAllBy(
+            AdminMultipleWordConditionRequest request,
+            @WordSortCondition Pageable pageable
+    ) {
+        List<AdminWordResponse> result = adminService.findAllBy(
+                AdminServiceMapper.to(
+                        request.category(),
+                        request.lastWordName(),
+                        pageable
+                )
+        );
+
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/words")
     public ResponseEntity<Void> createWord(Authentication authentication,

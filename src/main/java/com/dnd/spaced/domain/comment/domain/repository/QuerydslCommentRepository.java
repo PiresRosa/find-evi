@@ -83,9 +83,6 @@ public class QuerydslCommentRepository implements CommentRepository {
                                    Projections.constructor(
                                            PopularCommentInfoDto.class,
                                            comment.id,
-                                           comment.accountId,
-                                           account.nickname,
-                                           account.profileImage,
                                            word.id,
                                            word.name,
                                            word.category,

@@ -42,13 +42,10 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
 
         public static PopularCommentResponse from(MultiplePopularCommentInfoDto dto) {
             WordInfoDto wordInfoDto = dto.wordInfo();
-            PronunciationInfoDto pronunciationInfoDto = wordInfoDto.pronunciationInfo();
-            PronunciationInfoResponse pronunciationInfo = new PronunciationInfoResponse(pronunciationInfoDto.english());
             WordInfoResponse wordInfo = new WordInfoResponse(
                     wordInfoDto.id(),
                     wordInfoDto.name(),
-                    wordInfoDto.categoryName(),
-                    pronunciationInfo
+                    wordInfoDto.categoryName()
             );
 
             return new PopularCommentResponse(
@@ -71,16 +68,7 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
             String name,
 
             @Schema(description = "용어 카테고리", allowableValues = {"개발", "디자인", "비즈니스"})
-            String categoryName,
-
-            @Schema(description = "용어 발음 정보")
-            PronunciationInfoResponse pronunciationInfo
-    ) {
-    }
-
-    public record PronunciationInfoResponse(
-            @Schema(description = "용어 발음 기호")
-            String english
+            String categoryName
     ) {
     }
 }

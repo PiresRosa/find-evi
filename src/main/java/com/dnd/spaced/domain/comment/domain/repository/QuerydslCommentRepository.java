@@ -64,7 +64,8 @@ public class QuerydslCommentRepository implements CommentRepository {
                                 account.nickname,
                                 account.profileImage,
                                 like.id,
-                                like.id.isNotNull()
+                                like.id.isNotNull(),
+                                account.careerInfo
                         )
                 )
                 .from(comment)

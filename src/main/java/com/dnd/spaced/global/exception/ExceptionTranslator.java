@@ -175,6 +175,11 @@ public enum ExceptionTranslator {
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.POPULAR_WORD_SCHEDULE_NOT_FOUND,
             "많이 찾아본 실무 용어와 관련된 서버 문제가 발생했습니다."
+    ),
+    ACCOUNT_UNAUTHORIZED_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.ACCOUNT_UNAUTHORIZED,
+            "로그인이 필요한 기능입니다."
     )
     ;
 

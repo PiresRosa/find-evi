@@ -15,7 +15,7 @@ public class Pronunciation {
     private String english;
 
     @Builder
-    private Pronunciation(String english) {
+    public Pronunciation(String english) {
         validatePronunciation(english);
 
         this.english = english;

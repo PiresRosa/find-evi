@@ -22,7 +22,7 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
           echo "cors:" >> ./src/main/resources/application-prod.yml
-          echo "  allowed-origin: allowed-origin" >> ./src/main/resources/application-prod.yml
+          echo "  allowed-origin: ${{ secrets.ALLOWED_ORIGIN }}" >> ./src/main/resources/application-prod.yml
           echo "  max-age: 2400" >> ./src/main/resources/application-prod.yml
 
       - name: Set executable permission

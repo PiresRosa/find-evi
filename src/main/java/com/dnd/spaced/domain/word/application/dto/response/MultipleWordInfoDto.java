@@ -20,7 +20,7 @@ public record MultipleWordInfoDto(
         return new MultipleWordInfoDto(
                 dto.wordId(),
                 dto.name(),
-                new PronunciationInfoDto(dto.pronunciation().getKorean(), dto.pronunciation().getEnglish()),
+                new PronunciationInfoDto(dto.pronunciation().getEnglish()),
                 dto.meaning(),
                 dto.category().getName(),
                 dto.viewCount(),
@@ -31,6 +31,6 @@ public record MultipleWordInfoDto(
         );
     }
 
-    public record PronunciationInfoDto(String korean, String english) {
+    public record PronunciationInfoDto(String english) {
     }
 }

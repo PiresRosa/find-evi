@@ -51,7 +51,6 @@ public class Word extends BaseTimeEntity {
     @Builder
     private Word(
             String name,
-            String koreanPronunciation,
             String englishPronunciation,
             String meaning,
             String categoryName,
@@ -61,7 +60,6 @@ public class Word extends BaseTimeEntity {
 
         this.name = name;
         this.pronunciation = Pronunciation.builder()
-                                          .korean(koreanPronunciation)
                                           .english(englishPronunciation)
                                           .build();
         this.meaning = meaning;

@@ -210,8 +210,8 @@ public class QuerydslWordRepository implements WordRepository {
 
     private BooleanExpression pronunciationContains(String pronunciation) {
         if (pronunciation == null) return null;
-        return word.pronunciation.korean.containsIgnoreCase(pronunciation)
-                .or(word.pronunciation.english.containsIgnoreCase(pronunciation));
+
+        return word.pronunciation.english.containsIgnoreCase(pronunciation);
     }
 
     private BooleanExpression categoryEq(String category) {

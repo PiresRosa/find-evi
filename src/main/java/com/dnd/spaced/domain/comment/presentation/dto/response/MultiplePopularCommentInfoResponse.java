@@ -57,10 +57,7 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
             );
             WordInfoDto wordInfoDto = dto.wordInfo();
             PronunciationInfoDto pronunciationInfoDto = wordInfoDto.pronunciationInfo();
-            PronunciationInfoResponse pronunciationInfo = new PronunciationInfoResponse(
-                    pronunciationInfoDto.korean(),
-                    pronunciationInfoDto.english()
-            );
+            PronunciationInfoResponse pronunciationInfo = new PronunciationInfoResponse(pronunciationInfoDto.english());
             WordInfoResponse wordInfo = new WordInfoResponse(
                     wordInfoDto.id(),
                     wordInfoDto.name(),
@@ -97,9 +94,6 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
     }
 
     public record PronunciationInfoResponse(
-            @Schema(description = "용어 한글 발음")
-            String korean,
-
             @Schema(description = "용어 발음 기호")
             String english
     ) {

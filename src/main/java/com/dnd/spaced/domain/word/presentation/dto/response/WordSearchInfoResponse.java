@@ -10,6 +10,7 @@ public record WordSearchInfoResponse(
         Integer commentCount,
         Boolean isMarked
 ) {
-    public record PronunciationInfo(String korean, String english) {
+
+    public record PronunciationInfo(String english) {
     }
 }

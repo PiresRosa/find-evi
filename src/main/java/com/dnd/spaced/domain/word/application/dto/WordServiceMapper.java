@@ -53,10 +53,7 @@ public final class WordServiceMapper {
         return new WordSearchInfoResponse(
                 dto.id(),
                 dto.name(),
-                new WordSearchInfoResponse.PronunciationInfo(
-                        dto.pronunciation().getKorean(),
-                        dto.pronunciation().getEnglish()
-                ),
+                new WordSearchInfoResponse.PronunciationInfo(dto.pronunciation().getEnglish()),
                 dto.meaning(),
                 dto.category(),
                 dto.viewCount(),

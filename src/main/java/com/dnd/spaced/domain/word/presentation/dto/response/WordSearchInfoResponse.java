@@ -1,16 +1,15 @@
 package com.dnd.spaced.domain.word.presentation.dto.response;
 
-import com.dnd.spaced.domain.word.domain.Category;
-import com.dnd.spaced.domain.word.domain.Pronunciation;
-
 public record WordSearchInfoResponse(
         Long id,
         String name,
-        Pronunciation pronunciation,
+        PronunciationInfo pronunciationInfo,
         String meaning,
-        Category category,
+        String category,
         Integer viewCount,
         Integer commentCount,
-        Boolean isBookmarked
+        Boolean isMarked
 ) {
+    public record PronunciationInfo(String korean, String english) {
+    }
 }

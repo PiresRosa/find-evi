@@ -46,4 +46,5 @@ jobs:
             sudo docker rm spaced
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT
-            sudo docker run -d -p 8080:8080 --name spaced ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT
+            sudo docker run -d -p 8080:8080 --name spaced ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT \
+              --spring.profiles.active=prod

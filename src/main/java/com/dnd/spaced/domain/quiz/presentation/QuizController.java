@@ -4,6 +4,7 @@ import com.dnd.spaced.domain.quiz.application.QuizService;
 import com.dnd.spaced.domain.quiz.application.dto.request.QuizRequestDto;
 import com.dnd.spaced.domain.quiz.application.dto.response.QuizResponseDto;
 import com.dnd.spaced.domain.quiz.domain.QuizResult;
+import com.dnd.spaced.domain.quiz.presentation.dto.QuizControllerMapper;
 import com.dnd.spaced.domain.quiz.presentation.dto.request.QuizRequest;
 import com.dnd.spaced.domain.quiz.presentation.dto.response.QuizResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,28 +27,25 @@ public class QuizController {
     private final QuizService quizService;
 
     @PostMapping("/tests")
-    public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest requestDto) {
-        QuizRequestDto request = new QuizRequestDto(requestDto.categoryName(), List.of()); // Assumes no answers needed for creation
-        QuizResponseDto quizResponse = quizService.generateQuiz(request);
-        if (quizResponse.questions().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest request) {
+        QuizRequestDto requestDto = QuizControllerMapper.to(request);
+        QuizResponseDto responseDto = quizService.generateQuiz(requestDto);
 
-        URI location = URI.create("/learnings/tests/" + quizResponse.quizId());
-        return ResponseEntity.created(location).body(new QuizResponse(quizResponse.quizId(), quizResponse.questions()));
+        URI location = URI.create("/learnings/tests/" + responseDto.quizId());
+        return ResponseEntity.created(location).body(QuizControllerMapper.toResponse(responseDto));
     }
 
     @GetMapping("/tests/{id}")
     public ResponseEntity<QuizResponse> getQuiz(@PathVariable Long id) {
-        QuizResponseDto quizResponse = quizService.getQuiz(id);
-        return ResponseEntity.ok(new QuizResponse(quizResponse.quizId(), quizResponse.questions()));
+        QuizResponseDto responseDto = quizService.getQuiz(id);
+        return ResponseEntity.ok(QuizControllerMapper.toResponse(responseDto));
     }
 
     @PostMapping("/tests/{id}")
     public ResponseEntity<List<QuizResult>> submitQuiz(@PathVariable Long id,
-                                                       @RequestBody QuizRequest requestDto) {
-        QuizRequestDto request = new QuizRequestDto(requestDto.categoryName(), requestDto.answerIds());
-        List<QuizResult> results = quizService.submitAnswers(id, request);
+                                                       @RequestBody QuizRequest request) {
+        QuizRequestDto requestDto = QuizControllerMapper.to(request);
+        List<QuizResult> results = quizService.submitAnswers(id, requestDto);
         return ResponseEntity.ok(results);
     }
 }

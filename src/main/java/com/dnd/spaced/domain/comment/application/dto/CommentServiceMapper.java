@@ -1,11 +1,17 @@
 package com.dnd.spaced.domain.comment.application.dto;
 
+import com.dnd.spaced.domain.account.domain.Account;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.CreateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.response.LikedCommentDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.response.WrittenCommentDto;
+import com.dnd.spaced.domain.comment.domain.Comment;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByLikedConditionDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByWrittenConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
 import java.util.List;
@@ -48,5 +54,25 @@ public final class CommentServiceMapper {
         return dtos.stream()
                    .map(MultiplePopularCommentInfoDto::from)
                    .toList();
+    }
+
+    public static FindCommentAllByLikedConditionDto ofLiked(Long accountId, Long lastCommentId, Pageable pageable) {
+        return new FindCommentAllByLikedConditionDto(accountId, lastCommentId, pageable);
+    }
+
+    public static FindCommentAllByWrittenConditionDto ofWritten(Long accountId, Long lastCommentId, Pageable pageable) {
+        return new FindCommentAllByWrittenConditionDto(accountId, lastCommentId, pageable);
+    }
+
+    public static List<LikedCommentDto> ofLiked(List<Comment> comments, Account account) {
+        return comments.stream()
+                       .map(comment -> LikedCommentDto.of(account, comment))
+                       .toList();
+    }
+
+    public static List<WrittenCommentDto> ofWritten(List<Comment> comments, Account account) {
+        return comments.stream()
+                       .map(comment -> WrittenCommentDto.of(account, comment))
+                       .toList();
     }
 }

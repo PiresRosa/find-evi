@@ -2,6 +2,7 @@ package com.dnd.spaced.domain.admin.application;
 
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
 import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
+import com.dnd.spaced.domain.admin.application.exception.ReportNotFoundException;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
 import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
 import com.dnd.spaced.domain.comment.domain.Comment;
@@ -18,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +61,9 @@ public class AdminService {
 
     @Transactional
     public void ignoreReport(Long reportId) {
-        Report report = getReport(reportId);
+        if (!reportRepository.existsById(reportId)) {
+            throw new ReportNotFoundException();
+        }
         reportRepository.deleteById(reportId);
     }
 

@@ -27,6 +27,11 @@ public class QuerydslReportRepository implements ReportRepository {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return reportCrudRepository.existsById(id);
+    }
+
+    @Override
     public void deleteById(Long id) {
         reportCrudRepository.deleteById(id);
     }

@@ -11,6 +11,8 @@ public interface ReportRepository {
 
     Optional<Report> findById(Long id);
 
+    boolean existsById(Long id);
+
     void deleteById(Long id);
 
     List<Report> findReportsAfterId(Long lastReportId, int size);

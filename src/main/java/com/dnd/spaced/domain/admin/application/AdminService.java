@@ -30,7 +30,6 @@ public class AdminService {
     private final WordRepository wordRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
-    private final QuerydslReportRepository reportQuerydslRepository;
 
     @Transactional
     public Long createWord(AdminWordRequestDto wordRequestDto) {
@@ -69,7 +68,7 @@ public class AdminService {
 
     @Transactional
     public List<ReportInfoDto> findReports(Long lastReportId) {
-        List<Report> reports = reportQuerydslRepository.findReportsAfterId(lastReportId, PAGE_SIZE);
+        List<Report> reports = reportRepository.findReportsAfterId(lastReportId, PAGE_SIZE);
 
         return reports.stream()
                 .map(AdminServiceMapper::toReportInfoDto)

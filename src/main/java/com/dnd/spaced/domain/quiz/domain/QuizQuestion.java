@@ -23,6 +23,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuizQuestion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,6 +37,8 @@ public class QuizQuestion {
 
     private String questionText;
 
+    private String exampleText;
+
     @OneToMany(mappedBy = "quizQuestion", cascade = CascadeType.ALL)
     private List<QuizOption> options = new ArrayList<>();
 
@@ -48,13 +51,19 @@ public class QuizQuestion {
             Quiz quiz,
             String categoryName,
             String questionText,
+            String exampleText,
             List<QuizOption> options,
             QuizOption correctOption
     ) {
         this.quiz = quiz;
         this.category = Category.findBy(categoryName);
         this.questionText = questionText;
+        this.exampleText = exampleText;
         this.options = options;
         this.correctOption = correctOption;
+    }
+
+    public boolean isCorrect(QuizOption selectedOption) {
+        return selectedOption.equals(correctOption);
     }
 }

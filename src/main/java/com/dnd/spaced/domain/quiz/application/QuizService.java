@@ -92,7 +92,7 @@ public class QuizService {
         for (int i = 0; i < questions.size(); i++) {
             QuizQuestion question = questions.get(i);
             QuizOption selectedOption = findSelectedOption(question, requestDto.answerIds().get(i));
-            boolean isCorrect = isCorrectAnswer(question, selectedOption);
+            boolean isCorrect = question.isCorrect(selectedOption);
 
             QuizResult result = createQuizResult(question, selectedOption, isCorrect);
             results.add(result);
@@ -106,10 +106,6 @@ public class QuizService {
                 .filter(option -> option.getId().equals(answerId))
                 .findFirst()
                 .orElseThrow(InvalidOptionException::new);
-    }
-
-    private boolean isCorrectAnswer(QuizQuestion question, QuizOption selectedOption) {
-        return selectedOption.getId().equals(question.getCorrectOption());
     }
 
     private QuizResult createQuizResult(QuizQuestion question, QuizOption selectedOption, boolean isCorrect) {

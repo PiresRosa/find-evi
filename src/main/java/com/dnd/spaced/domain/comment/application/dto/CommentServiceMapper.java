@@ -16,6 +16,7 @@ import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAl
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByWrittenConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentWithoutIsLikeDto;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,12 @@ public final class CommentServiceMapper {
         return dtos.stream()
                    .map(MultiplePopularCommentInfoDto::from)
                    .toList();
+    }
+
+    public static List<MultiplePopularCommentInfoDto> fromPopularCommentWithOutIsLike(List<PopularCommentWithoutIsLikeDto> dtos) {
+        return dtos.stream()
+                .map(MultiplePopularCommentInfoDto::from)
+                .toList();
     }
 
     public static FindCommentAllByLikedConditionDto ofLiked(Long accountId, Long lastCommentId, Pageable pageable) {

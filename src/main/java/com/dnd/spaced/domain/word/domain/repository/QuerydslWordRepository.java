@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.word.domain.repository;
 
-import static com.dnd.spaced.domain.word.domain.QBookmark.bookmark;
+import static com.dnd.spaced.domain.bookmark.domain.QBookmark.bookmark;
 import static com.dnd.spaced.domain.word.domain.QWord.word;
 
 import com.dnd.spaced.domain.word.domain.Category;

@@ -47,6 +47,10 @@ public class QuizService {
         return QuizServiceMapper.toResponse(quiz.getId(), quiz.getQuestions());
     }
 
+    public long getParticipantsCountToday() {
+        return quizResultRepository.countParticipantsToday();
+    }
+
     @Transactional
     public List<QuizResult> submitAnswers(Long quizId, QuizRequestDto requestDto) {
         List<QuizQuestion> questions = findQuizById(quizId).getQuestions();

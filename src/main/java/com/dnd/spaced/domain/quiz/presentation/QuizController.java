@@ -47,4 +47,10 @@ public class QuizController implements SwaggerQuizController{
         List<QuizResult> results = quizService.submitAnswers(id, requestDto);
         return ResponseEntity.ok(results);
     }
+
+    @GetMapping("/today/participants")
+    public ResponseEntity<Long> getParticipantsCountToday() {
+        long participantsCount = quizService.getParticipantsCountToday();
+        return ResponseEntity.ok(participantsCount);
+    }
 }

@@ -11,7 +11,6 @@ public record TestProblemResponse(
             Long answerId,
             String question,
             String name,
-            String pronunciation,
             String category,
             double correctPercent,
             double wrongPercent,

@@ -13,7 +13,6 @@ public record TestExplanationResponse(
             boolean isCorrect,
             boolean isMarked,
             String name,
-            String korean,
             String selectedOptionDescription,
             String answerOptionDescription
     ) {

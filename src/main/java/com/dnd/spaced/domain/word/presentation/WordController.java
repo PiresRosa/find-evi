@@ -58,6 +58,12 @@ public class WordController implements SwaggerWordController {
         return ResponseEntity.ok(WordControllerMapper.to(result));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTotalWordCount() {
+        long totalWordCount = wordService.getTotalWordCount();
+        return ResponseEntity.ok(totalWordCount);
+    }
+
     @GetMapping("/candidates")
     public ResponseEntity<InputWordCandidateResponse> findCandidateAllBy(String name) {
         InputWordCandidateDto result = wordService.findCandidateAllBy(name);

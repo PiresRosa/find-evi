@@ -79,6 +79,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/images/{name}").permitAll()
                     .requestMatchers(HttpMethod.GET, "/learnings/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/learnings/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/words/**").permitAll()
                     .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))

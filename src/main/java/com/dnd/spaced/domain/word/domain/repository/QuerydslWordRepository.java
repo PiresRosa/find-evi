@@ -100,8 +100,8 @@ public class QuerydslWordRepository implements WordRepository {
                         bookmark.accountId.eq(accountId)
                 )
                 .where(
-                        eqCategory(wordConditionDto.categoryName()),
-                        ltLastWordName(wordConditionDto.lastWordName())
+                        categoryEq(wordConditionDto.categoryName()),
+                        lastWordNameLt(wordConditionDto.lastWordName())
                 )
                 .orderBy(orderByName(order))
                 .limit(wordConditionDto.pageable().getPageSize())
@@ -112,7 +112,7 @@ public class QuerydslWordRepository implements WordRepository {
     public WordCandidateDto findCandidateAllBy(String target) {
         List<String> result = queryFactory.select(word.name)
                 .from(word)
-                .where(word.name.like(target + "%"))
+                .where(word.name.endsWith(target))
                 .fetch();
 
         return WordRepositoryMapper.to(result);
@@ -150,22 +150,14 @@ public class QuerydslWordRepository implements WordRepository {
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),
                         categoryEq(request.category()),
-                        ltLastWordName(request.lastWordName())
+                        lastWordNameLt(request.lastWordName())
                 )
                 .orderBy(word.name.asc())
                 .limit(request.pageable().getPageSize())
                 .fetch();
     }
 
-    private BooleanExpression eqCategory(String categoryName) {
-        if (IGNORE_CATEGORY.equals(categoryName)) {
-            return null;
-        }
-
-        return word.category.eq(Category.findBy(categoryName));
-    }
-
-    private BooleanExpression ltLastWordName(String lastWordName) {
+    private BooleanExpression lastWordNameLt(String lastWordName) {
         if (lastWordName == null) {
             return null;
         }
@@ -179,12 +171,20 @@ public class QuerydslWordRepository implements WordRepository {
             return OrderByNull.DEFAULT;
         }
 
+        validateSortCondition(order);
+
+        return calculateOrderSpecifier(order);
+    }
+
+    private void validateSortCondition(Order order) {
         String sortCondition = order.getProperty();
 
         if (!SORT_CONDITION.equals(sortCondition)) {
             throw new UnsupportedWordSortConditionException();
         }
+    }
 
+    private OrderSpecifier<String> calculateOrderSpecifier(Order order) {
         String sortOrder = order.getDirection().toString();
 
         if (sortOrder == null || Direction.ASC.name().equalsIgnoreCase(sortOrder)) {
@@ -194,36 +194,40 @@ public class QuerydslWordRepository implements WordRepository {
         return word.name.desc();
     }
 
-    private Order findOrder(Pageable pageable) {
-        return pageable.getSort()
-                .get()
-                .findAny()
-                .orElse(null);
-    }
-
     private BooleanExpression nameContains(String name) {
         if (name == null) {
-              return null;
+            return null;
         }
+
         return word.name.containsIgnoreCase(name);
     }
 
     private BooleanExpression pronunciationContains(String pronunciation) {
-        if (pronunciation == null) return null;
+        if (pronunciation == null) {
+            return null;
+        }
 
         return word.pronunciation.english.containsIgnoreCase(pronunciation);
     }
 
     private BooleanExpression categoryEq(String category) {
-        if (IGNORE_CATEGORY.equals(category)) {
+        if (category == null || IGNORE_CATEGORY.equals(category)) {
             return null;
         }
 
         try {
             Category categoryEnum = Category.findBy(category);
+
             return word.category.eq(categoryEnum);
         } catch (InvalidCategoryException e) {
             return null;
         }
+    }
+
+    private Order findOrder(Pageable pageable) {
+        return pageable.getSort()
+                       .get()
+                       .findAny()
+                       .orElse(null);
     }
 }

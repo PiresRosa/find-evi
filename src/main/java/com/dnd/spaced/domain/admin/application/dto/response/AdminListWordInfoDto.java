@@ -24,7 +24,7 @@ public record AdminListWordInfoDto(
                 word.getCategory().getName(),
                 word.getCommentCount(),
                 word.getViewCount(),
-                word.getExamples().toString(),
+                word.getExample().toString(),
                 word.getCreatedAt(),
                 word.getUpdatedAt()
         );

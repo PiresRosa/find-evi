@@ -1,5 +1,6 @@
 package com.dnd.spaced.domain.word.application.dto.response;
 
+import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.time.LocalDateTime;
 
@@ -34,6 +35,24 @@ public record DetailWordInfoDto(
                 dto.updatedAt()
         );
     }
+
+    public static DetailWordInfoDto from(Word word) {
+        return new DetailWordInfoDto(
+                word.getId(),
+                word.getName(),
+                new PronunciationInfoDto(word.getPronunciation().getEnglish()),
+                word.getMeaning(),
+                word.getCategory().getName(),
+                word.getViewCount() + 1,
+                word.getCommentCount(),
+                word.getBookmarkCount(),
+                word.getExample(),
+                false,
+                word.getCreatedAt(),
+                word.getUpdatedAt()
+        );
+    }
+
 
     public record PronunciationInfoDto(String english) {
     }

@@ -215,7 +215,7 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     private BooleanExpression categoryEq(String category) {
-        if ("전체".equals(category)) {
+        if (IGNORE_CATEGORY.equals(category)) {
             return null;
         }
 

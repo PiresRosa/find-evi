@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class AdminController {
+public class AdminController implements SwaggerAdminController {
 
     private final AdminService adminService;
 

@@ -61,6 +61,16 @@ public class WordService {
         }
     }
 
+    public List<ListWordInfoDto> findRecentWords() {
+        List<Word> result = wordRepository.findRecentWords();
+        return WordServiceMapper.to(result);
+    }
+
+    public List<ListWordInfoDto> findRandomWords() {
+        List<Word> result = wordRepository.findRandomWords();
+        return WordServiceMapper.to(result);
+    }
+
     public InputWordCandidateDto findCandidateAllBy(String target) {
         WordCandidateDto result = wordRepository.findCandidateAllBy(target);
 

@@ -14,6 +14,10 @@ public interface WordRepository {
 
     void delete(Word word);
 
+    List<Word> findRecentWords();
+
+    List<Word> findRandomWords();
+
     Optional<Word> findBy(Long wordId);
 
     Optional<WordInfoWithBookmarkDto> findWithBookmarkBy(Long wordId, Long accountId);

@@ -6,12 +6,8 @@ import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.ListWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
-import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.*;
+
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -41,5 +37,9 @@ public final class WordControllerMapper {
 
     public static PopularWordResponse from(List<PopularWordInfoDto> dtos) {
         return PopularWordResponse.from(dtos);
+    }
+
+    public static SimpleListWordInfoResponse toSimpleResponse(List<ListWordInfoDto> dtos) {
+        return SimpleListWordInfoResponse.from(dtos);
     }
 }

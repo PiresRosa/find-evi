@@ -16,6 +16,7 @@ import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
@@ -137,6 +138,23 @@ public class QuerydslWordRepository implements WordRepository {
                 .limit(searchWordConditionDto.pageable().getPageSize())
                 .fetch();
     }
+
+    @Override
+    public List<Word> findRecentWords() {
+        return queryFactory.selectFrom(word)
+                .orderBy(word.createdAt.desc())
+                .limit(3)
+                .fetch();
+    }
+
+    @Override
+    public List<Word> findRandomWords() {
+        return queryFactory.selectFrom(word)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
+                .limit(3)
+                .fetch();
+    }
+
 
     private BooleanExpression lastWordNameLt(String lastWordName) {
         if (lastWordName == null) {

@@ -34,7 +34,7 @@ public class QuizService {
 
     public QuizResponseDto generateQuiz(QuizRequestDto requestDto) {
         Category category = findCategoryByName(requestDto.categoryName());
-        List<QuizQuestion> questions = findQuestionsByCategory(String.valueOf(category));
+        List<QuizQuestion> questions = findQuestionsByCategory(category.getName());
         validateQuestionCount(questions);
         List<QuizQuestion> selectedQuestions = selectRandomQuestions(questions);
         Long quizId = saveQuiz(selectedQuestions);

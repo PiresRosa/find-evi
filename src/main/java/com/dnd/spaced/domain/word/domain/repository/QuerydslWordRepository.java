@@ -76,29 +76,10 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<WordInfoWithBookmarkDto> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
+    public List<Word> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
         Order order = findOrder(wordConditionDto.pageable());
 
-        return queryFactory.select(
-                        Projections.constructor(
-                                WordInfoWithBookmarkDto.class,
-                                word.id,
-                                word.name,
-                                word.pronunciation,
-                                word.meaning,
-                                word.category,
-                                word.example,
-                                word.viewCount,
-                                bookmark.id,
-                                word.createdAt,
-                                word.updatedAt
-                        )
-                )
-                .from(word)
-                .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId),
-                        bookmark.accountId.eq(accountId)
-                )
+        return queryFactory.selectFrom(word)
                 .where(
                         categoryEq(wordConditionDto.categoryName()),
                         lastWordNameLt(wordConditionDto.lastWordName())

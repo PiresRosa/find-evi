@@ -4,6 +4,7 @@ import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 
@@ -28,8 +29,8 @@ public final class WordServiceMapper {
         return new WordConditionInfoDto(email, categoryName, lastWordName, pageable);
     }
 
-    public static List<MultipleWordInfoDto> to(List<WordInfoWithBookmarkDto> dtos) {
-        return dtos.stream()
+    public static List<MultipleWordInfoDto> to(List<Word> words) {
+        return words.stream()
                 .map(MultipleWordInfoDto::from)
                 .toList();
     }

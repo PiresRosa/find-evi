@@ -10,6 +10,7 @@ import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordInfoEvent;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
+import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
@@ -43,7 +44,7 @@ public class WordService {
                 dto.lastWordName(),
                 dto.pageable()
         );
-        List<WordInfoWithBookmarkDto> result = wordRepository.findAllBy(wordConditionDto, accountId);
+        List<Word> result = wordRepository.findAllBy(wordConditionDto, accountId);
 
         return WordServiceMapper.to(result);
     }

@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.word.application.dto.response;
 
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.Word;
 import java.time.LocalDateTime;
 
 public record MultipleWordInfoDto(
@@ -11,23 +11,21 @@ public record MultipleWordInfoDto(
         String category,
         int viewCount,
         String example,
-        boolean isMarked,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
 
-    public static MultipleWordInfoDto from(WordInfoWithBookmarkDto dto) {
+    public static MultipleWordInfoDto from(Word word) {
         return new MultipleWordInfoDto(
-                dto.wordId(),
-                dto.name(),
-                new PronunciationInfoDto(dto.pronunciation().getEnglish()),
-                dto.meaning(),
-                dto.category().getName(),
-                dto.viewCount(),
-                dto.example(),
-                dto.bookmarkId() != null,
-                dto.createdAt(),
-                dto.updatedAt()
+                word.getId(),
+                word.getName(),
+                new PronunciationInfoDto(word.getPronunciation().getEnglish()),
+                word.getMeaning(),
+                word.getCategory().getName(),
+                word.getViewCount(),
+                word.getExample(),
+                word.getCreatedAt(),
+                word.getUpdatedAt()
         );
     }
 

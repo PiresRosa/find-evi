@@ -8,8 +8,7 @@ public record WordInfoResponse(
         PronunciationInfoResponse pronunciationInfo,
         String meaning,
         String category,
-        int viewCount,
-        boolean isMarked
+        int viewCount
 ) {
 
     public record PronunciationInfoResponse(String english) {
@@ -22,8 +21,7 @@ public record WordInfoResponse(
                 new PronunciationInfoResponse(dto.pronunciationInfo().english()),
                 dto.meaning(),
                 dto.category(),
-                dto.viewCount(),
-                dto.isMarked()
+                dto.viewCount()
         );
     }
 }

@@ -1,7 +1,7 @@
 package com.dnd.spaced.domain.quiz.domain.repository;
 
 import com.dnd.spaced.domain.quiz.domain.QuizQuestion;
-import com.dnd.spaced.domain.word.domain.Category;
+import com.dnd.spaced.domain.quiz.domain.Category;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -13,7 +13,7 @@ import com.dnd.spaced.domain.quiz.domain.QuizResult;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizCrudRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizResultRepository;
-import com.dnd.spaced.domain.word.domain.Category;
+import com.dnd.spaced.domain.quiz.domain.Category;
 import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

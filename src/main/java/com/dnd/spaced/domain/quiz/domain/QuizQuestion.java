@@ -1,6 +1,5 @@
 package com.dnd.spaced.domain.quiz.domain;
 
-import com.dnd.spaced.domain.word.domain.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.ManyToOne;

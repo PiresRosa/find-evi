@@ -3,7 +3,7 @@ package com.dnd.spaced.domain.auth.presentation;
 import com.dnd.spaced.domain.auth.application.AuthService;
 import com.dnd.spaced.domain.auth.application.dto.response.TokenDto;
 import com.dnd.spaced.domain.auth.presentation.dto.AuthControllerMapper;
-import com.dnd.spaced.domain.auth.presentation.dto.request.InitProfileRequest;
+import com.dnd.spaced.domain.auth.presentation.dto.request.CareerInfoRequest;
 import com.dnd.spaced.domain.auth.presentation.dto.response.TokenResponse;
 import com.dnd.spaced.domain.auth.presentation.exception.RefreshTokenNotFoundException;
 import com.dnd.spaced.global.config.properties.TokenProperties;
@@ -34,11 +34,11 @@ public class AuthController {
     private final TokenProperties tokenProperties;
 
     @PostMapping("/profile")
-    public ResponseEntity<Void> initProfile(
+    public ResponseEntity<Void> saveCareerInfo(
             @AuthAccount AuthAccountInfo accountInfo,
-            @Valid @RequestBody InitProfileRequest request
+            @Valid @RequestBody CareerInfoRequest request
     ) {
-        authService.initProfile(accountInfo.email(), request.jobGroup(), request.company());
+        authService.saveCareerInfo(accountInfo.email(), request.jobGroup(), request.company(), request.experience());
 
         return ResponseEntityConst.NO_CONTENT;
     }

@@ -46,6 +46,16 @@ public enum ExceptionTranslator {
             ExceptionCode.INVALID_JOB_GROUP,
             "직군은 개발, 디자인만 선택 가능합니다."
     ),
+    INVALID_COMPANY_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_COMPANY,
+            "유효한 기업 선택지를 입력해주세요."
+    ),
+    INVALID_EXPERIENCE_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_EXPERIENCE,
+            "유효한 경력 선택지를 입력해주세요."
+    ),
     INVALID_EMAIL_EXCEPTION(
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.INVALID_EMAIL,

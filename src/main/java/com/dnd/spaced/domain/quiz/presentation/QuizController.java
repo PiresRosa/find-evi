@@ -31,8 +31,7 @@ public class QuizController {
         QuizRequestDto requestDto = QuizControllerMapper.to(request);
         QuizResponseDto responseDto = quizService.generateQuiz(requestDto);
 
-        URI location = URI.create("/learnings/tests/" + responseDto.quizId());
-        return ResponseEntity.created(location).body(QuizControllerMapper.toResponse(responseDto));
+        return ResponseEntity.ok(QuizControllerMapper.toResponse(responseDto));
     }
 
     @GetMapping("/tests/{id}")

@@ -54,15 +54,11 @@ public class WordService {
     }
 
     public DetailWordInfoDto findBy(String email, Long wordId) {
-        Long accountId = accountRepository.findBy(email)
-                                          .map(Account::getId)
-                                          .orElse(UNAUTHORIZED_ACCOUNT_ID);
-        WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId).orElseThrow(WordNotFoundException::new);
-
-        eventPublisher.publishEvent(new FoundWordViewCountEvent(wordId));
-        eventPublisher.publishEvent(new FoundWordPopularViewCountEvent(wordId));
-
-        return WordServiceMapper.to(result);
+        if (email != null) {
+            return findByWithAccount(email, wordId);
+        } else {
+            return findByWithoutAccount(wordId);
+        }
     }
 
     public InputWordCandidateDto findCandidateAllBy(String target) {
@@ -81,5 +77,38 @@ public class WordService {
         List<Word> result = popularWordRepository.findAllBy(LocalDateTime.now(clock), pageable);
 
         return WordServiceMapper.from(result);
+    }
+
+    private DetailWordInfoDto findByWithAccount(String email, Long wordId) {
+        Long accountId = getAccountId(email);
+        WordInfoWithBookmarkDto result = getWordInfoWithBookmark(wordId, accountId);
+
+        publishEvents(wordId);
+
+        return WordServiceMapper.to(result);
+    }
+
+    private Long getAccountId(String email) {
+        return accountRepository.findBy(email)
+                .map(Account::getId)
+                .orElse(UNAUTHORIZED_ACCOUNT_ID);
+    }
+
+    private WordInfoWithBookmarkDto getWordInfoWithBookmark(Long wordId, Long accountId) {
+        return wordRepository.findWithBookmarkBy(wordId, accountId)
+                .orElseThrow(WordNotFoundException::new);
+    }
+
+    private DetailWordInfoDto findByWithoutAccount(Long wordId) {
+        Word result = wordRepository.findBy(wordId).orElseThrow(WordNotFoundException::new);
+
+        publishEvents(wordId);
+
+        return WordServiceMapper.to(result);
+    }
+
+    private void publishEvents(Long wordId) {
+        eventPublisher.publishEvent(new FoundWordViewCountEvent(wordId));
+        eventPublisher.publishEvent(new FoundWordPopularViewCountEvent(wordId));
     }
 }

@@ -37,6 +37,10 @@ public final class WordServiceMapper {
         return DetailWordInfoDto.from(dto);
     }
 
+    public static DetailWordInfoDto to(Word word) {
+        return DetailWordInfoDto.from(word);
+    }
+
     public static InputWordCandidateDto from(WordCandidateDto dto) {
         return new InputWordCandidateDto(dto.candidates());
     }

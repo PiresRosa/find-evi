@@ -26,7 +26,6 @@ public class QuerydslAdminRepository implements AdminRepository{
     private static final String IGNORE_CATEGORY = "전체";
 
     private final JPAQueryFactory queryFactory;
-    private final AdminRepository adminRepository;
 
     @Override
     public List<Word> findAllBy(AdminWordConditionDto adminWordConditionDto) {

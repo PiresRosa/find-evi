@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 public class QuizResult {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

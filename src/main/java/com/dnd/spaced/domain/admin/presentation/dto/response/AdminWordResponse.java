@@ -25,5 +25,8 @@ public record AdminWordResponse(
         String category,
 
         @Schema(description = "예문")
-        String example
+        String example,
+
+        @Schema(description = "출처")
+        String resource
 ) {}

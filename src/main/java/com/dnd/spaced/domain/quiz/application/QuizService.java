@@ -14,7 +14,6 @@ import com.dnd.spaced.domain.quiz.domain.repository.QuizCrudRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizRepository;
 import com.dnd.spaced.domain.quiz.domain.repository.QuizResultRepository;
 import com.dnd.spaced.domain.quiz.domain.Category;
-import com.dnd.spaced.domain.word.domain.exception.InvalidCategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +104,7 @@ public class QuizService {
 
     private QuizOption findSelectedOption(QuizQuestion question, Long answerId) {
         return question.getOptions().stream()
-                .filter(option -> option.getId().equals(answerId))
+                .filter(option -> answerId.equals(option.getId()))
                 .findFirst()
                 .orElseThrow(InvalidOptionException::new);
     }

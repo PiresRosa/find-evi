@@ -21,6 +21,9 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
+          echo "cors:" >> ./src/main/resources/application-prod.yml
+          echo "  allowed-origin: ${{ secrets.ALLOWED_ORIGIN }}" >> ./src/main/resources/application-prod.yml
+          echo "  max-age: 2400" >> ./src/main/resources/application-prod.yml
 
       - name: Set executable permission
         run: chmod +x ./gradlew
@@ -38,12 +41,12 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            sudo docker stop spaced
-            sudo docker rm spaced
+            sudo docker stop spaced || true
+            sudo docker rm spaced || true
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT
             sudo docker run -d -p 8080:8080 --name spaced ${{ secrets.DOCKER_USERNAME }}/spaced:0.0.1-SNAPSHOT \

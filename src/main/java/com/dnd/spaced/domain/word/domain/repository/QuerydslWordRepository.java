@@ -77,7 +77,8 @@ public class QuerydslWordRepository implements WordRepository {
                                 word.bookmarkCount,
                                 bookmark.id,
                                 word.createdAt,
-                                word.updatedAt
+                                word.updatedAt,
+                                word.resource
                         )
                 )
                 .from(word)

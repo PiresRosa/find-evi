@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.word.application.event;
 
-import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordInfoEvent;
+import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordViewCountEvent;
 import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class ViewCountCalculateEventListener {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
-    public void listen(FoundWordInfoEvent event) {
+    public void listen(FoundWordViewCountEvent event) {
         wordRepository.updateViewCount(event.wordId());
     }
 }

@@ -72,6 +72,7 @@ public class SecurityConfig {
             .formLogin(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/api-docs/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/refresh-token").permitAll()
                     .requestMatchers(HttpMethod.GET, "/comments/popular").permitAll()

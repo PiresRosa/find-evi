@@ -92,4 +92,23 @@ public final class CommentServiceMapper {
     public static ReadCommentAllByWrittenDto ofWritten(String email, Long lastCommentId, Pageable pageable) {
         return new ReadCommentAllByWrittenDto(email, lastCommentId, pageable);
     }
+
+    public static List<CommentInfoWithLikeDto> toNonMemberCommentList(List<CommentInfoWithLikeDto> comments) {
+        return comments.stream()
+                .map(comment -> new CommentInfoWithLikeDto(
+                        comment.commentId(),
+                        comment.writerId(),
+                        comment.wordId(),
+                        comment.content(),
+                        comment.likeCount(),
+                        comment.createdAt(),
+                        comment.updatedAt(),
+                        comment.writerNickname(),
+                        comment.writerProfileImage(),
+                        comment.likeAccountId(),
+                        false
+                ))
+                .toList();
+    }
+
 }

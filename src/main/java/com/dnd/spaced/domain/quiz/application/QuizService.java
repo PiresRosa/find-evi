@@ -1,5 +1,6 @@
 package com.dnd.spaced.domain.quiz.application;
 
+import com.dnd.spaced.domain.quiz.application.dto.QuizServiceMapper;
 import com.dnd.spaced.domain.quiz.application.dto.request.QuizRequestDto;
 import com.dnd.spaced.domain.quiz.application.dto.response.QuizResponseDto;
 import com.dnd.spaced.domain.quiz.application.exception.InvalidOptionException;
@@ -23,71 +24,99 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QuizService {
 
-    private final QuizResultRepository quizResultRepository;
     private final QuizRepository quizRepository;
     private final QuizCrudRepository quizCrudRepository;
+    private final QuizResultRepository quizResultRepository;
 
     public QuizResponseDto generateQuiz(QuizRequestDto requestDto) {
-        QuizQuestion category = quizRepository.findByName(requestDto.categoryName())
-                .orElseThrow(() -> new InvalidCategoryException());
+        QuizQuestion category = findCategoryByName(requestDto.categoryName());
+        List<QuizQuestion> questions = findQuestionsByCategory(category);
+        validateQuestionCount(questions);
 
-        List<QuizQuestion> questions = quizRepository.findQuestionsByCategory(category.getCategory());
+        List<QuizQuestion> selectedQuestions = selectRandomQuestions(questions);
+        Long quizId = saveQuiz(selectedQuestions);
+
+        return QuizServiceMapper.toResponse(quizId, selectedQuestions);
+    }
+
+    public QuizResponseDto getQuiz(Long quizId) {
+        Quiz quiz = findQuizById(quizId);
+        return QuizServiceMapper.toResponse(quiz.getId(), quiz.getQuestions());
+    }
+
+    @Transactional
+    public List<QuizResult> submitAnswers(Long quizId, QuizRequestDto requestDto) {
+        List<QuizQuestion> questions = findQuizById(quizId).getQuestions();
+        return processResults(questions, requestDto);
+    }
+
+    private QuizQuestion findCategoryByName(String categoryName) {
+        return quizRepository.findByName(categoryName)
+                .orElseThrow(InvalidCategoryException::new);
+    }
+
+    private List<QuizQuestion> findQuestionsByCategory(QuizQuestion category) {
+        return quizRepository.findQuestionsByCategory(category.getCategory());
+    }
+
+    private void validateQuestionCount(List<QuizQuestion> questions) {
         if (questions.size() < 5) {
             throw new NotEnoughQuestionsException();
         }
+    }
 
+    private List<QuizQuestion> selectRandomQuestions(List<QuizQuestion> questions) {
         Collections.shuffle(questions);
-        List<QuizQuestion> selectedQuestions = questions.stream().limit(5).collect(Collectors.toList());
-
-        Long quizId = saveQuiz(selectedQuestions);
-
-        return new QuizResponseDto(quizId, selectedQuestions);
+        return questions.stream().limit(5).collect(Collectors.toList());
     }
 
     private Long saveQuiz(List<QuizQuestion> questions) {
         Quiz quiz = Quiz.builder()
                 .questions(questions)
                 .build();
-
         quiz = quizCrudRepository.save(quiz);
         return quiz.getId();
     }
 
-    public QuizResponseDto getQuiz(Long quizId) {
-        Quiz quiz = quizCrudRepository.findById(quizId)
-                .orElseThrow(() -> new QuizNotFoundException());
-
-        return new QuizResponseDto(quiz.getId(), quiz.getQuestions());
+    private Quiz findQuizById(Long quizId) {
+        return quizCrudRepository.findById(quizId)
+                .orElseThrow(QuizNotFoundException::new);
     }
 
-    @Transactional
-    public List<QuizResult> submitAnswers(Long quizId, QuizRequestDto requestDto) {
-        List<QuizQuestion> questions = getQuiz(quizId).questions();
+    private List<QuizResult> processResults(List<QuizQuestion> questions, QuizRequestDto requestDto) {
         List<QuizResult> results = new ArrayList<>();
 
         for (int i = 0; i < questions.size(); i++) {
             QuizQuestion question = questions.get(i);
-            int finalI = i;
-            QuizOption selectedOption = question.getOptions().stream()
-                    .filter(option -> option.getId().equals(requestDto.answerIds().get(finalI)))
-                    .findFirst()
-                    .orElseThrow(() -> new InvalidOptionException());
+            QuizOption selectedOption = findSelectedOption(question, requestDto.answerIds().get(i));
+            boolean isCorrect = isCorrectAnswer(question, selectedOption);
 
-            boolean isCorrect = selectedOption.getId().equals(question.getCorrectOption());
-
-            QuizResult result = QuizResult.builder()
-                    .quizQuestion(question)
-                    .selectedOption(selectedOption)
-                    .isCorrect(isCorrect)
-                    .build();
-
+            QuizResult result = createQuizResult(question, selectedOption, isCorrect);
             results.add(result);
         }
 
         return (List<QuizResult>) quizResultRepository.saveAll(results);
+    }
+
+    private QuizOption findSelectedOption(QuizQuestion question, Long answerId) {
+        return question.getOptions().stream()
+                .filter(option -> option.getId().equals(answerId))
+                .findFirst()
+                .orElseThrow(InvalidOptionException::new);
+    }
+
+    private boolean isCorrectAnswer(QuizQuestion question, QuizOption selectedOption) {
+        return selectedOption.getId().equals(question.getCorrectOption());
+    }
+
+    private QuizResult createQuizResult(QuizQuestion question, QuizOption selectedOption, boolean isCorrect) {
+        return QuizResult.builder()
+                .quizQuestion(question)
+                .selectedOption(selectedOption)
+                .isCorrect(isCorrect)
+                .build();
     }
 }

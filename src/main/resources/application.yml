@@ -4,3 +4,9 @@ spring:
     group:
       local:
         - console-logging
+      prod:
+        - console-logging
+        - file-error-logging
+        - file-warn-logging
+log:
+  directory: /logs/spring

@@ -1,7 +1,15 @@
 package com.dnd.spaced.domain.admin.application;
 
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
+import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
+import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
+import com.dnd.spaced.domain.comment.domain.Comment;
+import com.dnd.spaced.domain.comment.domain.repository.CommentRepository;
+import com.dnd.spaced.domain.report.application.exception.ReportedCommentNotFoundException;
+import com.dnd.spaced.domain.report.domain.Report;
+import com.dnd.spaced.domain.report.domain.repository.QuerydslReportRepository;
+import com.dnd.spaced.domain.report.domain.repository.ReportRepository;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
 import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Word;
@@ -10,10 +18,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService {
     private final WordRepository wordRepository;
+    private final ReportRepository reportRepository;
+    private final CommentRepository commentRepository;
+    private final QuerydslReportRepository reportQuerydslRepository;
 
     @Transactional
     public Long createWord(AdminWordRequestDto wordRequestDto) {
@@ -39,6 +53,42 @@ public class AdminService {
                 .build();
 
         wordRepository.save(word);
+    }
+
+    @Transactional
+    public void acceptReport(Long reportId) {
+        Report report = getReport(reportId);
+        Comment comment = getComment(report.getCommentId());
+
+        commentRepository.delete(comment);
+        reportRepository.deleteById(reportId);
+    }
+
+    @Transactional
+    public void ignoreReport(Long reportId) {
+        Report report = getReport(reportId);
+
+        reportRepository.deleteById(reportId);
+    }
+
+    @Transactional
+    public List<ReportInfoDto> findReports(Long lastReportId) {
+        int size = 15;
+        List<Report> reports = reportQuerydslRepository.findReportsAfterId(lastReportId, size);
+
+        return reports.stream()
+                .map(report -> new ReportInfoDto(report.getId(), report.getReason().name()))
+                .collect(Collectors.toList());
+    }
+
+    private Report getReport(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(ReportedCommentNotFoundException::new);
+    }
+
+    private Comment getComment(Long commentId) {
+        return commentRepository.findBy(commentId)
+                .orElseThrow(CommentNotFoundException::new);
     }
 
     public AdminWordResponse getWord(Long wordId) {

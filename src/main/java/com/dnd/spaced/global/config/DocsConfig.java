@@ -7,9 +7,11 @@ import com.dnd.spaced.global.docs.annotation.NotRequiredCommonHeaderSpec;
 import com.dnd.spaced.global.exception.ExceptionCode;
 import com.dnd.spaced.global.exception.ExceptionTranslator;
 import com.dnd.spaced.global.exception.dto.ExceptionDto;
+import com.dnd.spaced.global.security.dto.response.ExceptionResponse;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
@@ -35,18 +37,65 @@ public class DocsConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI()
+        OpenAPI openAPI = new OpenAPI()
                 .addServersItem(new Server().url("/"))
-                .info(apiInfo())
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
-                                        .description("JWT token authentication")
-                                        .in(SecurityScheme.In.HEADER)))
+                .info(new Info().title("OAuth2 API").version("v1"))
+                .components(new Components().addSecuritySchemes(
+                        "bearerAuth",
+                        new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .description("JWT token authentication")
+                                .in(SecurityScheme.In.HEADER))
+                )
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+
+        addLoginApiDocsSpec(openAPI);
+
+        return openAPI;
+    }
+
+    private void addLoginApiDocsSpec(OpenAPI openAPI) {
+        openAPI.path("/login/{providerType}",
+                new PathItem().get(new Operation()
+                        .summary("OAuth2 로그인")
+                        .description("OAuth2 로그인 API")
+                        .tags(List.of("OAuth2 관련 API"))
+                        .addParametersItem(new Parameter().name("providerType")
+                                                          .description("OAuth2 Provider 식별자")
+                                                          .required(true)
+                                                          .in("path")
+                                                          .schema(new StringSchema()._default("google")
+                                                                                    .addEnumItem("google")
+                                                          )
+                        )
+                        .responses(new ApiResponses()
+                                .addApiResponse("302", new ApiResponse().description("OAuth 동의 화면으로 리다이렉션"))
+                                .addApiResponse("401", createInvalidRegistrationIdExceptionResponse())
+                        )
+                )
+        );
+    }
+
+    private ApiResponse createInvalidRegistrationIdExceptionResponse() {
+        ApiResponse apiResponse = new ApiResponse();
+        Content content = new Content();
+        MediaType mediaType = new MediaType();
+        String message = "지원하지 않는 소셜 로그인 방식입니다.";
+        Example example = new Example().description(message);
+
+        example.setValue(
+                new ExceptionResponse(
+                        "INVALID_REGISTRATION_ID",
+                        message
+                )
+        );
+        mediaType.addExamples("400", example);
+        content.addMediaType("application/json", mediaType);
+        apiResponse.setContent(content);
+
+        return apiResponse;
     }
 
     @Bean

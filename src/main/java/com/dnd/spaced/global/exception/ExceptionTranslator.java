@@ -26,6 +26,11 @@ public enum ExceptionTranslator {
             ExceptionCode.INVALID_PATH_VARIABLE,
             "유효한 path variable 값을 입력해주세요."
     ),
+    REFRESH_TOKEN_NOT_FOUND_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.REFRESH_TOKEN_NOT_FOUND,
+            "리프레시 토큰을 입력해주세요."
+    ),
     INVALID_TOKEN_EXCEPTION(
             HttpStatus.UNAUTHORIZED,
             ExceptionCode.INVALID_TOKEN,

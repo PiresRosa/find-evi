@@ -50,6 +50,8 @@ public class Word extends BaseTimeEntity {
 
     private int commentCount = 0;
 
+    private String resource;
+
     @Builder
     private Word(
             String name,

@@ -49,11 +49,12 @@ public class BookmarkService {
                                     .build();
 
         bookmarkRepository.save(bookmark);
+        wordRepository.updateBookmarkCount(bookmark.getWordId(), ADD_BOOKMARK_COUNT);
     }
 
     private void processDeleteBookmark(Bookmark bookmark) {
         bookmarkRepository.delete(bookmark);
-        wordRepository.updateBookmarkCount(bookmark.getWordId(), ADD_BOOKMARK_COUNT);
+        wordRepository.updateBookmarkCount(bookmark.getWordId(), DELETE_BOOKMARK_COUNT);
     }
 
 

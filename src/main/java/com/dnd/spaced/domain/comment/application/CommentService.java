@@ -127,14 +127,9 @@ public class CommentService {
 
     public List<MultiplePopularCommentInfoDto> findPopularAllBy(Pageable pageable, String email) {
         if (email != null) {
-            Long accountId = findAccountId(email);
-            List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
-
-            return CommentServiceMapper.fromPopularComment(result);
+            return findPopularAllForMember(pageable, email);
         } else {
-            List<PopularCommentWithoutIsLikeDto> result = commentRepository.findPopularAll(pageable);
-
-            return CommentServiceMapper.fromPopularCommentWithOutIsLike(result);
+            return findPopularAllForNonMember(pageable);
         }
     }
 
@@ -162,6 +157,19 @@ public class CommentService {
         );
 
         return CommentServiceMapper.ofWritten(result, account);
+    }
+
+    public List<MultiplePopularCommentInfoDto> findPopularAllForMember(Pageable pageable, String email) {
+        Long accountId = findAccountId(email);
+        List<PopularCommentInfoDto> result = commentRepository.findPopularAllBy(pageable, accountId);
+
+        return CommentServiceMapper.fromPopularComment(result);
+    }
+
+    public List<MultiplePopularCommentInfoDto> findPopularAllForNonMember(Pageable pageable) {
+        List<PopularCommentWithoutIsLikeDto> result = commentRepository.findPopularAll(pageable);
+
+        return CommentServiceMapper.fromPopularCommentWithOutIsLike(result);
     }
 
     private Long findAccountId(String email) {

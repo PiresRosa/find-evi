@@ -17,7 +17,6 @@ import com.dnd.spaced.global.security.handler.OAuth2AuthenticationEntryPoint;
 import com.dnd.spaced.global.security.handler.OAuth2AuthenticationFailureHandler;
 import com.dnd.spaced.global.security.handler.OAuth2SuccessHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -48,7 +47,6 @@ public class SecurityConfig {
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final ObjectMapper objectMapper;
-    private final CorsProperties corsProperties;
     private final TokenProperties tokenProperties;
     private final NicknameProperties nicknameProperties;
     private final ProfileImageProperties profileImageProperties;
@@ -102,28 +100,16 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
 
-        config.addAllowedOrigin(corsProperties.allowedOrigin());
-        config.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setExposedHeaders(
-                List.of(
-                        "Authorization",
-                        "Origin",
-                        "Accept",
-                        "Access-Control-Allow-Headers",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers",
-                        "Content-Type"
-                )
-        );
-        config.setAllowCredentials(true);
-        config.setMaxAge(corsProperties.maxAge());
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
+        return urlBasedCorsConfigurationSource;
     }
 
     @Bean

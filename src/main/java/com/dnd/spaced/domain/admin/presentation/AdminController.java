@@ -30,7 +30,7 @@ public class AdminController {
     public ResponseEntity<Void> deleteWord(Authentication authentication,
                                            @PathVariable Long id) {
         adminService.deleteWord(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/words/{id}")
@@ -38,7 +38,7 @@ public class AdminController {
                                            @PathVariable Long id,
                                            @Valid @RequestBody AdminWordRequestDto wordRequestDto) {
         adminService.updateWord(id, wordRequestDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/words/{id}")

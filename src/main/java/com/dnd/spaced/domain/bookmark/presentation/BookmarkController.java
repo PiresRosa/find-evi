@@ -10,6 +10,7 @@ import com.dnd.spaced.domain.bookmark.presentation.dto.response.BookmarkWordResp
 import com.dnd.spaced.global.controller.ResponseEntityConst;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
+import com.dnd.spaced.global.resolver.bookmark.BookmarkSortCondition;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BookmarkController {
+public class BookmarkController implements SwaggerBookmarkController {
 
     private final BookmarkService bookmarkService;
 
@@ -36,7 +37,7 @@ public class BookmarkController {
     public ResponseEntity<BookmarkWordResponse> findAllBy(
             @AuthAccount AuthAccountInfo accountInfo,
             BookmarkConditionRequest request,
-            Pageable pageable
+            @BookmarkSortCondition Pageable pageable
     ) {
         BookmarkConditionInfoDto dto = BookmarkServiceMapper.of(
                 accountInfo.email(),

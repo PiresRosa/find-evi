@@ -4,6 +4,7 @@ import com.dnd.spaced.global.config.properties.ImageStorePathProperties;
 import com.dnd.spaced.global.config.properties.UrlProperties;
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
+import com.dnd.spaced.global.resolver.bookmark.BookmarkSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.CommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.LikedCommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumentResolver;
@@ -35,6 +36,7 @@ public class AppConfig implements WebMvcConfigurer {
     private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
     private final WordSortConditionArgumentResolver wordSortConditionArgumentResolver;
     private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
+    private final BookmarkSortConditionArgumentResolver bookmarkSortConditionArgumentResolver;
     private final SearchWordSortConditionArgumentResolver searchWordSortConditionArgumentResolver;
     private final PopularWordSortConditionArgumentResolver popularWordSortConditionArgumentResolver;
     private final LikedCommentSortConditionArgumentResolver likedCommentSortConditionArgumentResolver;
@@ -59,6 +61,7 @@ public class AppConfig implements WebMvcConfigurer {
         resolvers.add(authAccountInfoArgumentResolver);
         resolvers.add(wordSortConditionArgumentResolver);
         resolvers.add(commentSortConditionArgumentResolver);
+        resolvers.add(bookmarkSortConditionArgumentResolver);
         resolvers.add(searchWordSortConditionArgumentResolver);
         resolvers.add(popularWordSortConditionArgumentResolver);
         resolvers.add(likedCommentSortConditionArgumentResolver);

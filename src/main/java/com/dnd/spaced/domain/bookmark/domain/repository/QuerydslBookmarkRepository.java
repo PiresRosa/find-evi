@@ -54,7 +54,7 @@ public class QuerydslBookmarkRepository implements BookmarkRepository {
                                            word.meaning,
                                            word.category,
                                            word.viewCount,
-                                           word.example,
+                                           word.examples,
                                            word.createdAt,
                                            word.updatedAt,
                                            bookmark.id

@@ -18,7 +18,7 @@ public class AdminServiceMapper {
                 .englishPronunciation(dto.pronunciation().getEnglish())
                 .meaning(dto.meaning())
                 .categoryName(Category.findBy(dto.category()).getName())
-                .example(dto.example())
+                .examples(dto.examples())
                 .build();
     }
 
@@ -28,7 +28,7 @@ public class AdminServiceMapper {
                 dto.pronunciation().getEnglish(),
                 dto.meaning(),
                 Category.findBy(dto.category()).getName(),
-                dto.example()
+                dto.examples()
         );
         return existingWord;
     }
@@ -44,7 +44,7 @@ public class AdminServiceMapper {
                 word.getPronunciation(),
                 word.getMeaning(),
                 word.getCategory().name(),
-                word.getExample()
+                word.getExamples()
         );
     }
 }

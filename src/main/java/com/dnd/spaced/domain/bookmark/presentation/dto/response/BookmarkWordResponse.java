@@ -40,7 +40,7 @@ public record BookmarkWordResponse(List<BookmarkWordInfoResponse> words, Long la
                     dto.meaning(),
                     dto.category(),
                     dto.viewCount(),
-                    dto.example(),
+                    dto.examples().toString(),
                     dto.createdAt(),
                     dto.updatedAt(),
                     dto.bookmarkId()

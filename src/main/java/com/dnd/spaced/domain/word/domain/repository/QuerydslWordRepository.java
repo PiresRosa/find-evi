@@ -33,6 +33,17 @@ public class QuerydslWordRepository implements WordRepository {
     private static final String IGNORE_CATEGORY = "전체";
 
     private final JPAQueryFactory queryFactory;
+    private final WordCrudRepository wordCrudRepository;
+
+    @Override
+    public void save(Word word) {
+        wordCrudRepository.save(word);
+    }
+
+    @Override
+    public void delete(Word word) {
+        wordCrudRepository.delete(word);
+    }
 
     @Override
     public Optional<Word> findBy(Long wordId) {

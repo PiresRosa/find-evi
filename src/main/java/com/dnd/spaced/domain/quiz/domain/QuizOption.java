@@ -28,4 +28,8 @@ public class QuizOption {
         this.text = text;
         this.quizQuestion = quizQuestion;
     }
+
+    public boolean isMatchingId(Long answerId) {
+        return this.id.equals(answerId);
+    }
 }

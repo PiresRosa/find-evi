@@ -67,7 +67,7 @@ public class QuizQuestion {
 
     public QuizOption getOptionById(Long answerId) {
         return this.options.stream()
-                .filter(option -> answerId.equals(option.getId()))
+                .filter(option -> option.isMatchingId(answerId))
                 .findFirst()
                 .orElseThrow(InvalidOptionException::new);
     }

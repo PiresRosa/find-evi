@@ -29,7 +29,7 @@ public class Report extends CreateTimeEntity {
     @Column(name = "reported_comment_id")
     private Long commentId;
 
-    @Column(name = "reported_comment_id")
+    @Column(name = "reported_report_id")
     private Long reporterId;
 
     @Enumerated(EnumType.STRING)

@@ -47,6 +47,12 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
+    public long countAllWords() {
+        return queryFactory.selectFrom(word)
+                .fetchCount();
+    }
+
+    @Override
     public Optional<Word> findBy(Long wordId) {
         Word result = queryFactory.selectFrom(word)
                 .where(word.id.eq(wordId))

@@ -61,6 +61,10 @@ public class WordService {
         }
     }
 
+    public long getTotalWordCount() {
+        return wordRepository.countAllWords();
+    }
+
     public List<ListWordInfoDto> findRecentWords() {
         List<Word> result = wordRepository.findRecentWords();
         return WordServiceMapper.to(result);

@@ -22,7 +22,8 @@ public class SkillService {
     /**
      * 스킬 저장 로직.
      * 기존에 스킬 정보가 있으면 업데이트하고, 없으면 새로 저장.
-     * @param info 유저 정보
+     *
+     * @param info         유저 정보
      * @param skillRequest 카테고리와 맞춘 문제 개수
      */
     public void addSkill(AuthAccountInfo info, SkillRequest skillRequest) {
@@ -37,7 +38,6 @@ public class SkillService {
                     .totalCount(5L)
                     .build();
         }
-        // 저장된 스킬 정보 DB에 저장
         skillRepository.save(skill);
     }
 
@@ -50,13 +50,12 @@ public class SkillService {
         List<Skill> skills = skillRepository.findByEmail(info.email());
         Map<Category, SkillTotalScoreResponse> response = new HashMap<>();
 
-        // 각 카테고리별로 점수 계산
         for (Skill skill : skills) {
-            Long totalCount = calculateTotalScore(skill);  // 스킬의 정답 비율 계산
-            response.put(skill.getCategory(), createSkillTotalScoreResponse(skill, totalCount));  // 결과 맵에 추가
+            Long totalCount = calculateTotalScore(skill);
+            response.put(skill.getCategory(), createSkillTotalScoreResponse(skill, totalCount));
         }
 
-        return response;  // 최종 응답 반환
+        return response;
     }
 
     /**
@@ -67,15 +66,12 @@ public class SkillService {
     public Long getTotalMyScore(AuthAccountInfo info) {
         List<Skill> skills = skillRepository.findByEmail(info.email());
 
-        // 유저의 총 스킬 점수 합계 계산
         Long userTotalScore = skills.stream()
-                .mapToLong(this::calculateTotalScore)  // 스킬 점수를 합산
+                .mapToLong(this::calculateTotalScore)
                 .sum();
 
-        // 전체 평균 점수 계산
         Long averagePeopleScore = calculateAveragePeopleScore();
 
-        // 상위 퍼센트 계산 (평균이 0이면 0 반환)
         return (averagePeopleScore == 0) ? 0 : (userTotalScore * 100) / averagePeopleScore;
     }
 
@@ -96,9 +92,9 @@ public class SkillService {
      */
     private SkillTotalScoreResponse createSkillTotalScoreResponse(Skill skill, Long totalCount) {
         return SkillTotalScoreResponse.builder()
-                .totalScore(totalCount)           // 계산된 총점
-                .currentCount(skill.getCorrectCount())  // 맞춘 문제 개수
-                .totalCount(skill.getTotalCount())      // 총 문제 개수
+                .totalScore(totalCount)
+                .currentCount(skill.getCorrectCount())
+                .totalCount(skill.getTotalCount())
                 .build();
     }
 
@@ -107,10 +103,10 @@ public class SkillService {
      * @return 평균 스킬 점수
      */
     private Long calculateAveragePeopleScore() {
-        List<Skill> allSkills = skillRepository.findAll();  // 모든 유저의 스킬 정보 조회
+        List<Skill> allSkills = skillRepository.findAll();
         Long totalPeopleScore = allSkills.stream()
-                .mapToLong(Skill::getCorrectCount)  // 전체 유저의 맞춘 문제 수 합산
+                .mapToLong(Skill::getCorrectCount)
                 .sum();
-        return (allSkills.size() == 0) ? 0 : totalPeopleScore / allSkills.size();  // 평균 점수 계산
+        return (allSkills.isEmpty()) ? 0 : totalPeopleScore / allSkills.size();
     }
 }

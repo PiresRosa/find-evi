@@ -86,7 +86,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         try {
-            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/home")
+            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google/callback/loading")
                     .queryParam("accessToken", accessToken)
                     .queryParam("isSignUp", isSignUp)
                     .build().toUriString();

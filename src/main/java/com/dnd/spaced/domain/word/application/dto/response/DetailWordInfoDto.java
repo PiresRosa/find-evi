@@ -2,7 +2,6 @@ package com.dnd.spaced.domain.word.application.dto.response;
 
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record DetailWordInfoDto(
         Long id,
@@ -13,7 +12,7 @@ public record DetailWordInfoDto(
         int viewCount,
         int commentCount,
         int bookmarkCount,
-        List<String> examples,
+        String example,
         boolean isMarked,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -29,7 +28,7 @@ public record DetailWordInfoDto(
                 dto.viewCount() + 1,
                 dto.commentCount(),
                 dto.bookmarkCount(),
-                dto.examples(),
+                dto.example(),
                 dto.bookmarkId() != null,
                 dto.createdAt(),
                 dto.updatedAt()

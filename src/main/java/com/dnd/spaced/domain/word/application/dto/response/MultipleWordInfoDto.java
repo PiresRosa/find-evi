@@ -23,7 +23,7 @@ public record MultipleWordInfoDto(
                 word.getMeaning(),
                 word.getCategory().getName(),
                 word.getViewCount(),
-                word.getExamples().toString(),
+                word.getExample(),
                 word.getCreatedAt(),
                 word.getUpdatedAt()
         );

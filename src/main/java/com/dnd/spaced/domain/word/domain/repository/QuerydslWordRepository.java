@@ -104,6 +104,14 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
+    public void updateBookmarkCount(Long wordId, int count) {
+        queryFactory.update(word)
+                    .set(word.bookmarkCount, word.bookmarkCount.add(count))
+                    .where(word.id.eq(wordId))
+                    .execute();
+    }
+
+    @Override
     public List<Word> searchWords(SearchWordConditionDto searchWordConditionDto) {
         return queryFactory.selectFrom(word)
                 .where(

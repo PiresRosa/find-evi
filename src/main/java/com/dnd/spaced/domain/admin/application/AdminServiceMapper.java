@@ -14,7 +14,7 @@ public class AdminServiceMapper {
                 .name(dto.name())
                 .englishPronunciation(dto.pronunciation().getEnglish())
                 .meaning(dto.meaning())
-                .categoryName(String.valueOf(Category.findBy(dto.category())))
+                .categoryName(Category.findBy(dto.category()).getName())
                 .example(dto.example())
                 .build();
     }

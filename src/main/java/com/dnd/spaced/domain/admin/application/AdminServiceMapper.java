@@ -61,7 +61,8 @@ public class AdminServiceMapper {
                 word.getPronunciation(),
                 word.getMeaning(),
                 word.getCategory().name(),
-                word.getExample()
+                word.getExample(),
+                word.getResource()
         );
     }
 }

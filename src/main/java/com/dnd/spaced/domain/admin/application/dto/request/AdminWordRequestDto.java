@@ -7,5 +7,6 @@ public record AdminWordRequestDto(
         String meaning,
         Pronunciation pronunciation,
         String category,
-        String example
+        String example,
+        String resource
 ) {}

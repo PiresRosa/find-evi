@@ -2,7 +2,10 @@ package com.dnd.spaced.domain.admin.presentation;
 
 import com.dnd.spaced.domain.admin.application.AdminService;
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
+import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
+import com.dnd.spaced.domain.admin.presentation.dto.AdminControllerMapper;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
+import com.dnd.spaced.domain.admin.presentation.dto.response.ReportListResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -45,5 +49,25 @@ public class AdminController {
     public ResponseEntity<AdminWordResponse> getWord(@PathVariable Long id) {
         AdminWordResponse wordResponseDto = adminService.getWord(id);
         return ResponseEntity.ok(wordResponseDto);
+    }
+
+    @PostMapping("/reports/{id}/accept")
+    public ResponseEntity<Void> acceptReport(@PathVariable Long id) {
+        adminService.acceptReport(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reports/{id}/ignore")
+    public ResponseEntity<Void> ignoreReport(@PathVariable Long id) {
+        adminService.ignoreReport(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/reports")
+    public ResponseEntity<ReportListResponse> findReports(@RequestParam(required = false) Long lastReportId) {
+        List<ReportInfoDto> reports = adminService.findReports(lastReportId);
+
+        ReportListResponse response = AdminControllerMapper.toReportListResponse(reports, lastReportId);
+        return ResponseEntity.ok(response);
     }
 }

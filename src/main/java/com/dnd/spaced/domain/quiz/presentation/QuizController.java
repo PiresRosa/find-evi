@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/learnings")
-public class QuizController {
+public class QuizController implements SwaggerQuizController{
 
     private final QuizService quizService;
 

@@ -176,14 +176,14 @@ public enum ExceptionTranslator {
             ExceptionCode.POPULAR_WORD_SCHEDULE_NOT_FOUND,
             "많이 찾아본 실무 용어와 관련된 서버 문제가 발생했습니다."
     ),
-    INVALID_OPTION(
+    INVALID_OPTION_EXCEPTION(
             HttpStatus.BAD_REQUEST,
             ExceptionCode.INVALID_OPTION,
             "유효한 선택지를 선택해 주세요."
     ),
-    QUIZ_NOT_FOUND(
+    QUIZ_NOT_FOUND_EXCEPTION(
             HttpStatus.NOT_FOUND,
-            ExceptionCode.COMMENT_WORD_NOT_FOUND,
+            ExceptionCode.QUIZ_NOT_FOUND,
             "해당 퀴즈를 찾을 수 없습니다."
     ),
     NOT_ENOUGH_QUESTIONS_FOR_CATEGORY(

@@ -17,7 +17,7 @@ import static com.dnd.spaced.domain.quiz.domain.QQuizQuestion.quizQuestion;
 public class QuerydslQuizRepository implements QuizRepository {
 
     private final JPAQueryFactory queryFactory;
-    private static final String IGNORE_CATEGORY = "전체";
+    private static final String IGNORE_CATEGORY = "전체 실무";
 
     @Override
     public List<QuizQuestion> findQuestionsByCategory(String categoryName) {

@@ -16,7 +16,7 @@ public record WordSearchRequest(
 
         @Schema(
                 description = "검색할 용어 카테고리",
-                allowableValues = {"전체", "디자인", "개발", "비즈니스"},
+                allowableValues = {"전체 실무", "디자인", "개발", "비즈니스"},
                 requiredMode = RequiredMode.NOT_REQUIRED
         )
         String category
@@ -24,7 +24,7 @@ public record WordSearchRequest(
 
     public WordSearchRequest {
         if (category == null || category.isBlank()) {
-            category = "전체";
+            category = "전체 실무";
         }
     }
 }

@@ -71,7 +71,7 @@ public class AdminService {
 
         return reports.stream()
                 .map(AdminServiceMapper::toReportInfoDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public AdminWordResponse getWord(Long wordId) {

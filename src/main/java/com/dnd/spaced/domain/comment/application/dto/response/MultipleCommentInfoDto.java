@@ -23,7 +23,16 @@ public record MultipleCommentInfoDto(
                 dto.likeCount(),
                 dto.createdAt(),
                 dto.updatedAt(),
-                new WriterInfoDto(dto.writerId(), dto.writerNickname(), dto.writerProfileImage(), dto.careerInfo()),
+                new WriterInfoDto(
+                        dto.writerId(),
+                        dto.writerNickname(),
+                        dto.writerProfileImage(),
+                        new CareerInfo(
+                                dto.careerInfo().getJobGroup().getName(),
+                                dto.careerInfo().getCompany().getName(),
+                                dto.careerInfo().getExperience().getName()
+                        )
+                ),
                 dto.likeAccountId() != null
         );
     }

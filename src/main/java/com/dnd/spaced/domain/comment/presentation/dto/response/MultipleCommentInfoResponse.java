@@ -1,6 +1,5 @@
 package com.dnd.spaced.domain.comment.presentation.dto.response;
 
-import com.dnd.spaced.domain.account.domain.CareerInfo;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -42,7 +41,7 @@ public record MultipleCommentInfoResponse(
             @Schema(description = "댓글 내용")
             String content,
 
-            @Schema(description = "댓글 ID")
+            @Schema(description = "댓글 좋아요 수")
             int likeCount,
 
             @Schema(description = "댓글 생성 일자")
@@ -63,7 +62,9 @@ public record MultipleCommentInfoResponse(
                     dto.writerInfo().id(),
                     dto.writerInfo().nickname(),
                     baseUrl + imageUri + dto.writerInfo().profileImage(),
-                    dto.writerInfo().careerInfo()
+                    dto.writerInfo().careerInfo().getJobGroup().getName(),
+                    dto.writerInfo().careerInfo().getCompany().getName(),
+                    dto.writerInfo().careerInfo().getExperience().getName()
             );
 
             return new CommentResponse(
@@ -89,8 +90,14 @@ public record MultipleCommentInfoResponse(
             @Schema(description = "회원 프로필 이미지")
             String profileImage,
 
-            @Schema(description = "회원 경력 정보")
-            CareerInfo careerInfo
+            @Schema(description = "회원 직군")
+            String jobGroup,
+
+            @Schema(description = "회원 회사")
+            String company,
+
+            @Schema(description = "회원 연차")
+            String experience
     ) {
     }
 }

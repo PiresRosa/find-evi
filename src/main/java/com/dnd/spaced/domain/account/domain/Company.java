@@ -11,6 +11,7 @@ public enum Company {
     SMALL("중소기업"),
     STARTUP("스타트업"),
     FOREIGN("외국계"),
+    JOB_HUNTER_INTERN("취준생/인턴"),
     BLIND("비공개")
     ;
 

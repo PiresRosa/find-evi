@@ -5,7 +5,9 @@ import com.dnd.spaced.global.config.properties.UrlProperties;
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.CommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.comment.LikedCommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.comment.WrittenCommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.PopularWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.SearchWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
@@ -18,13 +20,11 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableScheduling
 @RequiredArgsConstructor
 @EnableConfigurationProperties(value = {UrlProperties.class, ImageStorePathProperties.class})
 public class AppConfig implements WebMvcConfigurer {
@@ -37,6 +37,8 @@ public class AppConfig implements WebMvcConfigurer {
     private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
     private final SearchWordSortConditionArgumentResolver searchWordSortConditionArgumentResolver;
     private final PopularWordSortConditionArgumentResolver popularWordSortConditionArgumentResolver;
+    private final LikedCommentSortConditionArgumentResolver likedCommentSortConditionArgumentResolver;
+    private final WrittenCommentSortConditionArgumentResolver writtenCommentSortConditionArgumentResolver;
     private final PopularCommentSortConditionArgumentResolver popularCommentSortConditionArgumentResolver;
 
     @Bean
@@ -59,7 +61,9 @@ public class AppConfig implements WebMvcConfigurer {
         resolvers.add(commentSortConditionArgumentResolver);
         resolvers.add(searchWordSortConditionArgumentResolver);
         resolvers.add(popularWordSortConditionArgumentResolver);
+        resolvers.add(likedCommentSortConditionArgumentResolver);
         resolvers.add(popularCommentSortConditionArgumentResolver);
+        resolvers.add(writtenCommentSortConditionArgumentResolver);
     }
 
     @Override

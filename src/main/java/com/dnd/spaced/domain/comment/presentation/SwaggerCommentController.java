@@ -2,16 +2,21 @@ package com.dnd.spaced.domain.comment.presentation;
 
 import com.dnd.spaced.domain.comment.presentation.dto.request.CommentConditionRequest;
 import com.dnd.spaced.domain.comment.presentation.dto.request.CreateCommentRequest;
+import com.dnd.spaced.domain.comment.presentation.dto.request.ReadLikedCommentRequest;
 import com.dnd.spaced.domain.comment.presentation.dto.request.UpdateCommentRequest;
+import com.dnd.spaced.domain.comment.presentation.dto.response.LikedCommentResponse;
 import com.dnd.spaced.domain.comment.presentation.dto.response.MultipleCommentInfoResponse;
 import com.dnd.spaced.domain.comment.presentation.dto.response.MultiplePopularCommentInfoResponse;
+import com.dnd.spaced.domain.comment.presentation.dto.response.WrittenCommentResponse;
 import com.dnd.spaced.global.docs.annotation.ExceptionSpec;
 import com.dnd.spaced.global.docs.annotation.NotRequiredCommonHeaderSpec;
 import com.dnd.spaced.global.exception.ExceptionCode;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import com.dnd.spaced.global.resolver.comment.CommentSortCondition;
+import com.dnd.spaced.global.resolver.comment.LikedCommentSortCondition;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortCondition;
+import com.dnd.spaced.global.resolver.comment.WrittenCommentSortCondition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -117,5 +122,33 @@ public interface SwaggerCommentController {
     ResponseEntity<MultiplePopularCommentInfoResponse> findPopularAllBy(
             @Parameter(hidden = true) @AuthAccount(required = false) AuthAccountInfo accountInfo,
             @Parameter(hidden = true) @PopularCommentSortCondition Pageable pageable
+    );
+
+    @Operation(summary = "좋아요한 댓글 목록 조회", description = "좋아요한 댓글 목록 조회 API")
+    @Parameters({
+            @Parameter(name = "lastCommentId", description = "마지막으로 조회한 댓글 ID"),
+    })
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ExceptionSpec(values = {
+            ExceptionCode.UNAUTHORIZED_COMMENT
+    })
+    ResponseEntity<LikedCommentResponse> findAllByLiked(
+            @Parameter(hidden = true) @AuthAccount AuthAccountInfo accountInfo,
+            @Parameter(hidden = true) ReadLikedCommentRequest request,
+            @Parameter(hidden = true) @LikedCommentSortCondition Pageable pageable
+    );
+
+    @Operation(summary = "작성한 댓글 목록 조회", description = "작성한 댓글 목록 조회 API")
+    @Parameters({
+            @Parameter(name = "lastCommentId", description = "마지막으로 조회한 댓글 ID"),
+    })
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ExceptionSpec(values = {
+            ExceptionCode.UNAUTHORIZED_COMMENT
+    })
+    ResponseEntity<WrittenCommentResponse> findAllByWritten(
+            @Parameter(hidden = true) @AuthAccount AuthAccountInfo accountInfo,
+            @Parameter(hidden = true) ReadLikedCommentRequest request,
+            @Parameter(hidden = true) @WrittenCommentSortCondition Pageable pageable
     );
 }

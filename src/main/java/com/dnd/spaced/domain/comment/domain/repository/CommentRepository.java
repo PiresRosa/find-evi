@@ -2,6 +2,8 @@ package com.dnd.spaced.domain.comment.domain.repository;
 
 import com.dnd.spaced.domain.comment.domain.Comment;
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByLikedConditionDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.request.FindCommentAllByWrittenConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
 import java.util.List;
@@ -21,4 +23,8 @@ public interface CommentRepository {
     List<PopularCommentInfoDto> findPopularAllBy(Pageable pageable, Long accountId);
 
     boolean existsBy(Long commentId);
+
+    List<Comment> findAllByLiked(FindCommentAllByLikedConditionDto dto);
+
+    List<Comment> findAllByWritten(FindCommentAllByWrittenConditionDto dto);
 }

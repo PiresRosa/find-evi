@@ -176,6 +176,21 @@ public enum ExceptionTranslator {
             ExceptionCode.POPULAR_WORD_SCHEDULE_NOT_FOUND,
             "많이 찾아본 실무 용어와 관련된 서버 문제가 발생했습니다."
     ),
+    INVALID_OPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_OPTION,
+            "유효한 선택지를 선택해 주세요."
+    ),
+    QUIZ_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.COMMENT_WORD_NOT_FOUND,
+            "해당 퀴즈를 찾을 수 없습니다."
+    ),
+    NOT_ENOUGH_QUESTIONS_FOR_CATEGORY(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.NOT_ENOUGH_QUESTIONS_FOR_CATEGORY,
+            "해당 카테고리로 가져올 수 있는 질문이 4개 이하 입니다."
+    ),
     ACCOUNT_UNAUTHORIZED_EXCEPTION(
             HttpStatus.UNAUTHORIZED,
             ExceptionCode.ACCOUNT_UNAUTHORIZED,

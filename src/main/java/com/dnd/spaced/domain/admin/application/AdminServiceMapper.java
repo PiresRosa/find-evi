@@ -3,7 +3,6 @@
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
 import com.dnd.spaced.domain.word.domain.Category;
-import com.dnd.spaced.domain.word.domain.Pronunciation;
 import com.dnd.spaced.domain.word.domain.Word;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,7 @@ public class AdminServiceMapper {
         return new AdminWordResponse(
                 word.getId(),
                 word.getName(),
-                new Pronunciation(word.getPronunciation().getEnglish()),
+                word.getPronunciation(),
                 word.getMeaning(),
                 word.getCategory().name(),
                 word.getExample()

@@ -3,8 +3,6 @@ package com.dnd.spaced.domain.word.presentation.dto.response;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
-
 public record DetailWordInfoResponse(
 
         @Schema(description = "용어 ID")
@@ -14,7 +12,7 @@ public record DetailWordInfoResponse(
         String name,
 
         @Schema(description = "용어 예문")
-        List<String> examples,
+        String example,
 
         @Schema(description = "용어 발음 정보")
         PronunciationInfoResponse pronunciationInfo,
@@ -45,7 +43,7 @@ public record DetailWordInfoResponse(
         return new DetailWordInfoResponse(
                 dto.id(),
                 dto.name(),
-                dto.examples(),
+                dto.example(),
                 new PronunciationInfoResponse(dto.pronunciationInfo().english()),
                 dto.meaning(),
                 dto.category(),

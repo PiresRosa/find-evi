@@ -4,14 +4,18 @@ import com.dnd.spaced.domain.word.domain.exception.InvalidExampleException;
 import com.dnd.spaced.domain.word.domain.exception.InvalidMeaningException;
 import com.dnd.spaced.domain.word.domain.exception.InvalidNameException;
 import com.dnd.spaced.global.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @Entity
@@ -38,8 +42,7 @@ public class Word extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ElementCollection
-    private List<String> examples;
+    private String example;
 
     private int viewCount = 0;
 
@@ -53,9 +56,9 @@ public class Word extends BaseTimeEntity {
             String englishPronunciation,
             String meaning,
             String categoryName,
-            List<String> examples
+            String example
     ) {
-        validateContent(name, meaning, examples.toString());
+        validateContent(name, meaning, example);
 
         this.name = name;
         this.pronunciation = Pronunciation.builder()
@@ -63,7 +66,7 @@ public class Word extends BaseTimeEntity {
                                           .build();
         this.meaning = meaning;
         this.category = Category.findBy(categoryName);
-        this.examples = examples;
+        this.example = example;
     }
 
     public void addComment() {
@@ -102,13 +105,13 @@ public class Word extends BaseTimeEntity {
         return MIN_EXAMPLE_LENGTH > length || MAX_EXAMPLE_LENGTH < length;
     }
 
-    public void updateDetails(String name, String englishPronunciation, String meaning, String categoryName, List<String> examples) {
+    public void updateDetails(String name, String englishPronunciation, String meaning, String categoryName, String example) {
         this.name = name;
         this.pronunciation = Pronunciation.builder()
                 .english(englishPronunciation)
                 .build();
         this.meaning = meaning;
         this.category = Category.findBy(categoryName);
-        this.examples = examples;
+        this.example = example;
     }
 }

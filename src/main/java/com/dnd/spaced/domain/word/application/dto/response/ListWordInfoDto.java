@@ -24,7 +24,7 @@ public record ListWordInfoDto(
                 word.getCategory().getName(),
                 word.getCommentCount(),
                 word.getViewCount(),
-                word.getExamples().toString(),
+                word.getExample(),
                 word.getCreatedAt(),
                 word.getUpdatedAt()
         );

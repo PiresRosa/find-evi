@@ -3,7 +3,6 @@ package com.dnd.spaced.domain.word.domain.repository.dto.response;
 import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Pronunciation;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record WordInfoWithBookmarkDto(
         Long wordId,
@@ -11,7 +10,7 @@ public record WordInfoWithBookmarkDto(
         Pronunciation pronunciation,
         String meaning,
         Category category,
-        List<String> examples,
+        String example,
         int viewCount,
         int commentCount,
         int bookmarkCount,

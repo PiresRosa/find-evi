@@ -18,7 +18,12 @@ import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
+
 import java.util.List;
+
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
+import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
+import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -50,8 +55,7 @@ public class WordService {
 
     public DetailWordInfoDto findBy(String email, Long wordId) {
         Long accountId = findAccountId(email);
-        WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
-                                                       .orElseThrow(WordNotFoundException::new);
+        WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId).orElseThrow(WordNotFoundException::new);
 
         eventPublisher.publishEvent(new FoundWordInfoEvent(wordId));
 
@@ -59,23 +63,14 @@ public class WordService {
     }
 
     public void processBookmark(String email, Long wordId) {
-        Account account = accountRepository.findBy(email)
-                                           .orElseThrow(ForbiddenBookmarkException::new);
-        Word word = wordRepository.findBy(wordId)
-                                  .orElseThrow(WordNotFoundException::new);
+        Account account = accountRepository.findBy(email).orElseThrow(ForbiddenBookmarkException::new);
+        Word word = wordRepository.findBy(wordId).orElseThrow(WordNotFoundException::new);
 
-        bookmarkRepository.findBy(account.getId(), word.getId())
-                          .ifPresentOrElse(
-                                  bookmarkRepository::delete,
-                                  () -> {
-                                      Bookmark bookmark = Bookmark.builder()
-                                                                  .accountId(account.getId())
-                                                                  .wordId(word.getId())
-                                                                  .build();
+        bookmarkRepository.findBy(account.getId(), word.getId()).ifPresentOrElse(bookmarkRepository::delete, () -> {
+            Bookmark bookmark = Bookmark.builder().accountId(account.getId()).wordId(word.getId()).build();
 
-                                      bookmarkRepository.save(bookmark);
-                                  }
-                          );
+            bookmarkRepository.save(bookmark);
+        });
     }
 
     public InputWordCandidateDto findCandidateAllBy(String target) {
@@ -84,9 +79,18 @@ public class WordService {
         return WordServiceMapper.from(result);
     }
 
+    public WordSearchResponse search(WordSearchRequest request, String email) {
+        Long accountId = findAccountId(email);
+        List<WordSearchDto> results = wordRepository.searchWords(request, accountId);
+
+        String lastWordName = results.isEmpty() ? null : results.get(results.size() - 1).name();
+
+        return WordServiceMapper.toWordSearchResponse(results, lastWordName);
+    }
+
     private Long findAccountId(String email) {
         return accountRepository.findBy(email)
-                                .map(Account::getId)
-                                .orElse(UNAUTHORIZED_ACCOUNT_ID);
+                .map(Account::getId)
+                .orElse(UNAUTHORIZED_ACCOUNT_ID);
     }
 }

@@ -6,7 +6,12 @@ import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
+
 import java.util.List;
+
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
+import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +30,8 @@ public final class WordServiceMapper {
 
     public static List<MultipleWordInfoDto> to(List<WordInfoWithBookmarkDto> dtos) {
         return dtos.stream()
-                   .map(MultipleWordInfoDto::from)
-                   .toList();
+                .map(MultipleWordInfoDto::from)
+                .toList();
     }
 
     public static DetailWordInfoDto to(WordInfoWithBookmarkDto dto) {
@@ -35,5 +40,28 @@ public final class WordServiceMapper {
 
     public static InputWordCandidateDto from(WordCandidateDto dto) {
         return new InputWordCandidateDto(dto.candidates());
+    }
+
+    public static WordSearchResponse toWordSearchResponse(List<WordSearchDto> dtos, String lastWordName) {
+        List<WordSearchInfoResponse> words = dtos.stream()
+                .map(WordServiceMapper::toWordSearchInfoResponse)
+                .toList();
+        return new WordSearchResponse(words, lastWordName);
+    }
+
+    private static WordSearchInfoResponse toWordSearchInfoResponse(WordSearchDto dto) {
+        return new WordSearchInfoResponse(
+                dto.id(),
+                dto.name(),
+                new WordSearchInfoResponse.PronunciationInfo(
+                        dto.pronunciation().getKorean(),
+                        dto.pronunciation().getEnglish()
+                ),
+                dto.meaning(),
+                dto.category(),
+                dto.viewCount(),
+                dto.commentCount(),
+                dto.isMarked()
+        );
     }
 }

@@ -57,11 +57,7 @@ public class QuizService {
     }
 
     private Category findCategoryByName(String categoryName) {
-        try {
-            return Category.findBy(categoryName);
-        } catch (InvalidCategoryException e) {
-            throw new InvalidCategoryException();
-        }
+        return Category.findBy(categoryName);
     }
 
     private List<QuizQuestion> findQuestionsByCategory(String categoryName) {

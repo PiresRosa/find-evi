@@ -38,13 +38,12 @@ public class QuerydslReportRepository implements ReportRepository {
 
     @Override
     public List<Report> findReportsAfterId(Long lastReportId, int size) {
-        QReport report = QReport.report;
-
-        return queryFactory.selectFrom(report)
-                .where(lastReportId != null ? report.id.gt(lastReportId) : null)
-                .orderBy(report.id.asc())
-                .limit(size)
-                .fetch();
+    return queryFactory.selectFrom(report)
+            .where(lastReportId != null ? report.id.gt(lastReportId) : null)
+            .orderBy(report.id.asc())
+            .limit(size)
+            .fetch();
+}
     }
 
 }

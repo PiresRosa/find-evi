@@ -17,4 +17,13 @@ public final class CommentRepositoryMapper {
     ) {
         return new CommentConditionDto(wordId, accountId, lastCommentId, lastLikeCount, pageable);
     }
+
+    public static CommentConditionDto toCommentConditionDto(
+            Long wordId,
+            Long accountId,
+            Long lastCommentId,
+            Integer lastLikeCount,
+            Pageable pageable) {
+        return new CommentConditionDto(wordId, accountId, lastCommentId, lastLikeCount, pageable);
+    }
 }

@@ -85,4 +85,18 @@ public class WordController implements SwaggerWordController {
 
         return ResponseEntity.ok(WordControllerMapper.from(result));
     }
+
+    @GetMapping("/recent")
+    public ResponseEntity<ListWordInfoResponse> findRecentWords() {
+        List<ListWordInfoDto> result = wordService.findRecentWords();
+
+        return ResponseEntity.ok(WordControllerMapper.too(result));
+    }
+
+    @GetMapping("/todays")
+    public ResponseEntity<ListWordInfoResponse> findRandomWords() {
+        List<ListWordInfoDto> result = wordService.findRandomWords();
+
+        return ResponseEntity.ok(WordControllerMapper.too(result));
+    }
 }

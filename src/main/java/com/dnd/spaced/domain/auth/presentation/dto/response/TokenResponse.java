@@ -1,5 +1,7 @@
 package com.dnd.spaced.domain.auth.presentation.dto.response;
 
-public record TokenResponse(String accessToken) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record TokenResponse(@Schema(description = "액세스 토큰") String accessToken) {
 
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 public record WordSearchResponse(
         List<WordSearchDto> words,
-        long lastWordId
+        String lastWordName
 ) {
 }

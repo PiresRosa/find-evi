@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum Category {
-    BUSINESS("비즈니스"), DEVELOP("개발"), DESIGN("디자인"), ALL("전체 실무");
+    BUSINESS("비즈니스"), DEVELOP("개발"), DESIGN("디자인");
 
     private final String name;
 

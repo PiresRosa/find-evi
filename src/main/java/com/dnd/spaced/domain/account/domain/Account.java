@@ -62,6 +62,13 @@ public class Account extends CreateTimeEntity {
         this.careerInfo = CareerInfo.builder().jobGroup(jobGroup).company(company).experience(experience).build();
     }
 
+    public void changeProfileInfo(String nickname, String profileImage) {
+        validateProfileInfo(nickname, profileImage);
+
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
     public void updateBusinessTryCount() {
         this.quizInfo.updateBusinessTryCount();
     }
@@ -87,6 +94,11 @@ public class Account extends CreateTimeEntity {
         if (isInvalidEmail(email)) {
             throw new InvalidEmailException();
         }
+
+        validateProfileInfo(nickname, profileImage);
+    }
+
+    private void validateProfileInfo(String nickname, String profileImage) {
         if (isInvalidNickname(nickname)) {
             throw new InvalidNicknameException();
         }

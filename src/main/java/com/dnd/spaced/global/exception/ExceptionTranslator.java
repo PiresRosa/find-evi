@@ -196,7 +196,7 @@ public enum ExceptionTranslator {
             ExceptionCode.ACCOUNT_UNAUTHORIZED,
             "로그인이 필요한 기능입니다."
     ),
-    REPORT_NOT_FOUND(
+    REPORT_NOT_FOUND_EXCEPTION(
             HttpStatus.NOT_FOUND,
             ExceptionCode.REPORT_NOT_FOUND,
             "해당 신고를 찾을 수 없습니다."

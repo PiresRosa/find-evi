@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Tag(name = "관리자 관련 API", description = "용어 생성, 용어 삭제, 용어 수정, 신고 수락, 신고 무시, 신고 목록 조회")
+@Tag(name = "관리자 관련 API", description = "용어 목록 조회, 용어 생성, 용어 삭제, 용어 수정, 신고 수락, 신고 무시, 신고 목록 조회")
 public interface SwaggerAdminController {
 
     @ExcludeCommonHeaderSpec

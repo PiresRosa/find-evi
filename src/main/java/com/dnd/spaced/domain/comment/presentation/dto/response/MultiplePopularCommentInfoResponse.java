@@ -3,26 +3,21 @@ package com.dnd.spaced.domain.comment.presentation.dto.response;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto.PronunciationInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto.WordInfoDto;
-import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto.WriterInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 정보") List<CommentResponse> comments) {
+public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 정보") List<PopularCommentResponse> comments) {
 
-    public static MultiplePopularCommentInfoResponse of(
-            List<MultiplePopularCommentInfoDto> comments,
-            String baseUrl,
-            String imageUri
-    ) {
-        List<CommentResponse> responses = comments.stream()
-                                              .map(dto -> CommentResponse.of(dto, baseUrl, imageUri))
-                                              .toList();
+    public static MultiplePopularCommentInfoResponse from(List<MultiplePopularCommentInfoDto> comments) {
+        List<PopularCommentResponse> responses = comments.stream()
+                                                         .map(PopularCommentResponse::from)
+                                                         .toList();
 
         return new MultiplePopularCommentInfoResponse(responses);
     }
 
-    public record CommentResponse(
+    public record PopularCommentResponse(
             @Schema(description = "댓글 정보")
             Long id,
 
@@ -42,19 +37,10 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
             boolean isLike,
 
             @Schema(description = "용어 정보")
-            WordInfoResponse wordInfo,
-
-            @Schema(description = "댓글 작성 정보")
-            WriterInfoResponse writerInfo
+            WordInfoResponse wordInfo
     ) {
 
-        public static CommentResponse of(MultiplePopularCommentInfoDto dto, String baseUrl, String imageUri) {
-            WriterInfoDto writerInfoDto = dto.writerInfo();
-            WriterInfoResponse writerInfo = new WriterInfoResponse(
-                    writerInfoDto.id(),
-                    writerInfoDto.nickname(),
-                    baseUrl + imageUri + writerInfoDto.profileImage()
-            );
+        public static PopularCommentResponse from(MultiplePopularCommentInfoDto dto) {
             WordInfoDto wordInfoDto = dto.wordInfo();
             PronunciationInfoDto pronunciationInfoDto = wordInfoDto.pronunciationInfo();
             PronunciationInfoResponse pronunciationInfo = new PronunciationInfoResponse(pronunciationInfoDto.english());
@@ -65,15 +51,14 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
                     pronunciationInfo
             );
 
-            return new CommentResponse(
+            return new PopularCommentResponse(
                     dto.commentId(),
                     dto.content(),
                     dto.likeCount(),
                     dto.createdAt(),
                     dto.updatedAt(),
                     dto.isLike(),
-                    wordInfo,
-                    writerInfo
+                    wordInfo
             );
         }
     }
@@ -96,18 +81,6 @@ public record MultiplePopularCommentInfoResponse(@Schema(description = "댓글 �
     public record PronunciationInfoResponse(
             @Schema(description = "용어 발음 기호")
             String english
-    ) {
-    }
-
-    public record WriterInfoResponse(
-            @Schema(description = "작성자 ID")
-            Long id,
-
-            @Schema(description = "작성자 닉네임")
-            String nickname,
-
-            @Schema(description = "작성자 프로필 이미지")
-            String profileImage
     ) {
     }
 }

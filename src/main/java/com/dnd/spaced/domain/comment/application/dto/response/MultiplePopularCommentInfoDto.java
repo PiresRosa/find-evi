@@ -10,7 +10,6 @@ public record MultiplePopularCommentInfoDto(
         int likeCount,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        WriterInfoDto writerInfo,
         boolean isLike
 ) {
 
@@ -24,12 +23,8 @@ public record MultiplePopularCommentInfoDto(
                 dto.likeCount(),
                 dto.createdAt(),
                 dto.updatedAt(),
-                new WriterInfoDto(dto.writerId(), dto.writerNickname(), dto.writerProfileImage()),
                 dto.likeAccountId() != null
         );
-    }
-
-    public record WriterInfoDto(Long id, String nickname, String profileImage) {
     }
 
     public record WordInfoDto(Long id, String name, String categoryName, PronunciationInfoDto pronunciationInfo) {

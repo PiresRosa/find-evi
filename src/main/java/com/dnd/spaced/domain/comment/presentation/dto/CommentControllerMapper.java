@@ -27,7 +27,7 @@ public final class CommentControllerMapper {
             List<MultiplePopularCommentInfoDto> dtos,
             UrlProperties urlProperties
     ) {
-        return MultiplePopularCommentInfoResponse.of(dtos, urlProperties.baseUrl(), urlProperties.imageUri());
+        return MultiplePopularCommentInfoResponse.from(dtos);
     }
 
     public static LikedCommentResponse ofLiked(List<LikedCommentDto> dtos, UrlProperties urlProperties) {

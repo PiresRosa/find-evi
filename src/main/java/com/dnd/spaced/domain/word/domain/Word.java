@@ -46,6 +46,8 @@ public class Word extends BaseTimeEntity {
 
     private int viewCount = 0;
 
+    private int bookmarkCount = 0;
+
     private int commentCount = 0;
 
     @Builder

@@ -69,7 +69,7 @@ public class WordController {
     @GetMapping("/search")
     public ResponseEntity<WordSearchResponse> search(
             WordSearchRequest request,
-            @AuthAccount AuthAccountInfo accountInfo
+            @AuthAccount(required = false) AuthAccountInfo accountInfo
     ) {
         return ResponseEntity.ok(wordService.search(request, accountInfo.email()));
     }

@@ -16,7 +16,6 @@ import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import java.util.List;
@@ -66,9 +65,9 @@ public class WordService {
 
     public WordSearchResponse search(WordSearchRequest request, String email) {
         Long accountId = findAccountId(email);
-        List<WordSearchDto> results = wordRepository.searchWords(request, accountId);
+        List<Word> results = wordRepository.searchWords(request, accountId);
 
-        String lastWordName = results.isEmpty() ? null : results.get(results.size() - 1).name();
+        String lastWordName = results.isEmpty() ? null : results.get(results.size() - 1).getName();
 
         return WordServiceMapper.toWordSearchResponse(results, lastWordName);
     }

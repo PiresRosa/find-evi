@@ -10,7 +10,6 @@ import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedWordSortConditionException;
 import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.global.repository.OrderByNull;
@@ -18,11 +17,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.util.List;
-
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -108,25 +104,8 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public List<WordSearchDto> searchWords(WordSearchRequest request, Long accountId) {
-        return queryFactory
-                .select(
-                        Projections.constructor(
-                                WordSearchDto.class,
-                                word.id,
-                                word.name,
-                                word.pronunciation,
-                                word.meaning,
-                                word.category,
-                                word.viewCount,
-                                word.commentCount,
-                                bookmark.id.isNotNull()
-                        )
-                )
-                .from(word)
-                .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId).and(bookmark.accountId.eq(accountId))
-                )
+    public List<Word> searchWords(WordSearchRequest request, Long accountId) {
+        return queryFactory.selectFrom(word)
                 .where(
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),

@@ -7,12 +7,9 @@ import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-
-import java.util.List;
-
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,23 +40,22 @@ public final class WordServiceMapper {
         return new InputWordCandidateDto(dto.candidates());
     }
 
-    public static WordSearchResponse toWordSearchResponse(List<WordSearchDto> dtos, String lastWordName) {
-        List<WordSearchInfoResponse> words = dtos.stream()
+    public static WordSearchResponse toWordSearchResponse(List<Word> words, String lastWordName) {
+        List<WordSearchInfoResponse> result = words.stream()
                 .map(WordServiceMapper::toWordSearchInfoResponse)
                 .toList();
-        return new WordSearchResponse(words, lastWordName);
+        return new WordSearchResponse(result, lastWordName);
     }
 
-    private static WordSearchInfoResponse toWordSearchInfoResponse(WordSearchDto dto) {
+    private static WordSearchInfoResponse toWordSearchInfoResponse(Word word) {
         return new WordSearchInfoResponse(
-                dto.id(),
-                dto.name(),
-                new WordSearchInfoResponse.PronunciationInfo(dto.pronunciation().getEnglish()),
-                dto.meaning(),
-                dto.category(),
-                dto.viewCount(),
-                dto.commentCount(),
-                dto.isMarked()
+                word.getId(),
+                word.getName(),
+                new WordSearchInfoResponse.PronunciationInfo(word.getPronunciation().getEnglish()),
+                word.getMeaning(),
+                word.getCategory().getName(),
+                word.getViewCount(),
+                word.getCommentCount()
         );
     }
 }

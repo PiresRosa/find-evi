@@ -7,8 +7,7 @@ public record WordSearchInfoResponse(
         String meaning,
         String category,
         Integer viewCount,
-        Integer commentCount,
-        Boolean isMarked
+        Integer commentCount
 ) {
 
     public record PronunciationInfo(String english) {

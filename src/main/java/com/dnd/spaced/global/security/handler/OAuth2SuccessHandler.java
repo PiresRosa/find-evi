@@ -30,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
@@ -85,6 +86,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         try {
+            String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/home")
+                    .queryParam("accessToken", accessToken)
+                    .queryParam("isSignUp", isSignUp)
+                    .build().toUriString();
+
+            response.sendRedirect(redirectUrl);
             PrintWriter writer = response.getWriter();
 
             writer.println(objectMapper.writeValueAsString(new LoginResponse(accessToken, isSignUp)));

@@ -6,9 +6,10 @@ import lombok.Getter;
 
 @Getter
 public enum Reason {
-    PROFANITY("욕설 및 비방"),
-    SPAM("스팸"),
-    UNRELATED_CONTENT("해당 용어와 관련 없는 댓글"),
+    SPAM("광고 및 홍보성 내용"),
+    PERSONAL_INFORMATION_EXPOSURE("개인정보 노출 위험"),
+    OVER_COMMENT("댓글 도배"),
+    PROFANITY("욕설, 음란 등 부적절한 내용"),
     ETC("기타");
 
     private final String name;

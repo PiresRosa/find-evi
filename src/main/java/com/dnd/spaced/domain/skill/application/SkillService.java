@@ -4,6 +4,7 @@ import com.dnd.spaced.domain.skill.domain.Category;
 import com.dnd.spaced.domain.skill.domain.Skill;
 import com.dnd.spaced.domain.skill.domain.repository.SkillRepository;
 import com.dnd.spaced.domain.skill.presentation.dto.request.SkillRequest;
+import com.dnd.spaced.domain.skill.presentation.dto.response.SkillTotalResponse;
 import com.dnd.spaced.domain.skill.presentation.dto.response.SkillTotalScoreResponse;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import lombok.RequiredArgsConstructor;
@@ -46,16 +47,26 @@ public class SkillService {
      * @param info 유저 정보
      * @return 카테고리별 스킬 점수 응답
      */
-    public Map<Category, SkillTotalScoreResponse> getSkillTotalScore(AuthAccountInfo info) {
+    public SkillTotalResponse getSkillTotalScore(AuthAccountInfo info) {
         List<Skill> skills = skillRepository.findByEmail(info.email());
         Map<Category, SkillTotalScoreResponse> response = new HashMap<>();
 
+        int sum=0;
+
         for (Skill skill : skills) {
             Long totalCount = calculateTotalScore(skill);
+            sum+=totalCount;
             response.put(skill.getCategory(), createSkillTotalScoreResponse(skill, totalCount));
         }
 
-        return response;
+        sum/=3;
+
+        SkillTotalResponse totalResponse= SkillTotalResponse.builder()
+                .totalAvgResponse(sum)
+                .skillTotalScoreResponse(response)
+                .build();
+
+        return totalResponse;
     }
 
     /**

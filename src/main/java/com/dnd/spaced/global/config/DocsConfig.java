@@ -39,7 +39,7 @@ public class DocsConfig {
     public OpenAPI openAPI() {
         OpenAPI openAPI = new OpenAPI()
                 .addServersItem(new Server().url("/"))
-                .info(new Info().title("OAuth2 API").version("v1"))
+                .info(apiInfo())
                 .components(new Components().addSecuritySchemes(
                         "bearerAuth",
                         new SecurityScheme()

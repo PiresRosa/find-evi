@@ -77,11 +77,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = tokenEncoder.encode(LocalDateTime.now(), TokenType.ACCESS, claims);
         String refreshToken = tokenEncoder.encode(LocalDateTime.now(), TokenType.REFRESH, claims);
 
-        writeResponse(response, accessToken, isSignUp);
+        writeResponse(response, accessToken, isSignUp, account.getRole().name());
         createRefreshTokenCookie(response, refreshToken);
     }
 
-    private void writeResponse(HttpServletResponse response, String accessToken, boolean isSignUp) {
+    private void writeResponse(HttpServletResponse response, String accessToken, boolean isSignUp, String role) {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
@@ -89,12 +89,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google/callback/loading")
                     .queryParam("accessToken", accessToken)
                     .queryParam("isSignUp", isSignUp)
+                    .queryParam("role", role)
                     .build().toUriString();
 
             response.sendRedirect(redirectUrl);
             PrintWriter writer = response.getWriter();
 
-            writer.println(objectMapper.writeValueAsString(new LoginResponse(accessToken, isSignUp)));
+            writer.println(objectMapper.writeValueAsString(new LoginResponse(accessToken, isSignUp, role)));
             writer.flush();
         } catch (IOException e) {
             throw new InvalidResponseWriteException();

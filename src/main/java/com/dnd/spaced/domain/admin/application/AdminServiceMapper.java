@@ -22,14 +22,15 @@ public class AdminServiceMapper {
                 .build();
     }
 
-    public static Word fromUpdateRequest(AdminWordRequestDto dto) {
-        return Word.builder()
-                .name(dto.name())
-                .englishPronunciation(dto.pronunciation().getEnglish())
-                .meaning(dto.meaning())
-                .categoryName(Category.findBy(dto.category()).getName())
-                .example(dto.example())
-                .build();
+    public static Word fromUpdateRequest(AdminWordRequestDto dto, Word existingWord) {
+        existingWord.updateDetails(
+                dto.name(),
+                dto.pronunciation().getEnglish(),
+                dto.meaning(),
+                Category.findBy(dto.category()).getName(),
+                dto.example()
+        );
+        return existingWord;
     }
 
     public static ReportInfoDto toReportInfoDto(Report report) {

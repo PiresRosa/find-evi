@@ -46,17 +46,9 @@ public class AdminService {
     }
 
     @Transactional
-    public void updateWord(Long wordId, AdminWordRequestDto dto) {
+    public void updateWord(Long wordId, AdminWordRequestDto wordRequestDto) {
         Word existingWord = findWordById(wordId);
-
-        existingWord.updateDetails(
-                dto.name(),
-                dto.pronunciation().getEnglish(),
-                dto.meaning(),
-                Category.findBy(dto.category()).getName(),
-                dto.example()
-        );
-
+        AdminServiceMapper.fromUpdateRequest(wordRequestDto, existingWord);
         wordRepository.save(existingWord);
     }
 

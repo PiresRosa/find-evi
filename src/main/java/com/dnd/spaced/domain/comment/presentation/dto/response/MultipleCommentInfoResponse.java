@@ -1,5 +1,6 @@
 package com.dnd.spaced.domain.comment.presentation.dto.response;
 
+import com.dnd.spaced.domain.account.domain.CareerInfo;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -61,7 +62,8 @@ public record MultipleCommentInfoResponse(
             WriterInfoResponse writerInfoResponse = new WriterInfoResponse(
                     dto.writerInfo().id(),
                     dto.writerInfo().nickname(),
-                    baseUrl + imageUri + dto.writerInfo().profileImage()
+                    baseUrl + imageUri + dto.writerInfo().profileImage(),
+                    dto.writerInfo().careerInfo()
             );
 
             return new CommentResponse(
@@ -85,7 +87,10 @@ public record MultipleCommentInfoResponse(
             String nickname,
 
             @Schema(description = "회원 프로필 이미지")
-            String profileImage
+            String profileImage,
+
+            @Schema(description = "회원 경력 정보")
+            CareerInfo careerInfo
     ) {
     }
 }

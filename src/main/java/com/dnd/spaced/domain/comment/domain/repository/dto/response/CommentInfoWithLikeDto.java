@@ -1,5 +1,7 @@
 package com.dnd.spaced.domain.comment.domain.repository.dto.response;
 
+import com.dnd.spaced.domain.account.domain.CareerInfo;
+
 import java.time.LocalDateTime;
 
 public record CommentInfoWithLikeDto(
@@ -13,6 +15,7 @@ public record CommentInfoWithLikeDto(
         String writerNickname,
         String writerProfileImage,
         Long likeAccountId,
-        boolean isLike
+        boolean isLike,
+        CareerInfo careerInfo
 ) {
 }

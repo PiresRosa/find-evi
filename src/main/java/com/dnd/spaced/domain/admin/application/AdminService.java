@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
+    private static final int PAGE_SIZE = 15;
+
     private final WordRepository wordRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
@@ -64,8 +67,7 @@ public class AdminService {
 
     @Transactional
     public List<ReportInfoDto> findReports(Long lastReportId) {
-        int size = 15;
-        List<Report> reports = reportQuerydslRepository.findReportsAfterId(lastReportId, size);
+        List<Report> reports = reportQuerydslRepository.findReportsAfterId(lastReportId, PAGE_SIZE);
 
         return reports.stream()
                 .map(AdminServiceMapper::toReportInfoDto)

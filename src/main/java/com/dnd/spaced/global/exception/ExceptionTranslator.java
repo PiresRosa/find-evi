@@ -165,6 +165,11 @@ public enum ExceptionTranslator {
             HttpStatus.NOT_FOUND,
             ExceptionCode.REPORTED_COMMENT_NOT_FOUND,
             "신고 대상 댓글을 찾지 못했습니다."
+    ),
+    POPULAR_WORD_SCHEDULE_NOT_FOUND_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.POPULAR_WORD_SCHEDULE_NOT_FOUND,
+            "많이 찾아본 실무 용어와 관련된 서버 문제가 발생했습니다."
     )
     ;
 

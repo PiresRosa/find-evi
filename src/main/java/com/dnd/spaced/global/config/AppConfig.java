@@ -8,9 +8,11 @@ import com.dnd.spaced.global.resolver.comment.CommentSortConditionArgumentResolv
 import com.dnd.spaced.global.resolver.comment.LikedCommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.PopularCommentSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.comment.WrittenCommentSortConditionArgumentResolver;
+import com.dnd.spaced.global.resolver.word.PopularWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.SearchWordSortConditionArgumentResolver;
 import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,15 @@ public class AppConfig implements WebMvcConfigurer {
     private final WordSortConditionArgumentResolver wordSortConditionArgumentResolver;
     private final CommentSortConditionArgumentResolver commentSortConditionArgumentResolver;
     private final SearchWordSortConditionArgumentResolver searchWordSortConditionArgumentResolver;
+    private final PopularWordSortConditionArgumentResolver popularWordSortConditionArgumentResolver;
     private final LikedCommentSortConditionArgumentResolver likedCommentSortConditionArgumentResolver;
     private final WrittenCommentSortConditionArgumentResolver writtenCommentSortConditionArgumentResolver;
     private final PopularCommentSortConditionArgumentResolver popularCommentSortConditionArgumentResolver;
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
+    }
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
@@ -52,6 +60,7 @@ public class AppConfig implements WebMvcConfigurer {
         resolvers.add(wordSortConditionArgumentResolver);
         resolvers.add(commentSortConditionArgumentResolver);
         resolvers.add(searchWordSortConditionArgumentResolver);
+        resolvers.add(popularWordSortConditionArgumentResolver);
         resolvers.add(likedCommentSortConditionArgumentResolver);
         resolvers.add(popularCommentSortConditionArgumentResolver);
         resolvers.add(writtenCommentSortConditionArgumentResolver);

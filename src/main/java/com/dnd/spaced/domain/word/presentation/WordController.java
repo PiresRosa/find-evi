@@ -5,6 +5,7 @@ import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.WordControllerMapper;
 import com.dnd.spaced.domain.word.presentation.dto.request.MultipleWordConditionRequest;
@@ -13,8 +14,10 @@ import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoRespon
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
+import com.dnd.spaced.global.resolver.word.PopularWordSortCondition;
 import com.dnd.spaced.global.resolver.word.SearchWordSortCondition;
 import com.dnd.spaced.global.resolver.word.WordSortCondition;
 import java.util.List;
@@ -74,5 +77,12 @@ public class WordController {
         List<WordSearchInfoDto> result = wordService.search(WordServiceMapper.of(request, pageable));
 
         return ResponseEntity.ok(WordControllerMapper.toResponse(result));
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<PopularWordResponse> findAllByPopular(@PopularWordSortCondition Pageable pageable) {
+        List<PopularWordInfoDto> result = wordService.findPopularAll(pageable);
+
+        return ResponseEntity.ok(WordControllerMapper.from(result));
     }
 }

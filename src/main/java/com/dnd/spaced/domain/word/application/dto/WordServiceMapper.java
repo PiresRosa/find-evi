@@ -5,6 +5,7 @@ import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
@@ -54,6 +55,12 @@ public final class WordServiceMapper {
                 request.category(),
                 pageable
         );
+    }
+
+    public static List<PopularWordInfoDto> from(List<Word> words) {
+        return words.stream()
+                    .map(word -> new PopularWordInfoDto(word.getId(), word.getName()))
+                    .toList();
     }
 
     private static WordSearchInfoDto toWordSearchInfoResponse(Word word) {

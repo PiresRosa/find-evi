@@ -3,11 +3,13 @@ package com.dnd.spaced.domain.word.presentation.dto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.ListWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.PopularWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.WordSearchInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleSearchWordInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.ListWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.PopularWordResponse;
 import java.util.List;
@@ -19,6 +21,10 @@ public final class WordControllerMapper {
 
     public static MultipleWordInfoResponse to(List<MultipleWordInfoDto> dtos) {
         return MultipleWordInfoResponse.from(dtos);
+    }
+
+    public static ListWordInfoResponse too(List<ListWordInfoDto> dtos) {
+        return ListWordInfoResponse.from(dtos);
     }
 
     public static MultipleSearchWordInfoResponse toResponse(List<WordSearchInfoDto> dtos) {

@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuizService {
 
+    private static final int MIN_QUESTION_SIZE = 5;
+
     private final QuizRepository quizRepository;
     private final QuizCrudRepository quizCrudRepository;
     private final QuizResultRepository quizResultRepository;
@@ -66,14 +68,14 @@ public class QuizService {
     }
 
     private void validateQuestionCount(List<QuizQuestion> questions) {
-        if (questions.size() < 5) {
+        if (questions.size() < MIN_QUESTION_SIZE) {
             throw new NotEnoughQuestionsException();
         }
     }
 
     private List<QuizQuestion> selectRandomQuestions(List<QuizQuestion> questions) {
         Collections.shuffle(questions);
-        return questions.stream().limit(5).collect(Collectors.toList());
+        return questions.stream().limit(MIN_QUESTION_SIZE).collect(Collectors.toList());
     }
 
     private Long saveQuiz(List<QuizQuestion> questions) {

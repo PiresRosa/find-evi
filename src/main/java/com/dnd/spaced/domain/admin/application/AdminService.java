@@ -1,8 +1,12 @@
 package com.dnd.spaced.domain.admin.application;
 
+import com.dnd.spaced.domain.admin.application.dto.request.AdminWordConditionInfoDto;
 import com.dnd.spaced.domain.admin.application.dto.request.AdminWordRequestDto;
 import com.dnd.spaced.domain.admin.application.dto.response.ReportInfoDto;
 import com.dnd.spaced.domain.admin.application.exception.ReportNotFoundException;
+import com.dnd.spaced.domain.admin.domain.repository.AdminRepository;
+import com.dnd.spaced.domain.admin.domain.repository.AdminRepositoryMapper;
+import com.dnd.spaced.domain.admin.domain.repository.dto.request.AdminWordConditionDto;
 import com.dnd.spaced.domain.admin.presentation.dto.response.AdminWordResponse;
 import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
 import com.dnd.spaced.domain.comment.domain.Comment;
@@ -28,6 +32,18 @@ public class AdminService {
     private final WordRepository wordRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
+    private final AdminRepository adminRepository;
+
+    public List<AdminWordResponse> findAllBy(AdminWordConditionInfoDto dto) {
+        AdminWordConditionDto adminWordConditionDto = AdminRepositoryMapper.to(
+                dto.categoryName(),
+                dto.lastWordName(),
+                dto.pageable()
+        );
+        List<Word> result = adminRepository.findAllBy(adminWordConditionDto);
+
+        return AdminServiceMapper.toAdminWordResponseList(result);
+    }
 
     @Transactional
     public Long createWord(AdminWordRequestDto wordRequestDto) {

@@ -3,7 +3,6 @@ package com.dnd.spaced.domain.quiz.application;
 import com.dnd.spaced.domain.quiz.application.dto.QuizServiceMapper;
 import com.dnd.spaced.domain.quiz.application.dto.request.QuizRequestDto;
 import com.dnd.spaced.domain.quiz.application.dto.response.QuizResponseDto;
-import com.dnd.spaced.domain.quiz.application.exception.InvalidOptionException;
 import com.dnd.spaced.domain.quiz.application.exception.NotEnoughQuestionsException;
 import com.dnd.spaced.domain.quiz.application.exception.QuizNotFoundException;
 import com.dnd.spaced.domain.quiz.domain.Quiz;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -102,10 +100,7 @@ public class QuizService {
     }
 
     private QuizOption findSelectedOption(QuizQuestion question, Long answerId) {
-        return question.getOptions().stream()
-                .filter(option -> answerId.equals(option.getId()))
-                .findFirst()
-                .orElseThrow(InvalidOptionException::new);
+        return question.getOptionById(answerId);
     }
 
     private QuizResult createQuizResult(QuizQuestion question, QuizOption selectedOption, boolean isCorrect) {

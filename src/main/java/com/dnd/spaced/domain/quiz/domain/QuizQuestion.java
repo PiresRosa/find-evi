@@ -1,5 +1,6 @@
 package com.dnd.spaced.domain.quiz.domain;
 
+import com.dnd.spaced.domain.quiz.application.exception.InvalidOptionException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.ManyToOne;
@@ -62,5 +63,12 @@ public class QuizQuestion {
 
     public boolean isCorrect(QuizOption selectedOption) {
         return selectedOption.equals(correctOption);
+    }
+
+    public QuizOption getOptionById(Long answerId) {
+        return this.options.stream()
+                .filter(option -> answerId.equals(option.getId()))
+                .findFirst()
+                .orElseThrow(InvalidOptionException::new);
     }
 }

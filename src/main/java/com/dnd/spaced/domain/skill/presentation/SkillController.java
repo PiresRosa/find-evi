@@ -7,6 +7,7 @@ import com.dnd.spaced.domain.skill.presentation.dto.response.SkillTotalScoreResp
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -14,25 +15,26 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/skill")
-public class SkillController {
+public class SkillController implements SwaggerSkillController {
 
     private final SkillService skillService;
 
     @PostMapping("/save")
-    public void addSkill(
+    public ResponseEntity<Void> addSkill(
             @AuthAccount AuthAccountInfo accountInfo,
             @RequestBody SkillRequest request
     ) {
         skillService.addSkill(accountInfo, request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/ability")
-    public Map<Category, SkillTotalScoreResponse> getAllAbility(@AuthAccount AuthAccountInfo accountInfo) {
-        return skillService.getSkillTotalScore(accountInfo);
+    public ResponseEntity<Map<Category, SkillTotalScoreResponse>> getAllAbility(@AuthAccount AuthAccountInfo accountInfo) {
+        return ResponseEntity.ok(skillService.getSkillTotalScore(accountInfo));
     }
 
     @GetMapping("/precedence")
-    public Long getPrecedence(@AuthAccount AuthAccountInfo info){
-        return skillService.getTotalMyScore(info);
+    public ResponseEntity<Long> getPrecedence(@AuthAccount AuthAccountInfo info){
+        return ResponseEntity.ok(skillService.getTotalMyScore(info));
     }
 }

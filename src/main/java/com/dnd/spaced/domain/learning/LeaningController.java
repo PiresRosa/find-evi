@@ -48,7 +48,7 @@ public class LeaningController {
         options.put(20L, "문제점, 논점, 중요 포인트 등 비지니스 상의 과제");
     }
 
-    @GetMapping("/tests/{id}")
+    @GetMapping("/mock/tests/{id}")
     public ResponseEntity<TestProblemResponse> findTestBy(@PathVariable Long id) {
         OptionInfoResponse option1 = new OptionInfoResponse(1L, options.get(1L));
         OptionInfoResponse option2 = new OptionInfoResponse(2L, options.get(2L));
@@ -85,7 +85,7 @@ public class LeaningController {
         return ResponseEntity.ok(testProblemResponse);
     }
 
-    @PostMapping("/tests/{id}")
+    @PostMapping("/mock/tests/{id}")
     public ResponseEntity<TestExplanationResponse> solveTest(@PathVariable Long id, @RequestBody SolveTestRequest request) {
         Long[] answers = {1L, 7L, 10L, 13L, 18L};
         List<Long> requestAnswer = request.answer();

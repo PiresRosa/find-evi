@@ -168,7 +168,7 @@ public class CommentService {
     }
 
     private List<MultipleCommentInfoDto> findMemberComments(CommentConditionInfoDto dto) {
-        CommentConditionDto commentConditionDto = createCommentConditionDto(
+        CommentConditionDto commentConditionDto = CommentRepositoryMapper.toCommentConditionDto(
                 dto.wordId(),
                 findAccountId(dto.email()),
                 dto.lastCommentId(),
@@ -181,7 +181,7 @@ public class CommentService {
     }
 
     private List<MultipleCommentInfoDto> findNonMemberComments(CommentConditionInfoDto dto) {
-        CommentConditionDto commentConditionDto = createCommentConditionDto(
+        CommentConditionDto commentConditionDto = CommentRepositoryMapper.toCommentConditionDto(
                 dto.wordId(),
                 null,
                 dto.lastCommentId(),
@@ -192,21 +192,6 @@ public class CommentService {
         List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
         List<CommentInfoWithLikeDto> nonMemberComments = CommentServiceMapper.toNonMemberCommentList(result);
         return CommentServiceMapper.fromComment(nonMemberComments);
-    }
-
-    private CommentConditionDto createCommentConditionDto(
-            Long wordId,
-            Long accountId,
-            Long lastCommentId,
-            Integer lastLikeCount,
-            Pageable pageable) {
-        return CommentRepositoryMapper.to(
-                wordId,
-                accountId,
-                lastCommentId,
-                lastLikeCount,
-                pageable
-        );
     }
 
     private Long findAccountId(String email) {

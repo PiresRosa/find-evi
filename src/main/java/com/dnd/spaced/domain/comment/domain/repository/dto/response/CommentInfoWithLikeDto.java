@@ -12,6 +12,7 @@ public record CommentInfoWithLikeDto(
         LocalDateTime updatedAt,
         String writerNickname,
         String writerProfileImage,
-        Long likeAccountId
+        Long likeAccountId,
+        boolean isLike
 ) {
 }

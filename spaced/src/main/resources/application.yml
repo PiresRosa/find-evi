@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    default: local
+    group:
+      local:
+        - console-logging

@@ -5,5 +5,5 @@ spring:
     username: sa
 
 cors:
-  allowed-origin:
-  max-age:
+  allowed-origin: allowed-origin
+  max-age: 2400

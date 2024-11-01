@@ -7,3 +7,11 @@ spring:
 cors:
   allowed-origin: allowed-origin
   max-age: 2400
+
+token:
+  access-key: thisistoolargeaccesstokenkeyfordummykeydataforlocal
+  refresh-key: thisistoolargerefreshtokenkeyfordummykeydataforlocal
+  access-expired-seconds: 3600
+  refresh-expired-seconds: 259200
+  access-expired-millis-seconds: 3600000
+  refresh-expired-millis-seconds: 259200000

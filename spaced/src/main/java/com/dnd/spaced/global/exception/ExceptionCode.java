@@ -5,5 +5,6 @@ public enum ExceptionCode {
     INVALID_EMAIL,
     INVALID_NICKNAME,
     INVALID_PROFILE_IMAGE,
-    INVALID_ROLE
+    INVALID_ROLE,
+    INVALID_TOKEN
 }

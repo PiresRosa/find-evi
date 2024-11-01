@@ -1,6 +1,7 @@
 package com.dnd.spaced.global.config;
 
 import com.dnd.spaced.global.config.properties.CorsProperties;
+import com.dnd.spaced.global.config.properties.TokenProperties;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -18,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableConfigurationProperties(value = {CorsProperties.class})
+@EnableConfigurationProperties(value = {CorsProperties.class, TokenProperties.class})
 public class SecurityConfig {
 
     private final CorsProperties corsProperties;

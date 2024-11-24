@@ -1,6 +1,8 @@
 package com.dnd.spaced.global.config;
 
 import com.dnd.spaced.global.config.properties.CorsProperties;
+import com.dnd.spaced.global.config.properties.NicknameProperties;
+import com.dnd.spaced.global.config.properties.ProfileImageProperties;
 import com.dnd.spaced.global.config.properties.TokenProperties;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableConfigurationProperties(value = {CorsProperties.class, TokenProperties.class})
+@EnableConfigurationProperties(value = {
+        CorsProperties.class, TokenProperties.class, NicknameProperties.class, ProfileImageProperties.class
+})
 public class SecurityConfig {
 
     private final CorsProperties corsProperties;

@@ -15,3 +15,26 @@ token:
   refresh-expired-seconds: 259200
   access-expired-millis-seconds: 3600000
   refresh-expired-millis-seconds: 259200000
+
+app:
+  profile:
+    nickname:
+      adjective:
+        - 멋있는
+        - 무서운
+        - 상큼한
+        - 행복한
+        - 재빠른
+      planet:
+        - 수성
+        - 금성
+        - 지구
+        - 화성
+        - 목성
+        - 토성
+        - 천왕성
+        - 해왕성
+      format: "%s%03d"
+    image:
+      name:
+        - dummy

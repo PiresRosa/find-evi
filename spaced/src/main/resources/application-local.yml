@@ -4,6 +4,15 @@ spring:
     url: jdbc:h2:mem:test
     username: sa
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: client-id
+            client-secret: client-secret
+            scope: email
+
 cors:
   allowed-origin: allowed-origin
   max-age: 2400

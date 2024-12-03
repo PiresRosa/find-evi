@@ -37,6 +37,11 @@ public class Account extends CreateTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private JobGroup jobGroup;
+
+    private String company;
+
     @Builder
     private Account(String email, String nickname, String profileImage, String roleName) {
         validateContent(email, nickname, profileImage);
@@ -45,6 +50,11 @@ public class Account extends CreateTimeEntity {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.role = Role.findBy(roleName);
+    }
+
+    public void changeProfile(String jobGroupName, String company) {
+        this.jobGroup = JobGroup.find(jobGroupName);
+        this.company = company;
     }
 
     private void validateContent(String email, String nickname, String profileImage) {

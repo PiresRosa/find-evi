@@ -24,6 +24,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends CreateTimeEntity {
 
+    private static final String WITHDRAWAL_EMAIL = null;
+    private static final String WITHDRAWAL_NICKNAME = "탈퇴한 회원입니다.";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,6 +58,11 @@ public class Account extends CreateTimeEntity {
     public void changeProfile(String jobGroupName, String company) {
         this.jobGroup = JobGroup.find(jobGroupName);
         this.company = company;
+    }
+
+    public void withdrawal() {
+        this.email = WITHDRAWAL_EMAIL;
+        this.nickname = WITHDRAWAL_NICKNAME;
     }
 
     private void validateContent(String email, String nickname, String profileImage) {

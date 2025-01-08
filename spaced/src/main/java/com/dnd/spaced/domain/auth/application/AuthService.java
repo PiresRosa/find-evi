@@ -52,10 +52,8 @@ public class AuthService {
     }
 
     @Transactional
-    public void withdrawal(String accessToken) {
-        PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
-                                                  .orElseThrow(ExpiredTokenException::new);
-        Account account = accountRepository.findBy(privateClaims.email())
+    public void withdrawal(String email) {
+        Account account = accountRepository.findBy(email)
                                            .orElseThrow(ForbiddenAccountException::new);
 
         account.withdrawal();

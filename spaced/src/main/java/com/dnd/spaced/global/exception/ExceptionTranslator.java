@@ -15,7 +15,28 @@ public enum ExceptionTranslator {
             HttpStatus.BAD_REQUEST,
             ExceptionCode.VALIDATION_ERROR,
             "유효한 파라미터 값을 입력해주세요."
-    );
+    ),
+    INVALID_TOKEN_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.INVALID_TOKEN,
+            "유효하지 않은 토큰입니다."
+    ),
+    EXPIRED_TOKEN_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.EXPIRED_TOKEN,
+            "만료된 토큰입니다."
+    ),
+    FORBIDDEN_ACCOUNT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_ACCOUNT,
+            "권한이 없습니다."
+    ),
+    INVALID_JOB_GROUP_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_JOB_GROUP,
+            "직군은 개발, 디자인만 선택 가능합니다."
+    ),
+    ;
 
     private static final String PARAMETER_SEPARATOR = ", ";
 

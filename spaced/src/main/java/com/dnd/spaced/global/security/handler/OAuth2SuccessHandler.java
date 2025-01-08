@@ -34,8 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    public static final String REFRESH_TOKEN_KEY = "refreshToken";
+    public static final String DOMAIN = "/";
+
     private static final String ATTRIBUTE_EMAIL_KEY = "email";
-    private static final String DOMAIN = "/";
 
     private final TokenEncoder tokenEncoder;
     private final ObjectMapper objectMapper;
@@ -93,7 +95,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private void createRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        Cookie cookie = new Cookie("refreshToken", URLEncoder.encode(refreshToken, StandardCharsets.UTF_8));
+        Cookie cookie = new Cookie(REFRESH_TOKEN_KEY, URLEncoder.encode(refreshToken, StandardCharsets.UTF_8));
 
         cookie.setSecure(true);
         cookie.setHttpOnly(true);

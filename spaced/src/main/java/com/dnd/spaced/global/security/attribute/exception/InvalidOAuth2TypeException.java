@@ -1,11 +1,10 @@
 package com.dnd.spaced.global.security.attribute.exception;
 
-import com.dnd.spaced.global.exception.BaseClientException;
-import com.dnd.spaced.global.exception.ExceptionCode;
+import org.springframework.security.core.AuthenticationException;
 
-public class InvalidOAuth2TypeException extends BaseClientException {
+public class InvalidOAuth2TypeException extends AuthenticationException {
 
     public InvalidOAuth2TypeException() {
-        super(ExceptionCode.INVALID_OAUTH2_TYPE);
+        super("지원하지 않는 소셜 로그인 방식입니다.");
     }
 }

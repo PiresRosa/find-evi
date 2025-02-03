@@ -36,6 +36,26 @@ public enum ExceptionTranslator {
             ExceptionCode.INVALID_JOB_GROUP,
             "직군은 개발, 디자인만 선택 가능합니다."
     ),
+    INVALID_EMAIL_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INVALID_EMAIL,
+            "유효한 이메일을 작성해주세요."
+    ),
+    INVALID_NICKNAME_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INVALID_NICKNAME,
+            "유효한 닉네임을 작성해주세요."
+    ),
+    INVALID_PROFILE_IMAGE_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INVALID_PROFILE_IMAGE,
+            "유효한 프로필 이미지를 지정해주세요."
+    ),
+    INVALID_ROLE_EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INVALID_ROLE,
+            "유효한 권한을 설정해주세요."
+    )
     ;
 
     private static final String PARAMETER_SEPARATOR = ", ";

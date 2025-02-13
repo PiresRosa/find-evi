@@ -48,7 +48,7 @@ public class AuthService {
                 Map.of(JwtDecoder.CLAIM_EMAIL, privateClaims.email(), JwtDecoder.CLAIM_ROLE, privateClaims.roleName())
         );
 
-        return AuthServiceMapper.ofToken(generateAccessToken, generateRefreshToken);
+        return AuthServiceMapper.of(generateAccessToken, generateRefreshToken);
     }
 
     @Transactional

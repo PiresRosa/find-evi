@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends CreateTimeEntity {
 
-    private static final String WITHDRAWAL_EMAIL = null;
+    private static final String WITHDRAWAL_EMAIL = "WITHDRAWAL_EMAIL";
     private static final String WITHDRAWAL_NICKNAME = "탈퇴한 회원입니다.";
 
     @Id

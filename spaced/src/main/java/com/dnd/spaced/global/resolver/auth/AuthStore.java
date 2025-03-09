@@ -1,4 +1,4 @@
-package com.dnd.spaced.global.resolver;
+package com.dnd.spaced.global.resolver.auth;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.dnd.spaced.global.resolver;
+package com.dnd.spaced.global.resolver.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

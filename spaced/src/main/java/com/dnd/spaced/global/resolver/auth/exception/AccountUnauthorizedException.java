@@ -1,4 +1,4 @@
-package com.dnd.spaced.global.resolver.exception;
+package com.dnd.spaced.global.resolver.auth.exception;
 
 import com.dnd.spaced.global.exception.BaseClientException;
 import com.dnd.spaced.global.exception.ExceptionCode;

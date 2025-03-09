@@ -1,7 +1,7 @@
 package com.dnd.spaced.global.config;
 
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
-import com.dnd.spaced.global.resolver.AuthAccountInfoArgumentResolver;
+import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

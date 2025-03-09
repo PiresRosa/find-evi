@@ -1,6 +1,6 @@
-package com.dnd.spaced.global.resolver;
+package com.dnd.spaced.global.resolver.auth;
 
-import com.dnd.spaced.global.resolver.exception.AccountUnauthorizedException;
+import com.dnd.spaced.global.resolver.auth.exception.AccountUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

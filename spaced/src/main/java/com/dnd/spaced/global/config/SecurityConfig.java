@@ -72,7 +72,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/api-docs/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/refresh-token").permitAll()
-                    .requestMatchers("/test").permitAll()
                     .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))

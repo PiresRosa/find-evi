@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 public class OAuth2AuthenticationToken extends AbstractAuthenticationToken {
 
-    private OAuth2UserDetails principal;
+    private final OAuth2UserDetails principal;
 
     public OAuth2AuthenticationToken(OAuth2UserDetails principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
@@ -23,7 +23,7 @@ public class OAuth2AuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Object getPrincipal() {
+    public OAuth2UserDetails getPrincipal() {
         return principal;
     }
 }

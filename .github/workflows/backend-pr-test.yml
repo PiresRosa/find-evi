@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           touch ./src/main/resources/application-prod.yml
-          echo "${{ secrets.APPLICATION-PROD }}" > ./src/main/resources/application-prod.yml
+          echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
           cat ./src/main/resources/application-prod.yml
 
       # Gradle build

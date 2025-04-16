@@ -20,7 +20,7 @@ jobs:
       - name: Create directory and file if not exist
         run: |
           mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION-PROD }}" > ./src/main/resources/application-prod.yml
+          echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
 
       - name: Set executable permission
         run: chmod +x ./gradlew

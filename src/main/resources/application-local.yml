@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: client-id
+            client-secret: client-secret
+            scope: email
+
+cors:
+  allowed-origin: allowed-origin
+  max-age: 2400
+
+token:
+  access-key: thisistoolargeaccesstokenkeyfordummykeydataforlocal
+  refresh-key: thisistoolargerefreshtokenkeyfordummykeydataforlocal
+  access-expired-seconds: 3600
+  refresh-expired-seconds: 259200
+  access-expired-millis-seconds: 3600000
+  refresh-expired-millis-seconds: 259200000
+
+app:
+  profile:
+    nickname:
+      adjective:
+        - 멋있는
+        - 무서운
+        - 상큼한
+        - 행복한
+        - 재빠른
+      planet:
+        - 수성
+        - 금성
+        - 지구
+        - 화성
+        - 목성
+        - 토성
+        - 천왕성
+        - 해왕성
+      format: "%s%03d"
+    image:
+      name:
+        - dummy

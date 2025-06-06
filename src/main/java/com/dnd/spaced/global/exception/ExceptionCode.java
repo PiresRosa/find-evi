@@ -1,0 +1,15 @@
+package com.dnd.spaced.global.exception;
+
+public enum ExceptionCode {
+    VALIDATION_ERROR,
+    INVALID_EMAIL,
+    INVALID_NICKNAME,
+    INVALID_PROFILE_IMAGE,
+    INVALID_ROLE,
+    INVALID_TOKEN,
+    FORBIDDEN_ACCOUNT,
+    INVALID_JOB_GROUP,
+    EXPIRED_TOKEN,
+    UNAUTHORIZED,
+    REFRESH_TOKEN_NOT_FOUND
+}

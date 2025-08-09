@@ -2,6 +2,7 @@ package com.dnd.spaced.global.config;
 
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
+import com.dnd.spaced.global.resolver.word.WordSortConditionArgumentResolver;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,8 +20,9 @@ public class AppConfig implements WebMvcConfigurer {
 
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
     private final AuthInterceptor authInterceptor;
+    private final AuthAccountInfoArgumentResolver authAccountInfoArgumentResolver;
+    private final WordSortConditionArgumentResolver wordSortConditionArgumentResolver;
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
@@ -33,6 +35,7 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(authAccountInfoArgumentResolver);
+        resolvers.add(wordSortConditionArgumentResolver);
     }
 
     @Override

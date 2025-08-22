@@ -9,7 +9,7 @@ import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedCommentSortConditionException;
 import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
@@ -43,10 +43,10 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public Optional<WordWithBookmarkDto> findWithBookmarkBy(Long wordId, Long accountId) {
-        WordWithBookmarkDto result = queryFactory.select(
+    public Optional<WordInfoWithBookmarkDto> findWithBookmarkBy(Long wordId, Long accountId) {
+        WordInfoWithBookmarkDto result = queryFactory.select(
                                                          Projections.constructor(
-                                                                 WordWithBookmarkDto.class,
+                                                                 WordInfoWithBookmarkDto.class,
                                                                  word.id,
                                                                  word.name,
                                                                  word.pronunciation,
@@ -57,24 +57,24 @@ public class QuerydslWordRepository implements WordRepository {
                                                                  bookmark.id
                                                          )
                                                  )
-                                                 .from(word)
-                                                 .leftJoin(bookmark).on(
+                                                     .from(word)
+                                                     .leftJoin(bookmark).on(
                         word.id.eq(bookmark.wordId),
                         bookmark.accountId.eq(accountId)
                 )
-                                                 .where(word.id.eq(wordId))
-                                                 .fetchOne();
+                                                     .where(word.id.eq(wordId))
+                                                     .fetchOne();
 
         return Optional.ofNullable(result);
     }
 
     @Override
-    public List<WordWithBookmarkDto> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
+    public List<WordInfoWithBookmarkDto> findAllBy(WordConditionDto wordConditionDto, Long accountId) {
         Order order = findOrder(wordConditionDto.pageable());
 
         return queryFactory.select(
                                    Projections.constructor(
-                                           WordWithBookmarkDto.class,
+                                           WordInfoWithBookmarkDto.class,
                                            word.id,
                                            word.name,
                                            word.pronunciation,

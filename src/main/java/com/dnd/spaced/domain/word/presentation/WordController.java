@@ -4,12 +4,12 @@ import com.dnd.spaced.domain.word.application.WordService;
 import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
-import com.dnd.spaced.domain.word.application.dto.response.ReadMultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.presentation.dto.WordControllerMapper;
 import com.dnd.spaced.domain.word.presentation.dto.request.MultipleWordConditionRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.DetailWordInfoResponse;
 import com.dnd.spaced.domain.word.presentation.dto.response.InputWordCandidateResponse;
-import com.dnd.spaced.domain.word.presentation.dto.response.ReadMultipleWordInfoResponse;
+import com.dnd.spaced.domain.word.presentation.dto.response.MultipleWordInfoResponse;
 import com.dnd.spaced.global.controller.ResponseEntityConst;
 import com.dnd.spaced.global.resolver.auth.AuthAccount;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfo;
@@ -32,12 +32,12 @@ public class WordController {
     private final WordService wordService;
 
     @GetMapping
-    public ResponseEntity<ReadMultipleWordInfoResponse> findAllBy(
+    public ResponseEntity<MultipleWordInfoResponse> findAllBy(
             @AuthAccount(required = false) AuthAccountInfo accountInfo,
             MultipleWordConditionRequest request,
             @WordSortCondition Pageable pageable
     ) {
-        List<ReadMultipleWordInfoDto> result = wordService.findAllBy(
+        List<MultipleWordInfoDto> result = wordService.findAllBy(
                                                                     WordServiceMapper.to(
                                                                             accountInfo.email(),
                                                                             request.categoryName(),

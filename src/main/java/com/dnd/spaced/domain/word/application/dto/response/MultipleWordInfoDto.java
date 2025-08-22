@@ -1,9 +1,9 @@
 package com.dnd.spaced.domain.word.application.dto.response;
 
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.time.LocalDateTime;
 
-public record ReadMultipleWordInfoDto(
+public record MultipleWordInfoDto(
         Long id,
         String name,
         PronunciationInfoDto pronunciationInfo,
@@ -16,8 +16,8 @@ public record ReadMultipleWordInfoDto(
         LocalDateTime updatedAt
 ) {
 
-    public static ReadMultipleWordInfoDto from(WordWithBookmarkDto dto) {
-        return new ReadMultipleWordInfoDto(
+    public static MultipleWordInfoDto from(WordInfoWithBookmarkDto dto) {
+        return new MultipleWordInfoDto(
                 dto.wordId(),
                 dto.name(),
                 new PronunciationInfoDto(dto.pronunciation().getKorean(), dto.pronunciation().getEnglish()),

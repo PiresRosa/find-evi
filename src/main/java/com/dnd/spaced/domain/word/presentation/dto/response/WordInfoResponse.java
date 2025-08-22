@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.word.presentation.dto.response;
 
-import com.dnd.spaced.domain.word.application.dto.response.ReadMultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 
 public record WordInfoResponse(
         Long id,
@@ -15,7 +15,7 @@ public record WordInfoResponse(
     public record PronunciationInfoResponse(String korean, String english) {
     }
 
-    public static WordInfoResponse from(ReadMultipleWordInfoDto dto) {
+    public static WordInfoResponse from(MultipleWordInfoDto dto) {
         return new WordInfoResponse(
                 dto.id(),
                 dto.name(),

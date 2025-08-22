@@ -4,7 +4,7 @@ import com.dnd.spaced.domain.word.domain.Category;
 import com.dnd.spaced.domain.word.domain.Pronunciation;
 import java.time.LocalDateTime;
 
-public record WordWithBookmarkDto(
+public record WordInfoWithBookmarkDto(
         Long wordId,
         String name,
         Pronunciation pronunciation,

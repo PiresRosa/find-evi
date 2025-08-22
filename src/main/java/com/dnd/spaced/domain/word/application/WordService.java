@@ -3,10 +3,10 @@ package com.dnd.spaced.domain.word.application;
 import com.dnd.spaced.domain.account.domain.Account;
 import com.dnd.spaced.domain.account.domain.repository.AccountRepository;
 import com.dnd.spaced.domain.word.application.dto.WordServiceMapper;
-import com.dnd.spaced.domain.word.application.dto.request.ReadWordConditionDto;
+import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
-import com.dnd.spaced.domain.word.application.dto.response.ReadMultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
 import com.dnd.spaced.domain.word.application.exception.ForbiddenBookmarkException;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
 import com.dnd.spaced.domain.word.domain.Bookmark;
@@ -16,7 +16,7 @@ import com.dnd.spaced.domain.word.domain.repository.WordRepository;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class WordService {
     private final AccountRepository accountRepository;
     private final BookmarkRepository bookmarkRepository;
 
-    public List<ReadMultipleWordInfoDto> findAllBy(ReadWordConditionDto dto) {
+    public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
         Long accountId = accountRepository.findBy(dto.email())
                                           .map(Account::getId)
                                           .orElse(UNAUTHORIZED_ACCOUNT_ID);
@@ -42,7 +42,7 @@ public class WordService {
                 dto.lastWordName(),
                 dto.pageable()
         );
-        List<WordWithBookmarkDto> result = wordRepository.findAllBy(wordConditionDto, accountId);
+        List<WordInfoWithBookmarkDto> result = wordRepository.findAllBy(wordConditionDto, accountId);
 
         return WordServiceMapper.to(result);
     }
@@ -51,8 +51,8 @@ public class WordService {
         Long accountId = accountRepository.findBy(email)
                                           .map(Account::getId)
                                           .orElse(UNAUTHORIZED_ACCOUNT_ID);
-        WordWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
-                                                   .orElseThrow(WordNotFoundException::new);
+        WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
+                                                       .orElseThrow(WordNotFoundException::new);
 
         return WordServiceMapper.to(result);
     }

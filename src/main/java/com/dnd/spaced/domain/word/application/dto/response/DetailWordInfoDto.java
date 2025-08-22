@@ -1,6 +1,6 @@
 package com.dnd.spaced.domain.word.application.dto.response;
 
-import com.dnd.spaced.domain.word.domain.repository.dto.response.WordWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.time.LocalDateTime;
 
 public record DetailWordInfoDto(
@@ -16,7 +16,7 @@ public record DetailWordInfoDto(
         LocalDateTime updatedAt
 ) {
 
-    public static DetailWordInfoDto from(WordWithBookmarkDto dto) {
+    public static DetailWordInfoDto from(WordInfoWithBookmarkDto dto) {
         return new DetailWordInfoDto(
                 dto.wordId(),
                 dto.name(),

@@ -4,7 +4,6 @@ import static com.dnd.spaced.domain.word.domain.QBookmark.bookmark;
 import static com.dnd.spaced.domain.word.domain.QWord.word;
 
 import com.dnd.spaced.domain.word.domain.Category;
-import com.dnd.spaced.domain.word.domain.QWord;
 import com.dnd.spaced.domain.word.domain.Word;
 import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
@@ -28,15 +27,15 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuerydslWordRepository implements WordRepository {
 
-    private static final String IGNORE_CATEGORY = "전체";
     private static final String SORT_CONDITION = "name";
+    private static final String IGNORE_CATEGORY = "전체";
 
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Optional<Word> findBy(Long wordId) {
-        Word result = queryFactory.selectFrom(QWord.word)
-                                  .where(QWord.word.id.eq(wordId))
+        Word result = queryFactory.selectFrom(word)
+                                  .where(word.id.eq(wordId))
                                   .fetchOne();
 
         return Optional.ofNullable(result);
@@ -56,12 +55,12 @@ public class QuerydslWordRepository implements WordRepository {
                                                                  word.viewCount,
                                                                  bookmark.id
                                                          )
-                                                 )
+                                                     )
                                                      .from(word)
                                                      .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId),
-                        bookmark.accountId.eq(accountId)
-                )
+                                                        word.id.eq(bookmark.wordId),
+                                                        bookmark.accountId.eq(accountId)
+                                                     )
                                                      .where(word.id.eq(wordId))
                                                      .fetchOne();
 

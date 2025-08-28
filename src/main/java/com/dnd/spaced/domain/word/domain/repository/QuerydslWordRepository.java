@@ -44,22 +44,22 @@ public class QuerydslWordRepository implements WordRepository {
     @Override
     public Optional<WordInfoWithBookmarkDto> findWithBookmarkBy(Long wordId, Long accountId) {
         WordInfoWithBookmarkDto result = queryFactory.select(
-                                                         Projections.constructor(
-                                                                 WordInfoWithBookmarkDto.class,
-                                                                 word.id,
-                                                                 word.name,
-                                                                 word.pronunciation,
-                                                                 word.meaning,
-                                                                 word.category,
-                                                                 word.example,
-                                                                 word.viewCount,
-                                                                 bookmark.id
-                                                         )
+                                                             Projections.constructor(
+                                                                     WordInfoWithBookmarkDto.class,
+                                                                     word.id,
+                                                                     word.name,
+                                                                     word.pronunciation,
+                                                                     word.meaning,
+                                                                     word.category,
+                                                                     word.example,
+                                                                     word.viewCount,
+                                                                     bookmark.id
+                                                             )
                                                      )
                                                      .from(word)
                                                      .leftJoin(bookmark).on(
-                                                        word.id.eq(bookmark.wordId),
-                                                        bookmark.accountId.eq(accountId)
+                                                            word.id.eq(bookmark.wordId),
+                                                            bookmark.accountId.eq(accountId)
                                                      )
                                                      .where(word.id.eq(wordId))
                                                      .fetchOne();
@@ -88,9 +88,9 @@ public class QuerydslWordRepository implements WordRepository {
                            )
                            .from(word)
                            .leftJoin(bookmark).on(
-                                    word.id.eq(bookmark.wordId),
-                                    bookmark.accountId.eq(accountId)
-                            )
+                                word.id.eq(bookmark.wordId),
+                                bookmark.accountId.eq(accountId)
+                           )
                            .where(
                                    eqCategory(wordConditionDto.categoryName()),
                                    ltLastWordName(wordConditionDto.lastWordName())
@@ -108,6 +108,14 @@ public class QuerydslWordRepository implements WordRepository {
                                           .fetch();
 
         return WordRepositoryMapper.to(result);
+    }
+
+    @Override
+    public void update(Long wordId) {
+        queryFactory.update(word)
+                    .set(word.viewCount, word.viewCount.add(1))
+                    .where(word.id.eq(wordId))
+                    .execute();
     }
 
     private BooleanExpression eqCategory(String categoryName) {

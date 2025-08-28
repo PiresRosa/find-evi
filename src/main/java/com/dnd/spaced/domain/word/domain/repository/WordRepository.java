@@ -16,4 +16,6 @@ public interface WordRepository {
     List<WordInfoWithBookmarkDto> findAllBy(WordConditionDto wordConditionDto, Long accountId);
 
     WordCandidateDto findCandidateAllBy(String target);
+
+    void update(Long wordId);
 }

@@ -23,7 +23,7 @@ public record DetailWordInfoDto(
                 new PronunciationInfoDto(dto.pronunciation().getKorean(), dto.pronunciation().getEnglish()),
                 dto.meaning(),
                 dto.category().getName(),
-                dto.viewCount(),
+                dto.viewCount() + 1,
                 dto.example(),
                 dto.bookmarkId() != null,
                 dto.createdAt(),

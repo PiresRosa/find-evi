@@ -67,10 +67,6 @@ public class Word extends BaseTimeEntity {
         this.example = example;
     }
 
-    public void view() {
-        this.viewCount++;
-    }
-
     private void validateContent(String name, String meaning, String example) {
         if (isInvalidName(name)) {
             throw new InvalidNameException();

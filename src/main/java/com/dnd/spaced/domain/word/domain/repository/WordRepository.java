@@ -17,5 +17,5 @@ public interface WordRepository {
 
     WordCandidateDto findCandidateAllBy(String target);
 
-    void update(Long wordId);
+    void updateViewCount(Long wordId);
 }

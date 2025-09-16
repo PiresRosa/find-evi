@@ -54,7 +54,7 @@ public class WordService {
         WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
                                                        .orElseThrow(WordNotFoundException::new);
 
-        wordRepository.update(wordId);
+        wordRepository.updateViewCount(wordId);
 
         return WordServiceMapper.to(result);
     }

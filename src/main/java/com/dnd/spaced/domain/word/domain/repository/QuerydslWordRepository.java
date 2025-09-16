@@ -113,7 +113,7 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public void update(Long wordId) {
+    public void updateViewCount(Long wordId) {
         queryFactory.update(word)
                     .set(word.viewCount, word.viewCount.add(1))
                     .where(word.id.eq(wordId))

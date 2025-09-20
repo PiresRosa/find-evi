@@ -47,6 +47,7 @@ public class WordService {
         return WordServiceMapper.to(result);
     }
 
+    @Transactional
     public DetailWordInfoDto findBy(String email, Long wordId) {
         Long accountId = accountRepository.findBy(email)
                                           .map(Account::getId)

@@ -7,6 +7,7 @@ import com.dnd.spaced.domain.word.application.dto.request.WordConditionInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.DetailWordInfoDto;
 import com.dnd.spaced.domain.word.application.dto.response.InputWordCandidateDto;
 import com.dnd.spaced.domain.word.application.dto.response.MultipleWordInfoDto;
+import com.dnd.spaced.domain.word.application.event.dto.request.FoundWordInfoEvent;
 import com.dnd.spaced.domain.word.application.exception.ForbiddenBookmarkException;
 import com.dnd.spaced.domain.word.application.exception.WordNotFoundException;
 import com.dnd.spaced.domain.word.domain.Bookmark;
@@ -19,6 +20,7 @@ import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDt
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class WordService {
     private final WordRepository wordRepository;
     private final AccountRepository accountRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
         Long accountId = accountRepository.findBy(dto.email())
@@ -47,7 +50,6 @@ public class WordService {
         return WordServiceMapper.to(result);
     }
 
-    @Transactional
     public DetailWordInfoDto findBy(String email, Long wordId) {
         Long accountId = accountRepository.findBy(email)
                                           .map(Account::getId)
@@ -55,7 +57,7 @@ public class WordService {
         WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
                                                        .orElseThrow(WordNotFoundException::new);
 
-        wordRepository.updateViewCount(wordId);
+        eventPublisher.publishEvent(new FoundWordInfoEvent(wordId));
 
         return WordServiceMapper.to(result);
     }

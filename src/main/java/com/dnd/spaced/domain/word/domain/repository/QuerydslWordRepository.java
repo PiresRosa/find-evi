@@ -15,7 +15,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +53,9 @@ public class QuerydslWordRepository implements WordRepository {
                                                                      word.category,
                                                                      word.example,
                                                                      word.viewCount,
-                                                                     bookmark.id
+                                                                     bookmark.id,
+                                                                     word.createdAt,
+                                                                     word.updatedAt
                                                              )
                                                      )
                                                      .from(word)
@@ -63,7 +64,6 @@ public class QuerydslWordRepository implements WordRepository {
                                                             bookmark.accountId.eq(accountId)
                                                      )
                                                      .where(word.id.eq(wordId))
-                                                     .setLockMode(LockModeType.PESSIMISTIC_READ)
                                                      .fetchOne();
 
         return Optional.ofNullable(result);

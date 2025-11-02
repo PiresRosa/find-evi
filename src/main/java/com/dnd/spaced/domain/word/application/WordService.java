@@ -37,9 +37,7 @@ public class WordService {
     private final ApplicationEventPublisher eventPublisher;
 
     public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
-        Long accountId = accountRepository.findBy(dto.email())
-                                          .map(Account::getId)
-                                          .orElse(UNAUTHORIZED_ACCOUNT_ID);
+        Long accountId = findAccountId(dto.email());
         WordConditionDto wordConditionDto = WordRepositoryMapper.to(
                 dto.categoryName(),
                 dto.lastWordName(),
@@ -51,9 +49,7 @@ public class WordService {
     }
 
     public DetailWordInfoDto findBy(String email, Long wordId) {
-        Long accountId = accountRepository.findBy(email)
-                                          .map(Account::getId)
-                                          .orElse(UNAUTHORIZED_ACCOUNT_ID);
+        Long accountId = findAccountId(email);
         WordInfoWithBookmarkDto result = wordRepository.findWithBookmarkBy(wordId, accountId)
                                                        .orElseThrow(WordNotFoundException::new);
 
@@ -86,5 +82,11 @@ public class WordService {
         WordCandidateDto result = wordRepository.findCandidateAllBy(target);
 
         return WordServiceMapper.from(result);
+    }
+
+    private Long findAccountId(String email) {
+        return accountRepository.findBy(email)
+                                .map(Account::getId)
+                                .orElse(UNAUTHORIZED_ACCOUNT_ID);
     }
 }

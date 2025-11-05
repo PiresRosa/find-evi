@@ -55,6 +55,46 @@ public enum ExceptionTranslator {
             HttpStatus.INTERNAL_SERVER_ERROR,
             ExceptionCode.INVALID_ROLE,
             "유효한 권한을 설정해주세요."
+    ),
+    FORBIDDEN_BOOKMARK_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_BOOKMARK,
+            "권한이 없습니다."
+    ),
+    WORD_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.WORD_NOT_FOUND,
+            "지정한 용어를 찾을 수 없습니다."
+    ),
+    INVALID_CATEGORY_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_CATEGORY,
+            "카테고리는 개발, 디자인, 비즈니스만 입력할 수 있습니다."
+    ),
+    INVALID_EXCEPTION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_EXAMPLE,
+            "예문은 최소 1글자, 최대 50글자여야 합니다."
+    ),
+    INVALID_MEANING_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_MEANING,
+            "용어 뜻은 최소 10글자, 최대 70글자여야 합니다."
+    ),
+    INVALID_NAME_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_NAME,
+            "용어 이름을 입력해주세요."
+    ),
+    INVALID_PRONUNCIATION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_PRONUNCIATION,
+            "용어 발음을 입력해주세요."
+    ),
+    UNSUPPORTED_COMMENT_SORT_CONDITION_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.UNSUPPORTED_COMMENT_SORT_CONDITION,
+            "지원하지 않는 정렬 방식입니다."
     )
     ;
 

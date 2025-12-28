@@ -14,5 +14,5 @@ public interface CommentRepository {
 
     void delete(Comment comment);
 
-    List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto);
+    List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto, Long accountId);
 }

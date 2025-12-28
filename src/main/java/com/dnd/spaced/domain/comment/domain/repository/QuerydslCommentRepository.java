@@ -2,6 +2,7 @@ package com.dnd.spaced.domain.comment.domain.repository;
 
 import static com.dnd.spaced.domain.account.domain.QAccount.account;
 import static com.dnd.spaced.domain.comment.domain.QComment.comment;
+import static com.dnd.spaced.domain.comment.domain.QLike.like;
 
 import com.dnd.spaced.domain.comment.domain.Comment;
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
@@ -44,7 +45,7 @@ public class QuerydslCommentRepository implements CommentRepository {
     }
 
     @Override
-    public List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto) {
+    public List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto, Long accountId) {
         return queryFactory.select(
                                    Projections.constructor(
                                            CommentInfoWithLikeDto.class,
@@ -55,11 +56,14 @@ public class QuerydslCommentRepository implements CommentRepository {
                                            comment.likeCount,
                                            comment.createdAt,
                                            comment.updatedAt,
-                                           account.id
+                                           account.nickname,
+                                           account.profileImage,
+                                           like.id
                                    )
                            )
                            .from(comment)
-                           .leftJoin(account).on(comment.accountId.eq(account.id))
+                           .join(account).on(comment.accountId.eq(account.id))
+                           .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(accountId))
                            .where(calculateFindAllBooleanExpressions(dto))
                            .orderBy(calculateOrderSpecifiers(dto.pageable()).toArray(OrderSpecifier[]::new))
                            .limit(dto.pageable().getPageSize())

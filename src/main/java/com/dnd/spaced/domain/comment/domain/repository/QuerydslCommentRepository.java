@@ -3,10 +3,12 @@ package com.dnd.spaced.domain.comment.domain.repository;
 import static com.dnd.spaced.domain.account.domain.QAccount.account;
 import static com.dnd.spaced.domain.comment.domain.QComment.comment;
 import static com.dnd.spaced.domain.comment.domain.QLike.like;
+import static com.dnd.spaced.domain.word.domain.QWord.word;
 
 import com.dnd.spaced.domain.comment.domain.Comment;
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
+import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
 import com.dnd.spaced.domain.comment.domain.repository.exception.UnsupportedCommentSortConditionException;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -67,6 +69,35 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .where(calculateFindAllBooleanExpressions(dto))
                            .orderBy(calculateOrderSpecifiers(dto.pageable()).toArray(OrderSpecifier[]::new))
                            .limit(dto.pageable().getPageSize())
+                           .fetch();
+    }
+
+    @Override
+    public List<PopularCommentInfoDto> findPopularAllBy(Pageable pageable, Long accountId) {
+        return queryFactory.select(
+                                   Projections.constructor(
+                                           PopularCommentInfoDto.class,
+                                           comment.id,
+                                           comment.accountId,
+                                           account.nickname,
+                                           account.profileImage,
+                                           word.id,
+                                           word.name,
+                                           word.category,
+                                           word.pronunciation,
+                                           comment.content,
+                                           comment.likeCount,
+                                           comment.createdAt,
+                                           comment.updatedAt,
+                                           like.id
+                                   )
+                           )
+                           .from(comment)
+                           .join(account).on(comment.accountId.eq(account.id))
+                           .join(word).on(comment.wordId.eq(word.id))
+                           .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(accountId))
+                           .orderBy(comment.likeCount.desc())
+                           .limit(pageable.getPageSize())
                            .fetch();
     }
 

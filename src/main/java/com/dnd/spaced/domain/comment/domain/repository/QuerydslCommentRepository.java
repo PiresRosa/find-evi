@@ -124,6 +124,9 @@ public class QuerydslCommentRepository implements CommentRepository {
         if (order == null) {
             return null;
         }
+        if (dto.lastLikeCount() == null) {
+            return ltLastCommentId(dto.lastCommentId());
+        }
 
         String sortBy = order.getProperty();
 

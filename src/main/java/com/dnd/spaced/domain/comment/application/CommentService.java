@@ -5,6 +5,7 @@ import com.dnd.spaced.domain.account.domain.repository.AccountRepository;
 import com.dnd.spaced.domain.comment.application.dto.CommentServiceMapper;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.CreateCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.LikeInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
@@ -74,10 +75,10 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(String email, Long commentId) {
-        Account writer = accountRepository.findBy(email)
+    public void delete(DeleteCommentInfoDto dto) {
+        Account writer = accountRepository.findBy(dto.email())
                                           .orElseThrow(UnauthorizedCommentException::new);
-        Comment comment = commentRepository.findBy(commentId)
+        Comment comment = commentRepository.findBy(dto.commentId())
                                            .orElseThrow(CommentNotFoundException::new);
 
         if (comment.isOwner(writer.getId())) {
@@ -86,7 +87,7 @@ public class CommentService {
 
         commentRepository.delete(comment);
 
-        Word word = wordRepository.findBy(comment.getWordId())
+        Word word = wordRepository.findBy(dto.wordId())
                                   .orElseThrow(CommentWordNotFoundException::new);
 
         word.deleteComment();

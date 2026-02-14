@@ -6,7 +6,6 @@ import com.dnd.spaced.domain.comment.application.dto.CommentServiceMapper;
 import com.dnd.spaced.domain.comment.application.dto.request.CommentConditionInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.CreateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDto;
-import com.dnd.spaced.domain.comment.application.dto.request.LikeInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
@@ -94,19 +93,17 @@ public class CommentService {
     }
 
     @Transactional
-    public void processLike(LikeInfoDto dto) {
-        Account account = accountRepository.findBy(dto.email())
+    public void processLike(String email, Long commentId) {
+        Account account = accountRepository.findBy(email)
                                            .orElseThrow(ForbiddenLikeException::new);
-        Comment comment = commentRepository.findBy(dto.commentId())
+        Comment comment = commentRepository.findBy(commentId)
                                            .orElseThrow(CommentNotFoundException::new);
-        Word word = wordRepository.findBy(dto.wordId())
-                                  .orElseThrow(CommentWordNotFoundException::new);
 
         likeRepository.findBy(account.getId(), comment.getWordId())
                       .ifPresentOrElse(
                               like -> {
                                   likeRepository.delete(like);
-                                  word.deleteComment();
+                                  comment.dislike();
                               },
                               () -> {
                                   Like like = Like.builder()
@@ -115,7 +112,7 @@ public class CommentService {
                                                   .build();
 
                                   likeRepository.save(like);
-                                  word.addComment();
+                                  comment.like();
                               }
                       );
     }

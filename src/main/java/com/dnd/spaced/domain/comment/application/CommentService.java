@@ -118,13 +118,14 @@ public class CommentService {
     }
 
     public List<MultipleCommentInfoDto> findAllBy(CommentConditionInfoDto dto) {
-        Long accountId = findAccountId(dto.email());
         CommentConditionDto commentConditionDto = CommentRepositoryMapper.to(
+                dto.wordId(),
+                findAccountId(dto.email()),
                 dto.lastCommentId(),
                 dto.lastLikeCount(),
                 dto.pageable()
         );
-        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto, accountId);
+        List<CommentInfoWithLikeDto> result = commentRepository.findAllBy(commentConditionDto);
 
         return CommentServiceMapper.fromComment(result);
     }

@@ -8,7 +8,13 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommentRepositoryMapper {
 
-    public static CommentConditionDto to(Long lastCommentId, int lastLikeCount, Pageable pageable) {
-        return new CommentConditionDto(lastCommentId, lastLikeCount, pageable);
+    public static CommentConditionDto to(
+            Long wordId,
+            Long accountId,
+            Long lastCommentId,
+            int lastLikeCount,
+            Pageable pageable
+    ) {
+        return new CommentConditionDto(wordId, accountId, lastCommentId, lastLikeCount, pageable);
     }
 }

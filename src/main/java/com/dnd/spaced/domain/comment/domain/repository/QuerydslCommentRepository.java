@@ -47,7 +47,7 @@ public class QuerydslCommentRepository implements CommentRepository {
     }
 
     @Override
-    public List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto, Long accountId) {
+    public List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto) {
         return queryFactory.select(
                                    Projections.constructor(
                                            CommentInfoWithLikeDto.class,
@@ -65,9 +65,9 @@ public class QuerydslCommentRepository implements CommentRepository {
                            )
                            .from(comment)
                            .join(account).on(comment.accountId.eq(account.id))
-                           .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(accountId))
-                           .where(calculateFindAllBooleanExpressions(dto))
-                           .orderBy(calculateOrderSpecifiers(dto.pageable()).toArray(OrderSpecifier[]::new))
+                           .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(dto.accountId()))
+                           .where(calculateFindAllBooleanExpressions(dto), comment.wordId.eq(dto.wordId()))
+                           .orderBy(calculateFindAllOrderSpecifiers(dto.pageable()).toArray(OrderSpecifier[]::new))
                            .limit(dto.pageable().getPageSize())
                            .fetch();
     }
@@ -96,12 +96,12 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .join(account).on(comment.accountId.eq(account.id))
                            .join(word).on(comment.wordId.eq(word.id))
                            .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(accountId))
-                           .orderBy(comment.likeCount.desc())
+                           .orderBy(calculateFindPopularAllOrderSpecifier(pageable))
                            .limit(pageable.getPageSize())
                            .fetch();
     }
 
-    private List<OrderSpecifier<?>> calculateOrderSpecifiers(Pageable pageable) {
+    private List<OrderSpecifier<?>> calculateFindAllOrderSpecifiers(Pageable pageable) {
         Order order = findOrder(pageable);
 
         if (LIKE_COUNT_SORT_CONDITION.equalsIgnoreCase(order.getProperty())) {
@@ -157,6 +157,16 @@ public class QuerydslCommentRepository implements CommentRepository {
         }
 
         return comment.id.gt(lastCommentId);
+    }
+
+    private OrderSpecifier<?> calculateFindPopularAllOrderSpecifier(Pageable pageable) {
+        Order order = findOrder(pageable);
+
+        if (LIKE_COUNT_SORT_CONDITION.equalsIgnoreCase(order.getProperty())) {
+            return comment.likeCount.desc();
+        }
+
+        throw new UnsupportedCommentSortConditionException();
     }
 
     private Order findOrder(Pageable pageable) {

@@ -2,6 +2,7 @@ package com.dnd.spaced.global.exception;
 
 import com.dnd.spaced.global.exception.dto.ExceptionDto;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,6 +27,16 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         logger.error(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
+
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity<ExceptionDto> handleException(Exception ex) {
+        logger.error(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
+
+        ExceptionDto exceptionDto = new ExceptionDto("INTERNAL_SERVER_ERROR", "예상치 못한 예외가 발생했습니다.");
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(exceptionDto);
     }
 
     @Override

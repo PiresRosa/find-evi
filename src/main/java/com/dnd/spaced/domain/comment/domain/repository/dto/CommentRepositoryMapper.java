@@ -12,7 +12,7 @@ public final class CommentRepositoryMapper {
             Long wordId,
             Long accountId,
             Long lastCommentId,
-            int lastLikeCount,
+            Integer lastLikeCount,
             Pageable pageable
     ) {
         return new CommentConditionDto(wordId, accountId, lastCommentId, lastLikeCount, pageable);

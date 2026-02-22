@@ -26,6 +26,9 @@ token:
   refresh-expired-millis-seconds: 259200000
 
 app:
+  url:
+    base-url: http://localhost:8080/
+    image-uri: images/
   profile:
     nickname:
       adjective:

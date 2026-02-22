@@ -95,6 +95,41 @@ public enum ExceptionTranslator {
             HttpStatus.BAD_REQUEST,
             ExceptionCode.UNSUPPORTED_COMMENT_SORT_CONDITION,
             "지원하지 않는 정렬 방식입니다."
+    ),
+    COMMENT_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.COMMENT_NOT_FOUND,
+            "댓글을 찾을 수 없습니다."
+    ),
+    COMMENT_WORD_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.COMMENT_WORD_NOT_FOUND,
+            "댓글이 등록된 용어를 찾을 수 없습니다."
+    ),
+    FORBIDDEN_DELETE_COMMENT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_DELETE_COMMENT,
+            "댓글을 삭제할 수 있는 권한이 없습니다."
+    ),
+    FORBIDDEN_LIKE_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_LIKE,
+            "권한이 없습니다."
+    ),
+    FORBIDDEN_UPDATE_COMMENT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_UPDATE_COMMENT,
+            "댓글을 수정할 수 있는 권한이 없습니다."
+    ),
+    UNAUTHORIZED_COMMENT_EXCEPTION(
+            HttpStatus.UNAUTHORIZED,
+            ExceptionCode.UNAUTHORIZED_COMMENT,
+            "로그인이 필요한 기능입니다."
+    ),
+    INVALID_CONTENT_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_CONTENT,
+            "댓글은 최소 1글자, 최대 100글자여야 합니다."
     )
     ;
 

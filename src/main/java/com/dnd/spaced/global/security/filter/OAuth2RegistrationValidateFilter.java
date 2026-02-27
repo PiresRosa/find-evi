@@ -3,7 +3,6 @@ package com.dnd.spaced.global.security.filter;
 import com.dnd.spaced.global.security.dto.response.ExceptionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class OAuth2RegistrationValidateFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
-    ) throws ServletException, IOException {
+    ) throws IOException {
         String requestURI = request.getRequestURI();
 
         if (requestURI.contains(AUTHORIZE_URI)) {
@@ -53,8 +52,6 @@ public class OAuth2RegistrationValidateFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response);
-        } catch (ServletException e) {
-            throw e;
         } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }

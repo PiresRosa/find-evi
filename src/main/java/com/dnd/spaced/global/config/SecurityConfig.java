@@ -35,7 +35,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -54,7 +53,6 @@ public class SecurityConfig {
     private final ProfileImageProperties profileImageProperties;
     private final AccountRepository accountRepository;
     private final NicknameMetadataRepository nicknameMetadataRepository;
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -166,6 +164,6 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2RegistrationValidateFilter oAuth2RegistrationValidateFilter() {
-        return new OAuth2RegistrationValidateFilter(objectMapper, handlerExceptionResolver);
+        return new OAuth2RegistrationValidateFilter(objectMapper);
     }
 }

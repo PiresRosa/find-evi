@@ -3,6 +3,7 @@ package com.dnd.spaced.global.security.filter;
 import com.dnd.spaced.global.security.dto.response.ExceptionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @RequiredArgsConstructor
 public class OAuth2RegistrationValidateFilter extends OncePerRequestFilter {
@@ -21,14 +21,13 @@ public class OAuth2RegistrationValidateFilter extends OncePerRequestFilter {
     private static final List<String> REGISTRATION_ID = List.of("google");
 
     private final ObjectMapper objectMapper;
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
-    ) throws IOException {
+    ) throws IOException, ServletException {
         String requestURI = request.getRequestURI();
 
         if (requestURI.contains(AUTHORIZE_URI)) {
@@ -50,10 +49,6 @@ public class OAuth2RegistrationValidateFilter extends OncePerRequestFilter {
             }
         }
 
-        try {
-            filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            handlerExceptionResolver.resolveException(request, response, null, e);
-        }
+        filterChain.doFilter(request, response);
     }
 }

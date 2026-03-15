@@ -9,10 +9,8 @@ import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDt
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
-import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.CommentWordNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.ForbiddenDeleteCommentException;
-import com.dnd.spaced.domain.comment.application.exception.ForbiddenLikeException;
 import com.dnd.spaced.domain.comment.application.exception.ForbiddenUpdateCommentException;
 import com.dnd.spaced.domain.comment.application.exception.UnauthorizedCommentException;
 import com.dnd.spaced.domain.comment.domain.Comment;
@@ -45,10 +43,8 @@ public class CommentService {
 
     @Transactional
     public void save(CreateCommentInfoDto dto) {
-        Account writer = accountRepository.findBy(dto.email())
-                                          .orElseThrow(UnauthorizedCommentException::new);
-        Word word = wordRepository.findBy(dto.wordId())
-                                  .orElseThrow(CommentWordNotFoundException::new);
+        Account writer = findAccount(dto.email());
+        Word word = findWord(dto.wordId());
         Comment comment = Comment.builder()
                                  .accountId(writer.getId())
                                  .wordId(word.getId())
@@ -61,10 +57,8 @@ public class CommentService {
 
     @Transactional
     public void update(UpdateCommentInfoDto dto) {
-        Account writer = accountRepository.findBy(dto.email())
-                                          .orElseThrow(UnauthorizedCommentException::new);
-        Comment comment = commentRepository.findBy(dto.commentId())
-                                           .orElseThrow(CommentWordNotFoundException::new);
+        Account writer = findAccount(dto.email());
+        Comment comment = findComment(dto.commentId());
 
         if (comment.isOwner(writer.getId())) {
             throw new ForbiddenUpdateCommentException();
@@ -75,10 +69,8 @@ public class CommentService {
 
     @Transactional
     public void delete(DeleteCommentInfoDto dto) {
-        Account writer = accountRepository.findBy(dto.email())
-                                          .orElseThrow(UnauthorizedCommentException::new);
-        Comment comment = commentRepository.findBy(dto.commentId())
-                                           .orElseThrow(CommentNotFoundException::new);
+        Account writer = findAccount(dto.email());
+        Comment comment = findComment(dto.commentId());
 
         if (comment.isOwner(writer.getId())) {
             throw new ForbiddenDeleteCommentException();
@@ -86,18 +78,15 @@ public class CommentService {
 
         commentRepository.delete(comment);
 
-        Word word = wordRepository.findBy(dto.wordId())
-                                  .orElseThrow(CommentWordNotFoundException::new);
+        Word word = findWord(dto.wordId());
 
         word.deleteComment();
     }
 
     @Transactional
     public void processLike(String email, Long commentId) {
-        Account account = accountRepository.findBy(email)
-                                           .orElseThrow(ForbiddenLikeException::new);
-        Comment comment = commentRepository.findBy(commentId)
-                                           .orElseThrow(CommentNotFoundException::new);
+        Account account = findAccount(email);
+        Comment comment = findComment(commentId);
 
         likeRepository.findBy(account.getId(), comment.getWordId())
                       .ifPresentOrElse(
@@ -141,5 +130,20 @@ public class CommentService {
         return accountRepository.findBy(email)
                                 .map(Account::getId)
                                 .orElse(UNAUTHORIZED_ACCOUNT_ID);
+    }
+
+    private Account findAccount(String email) {
+        return accountRepository.findBy(email)
+                                .orElseThrow(UnauthorizedCommentException::new);
+    }
+
+    private Word findWord(Long wordId) {
+        return wordRepository.findBy(wordId)
+                                  .orElseThrow(CommentWordNotFoundException::new);
+    }
+
+    private Comment findComment(Long commentId) {
+        return commentRepository.findBy(commentId)
+                                .orElseThrow(CommentWordNotFoundException::new);
     }
 }

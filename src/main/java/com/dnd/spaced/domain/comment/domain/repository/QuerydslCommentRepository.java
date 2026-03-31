@@ -9,7 +9,7 @@ import com.dnd.spaced.domain.comment.domain.Comment;
 import com.dnd.spaced.domain.comment.domain.repository.dto.request.CommentConditionDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.CommentInfoWithLikeDto;
 import com.dnd.spaced.domain.comment.domain.repository.dto.response.PopularCommentInfoDto;
-import com.dnd.spaced.domain.comment.domain.repository.exception.UnsupportedCommentSortConditionException;
+import com.dnd.spaced.domain.comment.domain.repository.util.CommentSortConditionConverter;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -66,8 +66,11 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .from(comment)
                            .join(account).on(comment.accountId.eq(account.id))
                            .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(dto.accountId()))
-                           .where(calculateFindAllBooleanExpressions(dto), comment.wordId.eq(dto.wordId()))
-                           .orderBy(calculateFindAllOrderSpecifiers(dto.pageable()).toArray(OrderSpecifier[]::new))
+                           .where(calculateFindAllBooleanExpression(dto), comment.wordId.eq(dto.wordId()))
+                           .orderBy(
+                                   CommentSortConditionConverter.convert(findOrder(dto.pageable()))
+                                                                 .toArray(OrderSpecifier[]::new)
+                           )
                            .limit(dto.pageable().getPageSize())
                            .fetch();
     }
@@ -96,31 +99,21 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .join(account).on(comment.accountId.eq(account.id))
                            .join(word).on(comment.wordId.eq(word.id))
                            .leftJoin(like).on(comment.id.eq(like.commentId), like.accountId.eq(accountId))
-                           .orderBy(calculateFindPopularAllOrderSpecifier(pageable))
+                           .orderBy(
+                                   CommentSortConditionConverter.convert(findOrder(pageable))
+                                                                .toArray(OrderSpecifier[]::new)
+                           )
                            .limit(pageable.getPageSize())
                            .fetch();
     }
 
-    private List<OrderSpecifier<?>> calculateFindAllOrderSpecifiers(Pageable pageable) {
-        Order order = findOrder(pageable);
-
-        if (LIKE_COUNT_SORT_CONDITION.equalsIgnoreCase(order.getProperty())) {
-            return List.of(comment.likeCount.desc(), comment.id.desc());
-        }
-        if (CREATED_AT_SORT_CONDITION.equalsIgnoreCase(order.getProperty())) {
-            if (order.isAscending()) {
-                return List.of(comment.id.asc());
-            }
-
-            return List.of(comment.id.desc());
-        }
-
-        throw new UnsupportedCommentSortConditionException();
-    }
-
-    private BooleanExpression calculateFindAllBooleanExpressions(CommentConditionDto dto) {
+    private BooleanExpression calculateFindAllBooleanExpression(CommentConditionDto dto) {
         Order order = findOrder(dto.pageable());
 
+        return calculateBooleanExpression(dto, order);
+    }
+
+    private BooleanExpression calculateBooleanExpression(CommentConditionDto dto, Order order) {
         if (order == null) {
             return null;
         }
@@ -128,19 +121,33 @@ public class QuerydslCommentRepository implements CommentRepository {
             return ltLastCommentId(dto.lastCommentId());
         }
 
-        String sortBy = order.getProperty();
+        return calculatePaginationBooleanExpression(dto, order);
+    }
 
-        if (CREATED_AT_SORT_CONDITION.equals(sortBy)) {
-            if (order.isAscending()) {
-                return gtLastCommentId(dto.lastCommentId());
-            }
-            return ltLastCommentId(dto.lastCommentId());
+    private BooleanExpression calculatePaginationBooleanExpression(CommentConditionDto dto, Order order) {
+        if (CREATED_AT_SORT_CONDITION.equals(order.getProperty())) {
+            return calculateLastCommentFirstPaginationBooleanExpression(dto, order);
         }
 
+        return calculateLastCommentAfterFirstPaginationBooleanExpression(dto);
+    }
+
+    private BooleanExpression calculateLastCommentAfterFirstPaginationBooleanExpression(CommentConditionDto dto) {
         return comment.likeCount.lt(dto.lastLikeCount())
                                 .or(comment.likeCount.eq(dto.lastLikeCount())
                                                      .and(ltLastCommentId(dto.lastCommentId()))
                                 );
+    }
+
+    private BooleanExpression calculateLastCommentFirstPaginationBooleanExpression(
+            CommentConditionDto dto,
+            Order order
+    ) {
+        if (order.isAscending()) {
+            return gtLastCommentId(dto.lastCommentId());
+        }
+
+        return ltLastCommentId(dto.lastCommentId());
     }
 
     private BooleanExpression ltLastCommentId(Long lastCommentId) {
@@ -157,16 +164,6 @@ public class QuerydslCommentRepository implements CommentRepository {
         }
 
         return comment.id.gt(lastCommentId);
-    }
-
-    private OrderSpecifier<?> calculateFindPopularAllOrderSpecifier(Pageable pageable) {
-        Order order = findOrder(pageable);
-
-        if (LIKE_COUNT_SORT_CONDITION.equalsIgnoreCase(order.getProperty())) {
-            return comment.likeCount.desc();
-        }
-
-        throw new UnsupportedCommentSortConditionException();
     }
 
     private Order findOrder(Pageable pageable) {

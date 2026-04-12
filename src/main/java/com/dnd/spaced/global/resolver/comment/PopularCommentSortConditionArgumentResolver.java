@@ -1,4 +1,4 @@
-package com.dnd.spaced.global.resolver.word;
+package com.dnd.spaced.global.resolver.comment;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
@@ -11,17 +11,16 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-public class WordSortConditionArgumentResolver implements HandlerMethodArgumentResolver {
+public class PopularCommentSortConditionArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final int IGNORED_PAGE = 0;
-    private static final int DEFAULT_SIZE = 15;
-    private static final String DEFAULT_SORT_BY = "name";
-    private static final Direction DEFAULT_DIRECTION = Direction.ASC;
+    private static final int DEFAULT_SIZE = 3;
+    private static final String DEFAULT_SORT_BY = "likeCount";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(WordSortCondition.class) && parameter.getParameterType()
-                                                                                     .equals(Pageable.class);
+        return parameter.hasParameterAnnotation(PopularCommentSortCondition.class) && parameter.getParameterType()
+                                                                                               .equals(Pageable.class);
     }
 
     @Override
@@ -32,6 +31,6 @@ public class WordSortConditionArgumentResolver implements HandlerMethodArgumentR
             WebDataBinderFactory binderFactory
     ) {
         return PageRequest.of(IGNORED_PAGE, DEFAULT_SIZE)
-                          .withSort(DEFAULT_DIRECTION, DEFAULT_SORT_BY);
+                          .withSort(Direction.DESC, DEFAULT_SORT_BY);
     }
 }

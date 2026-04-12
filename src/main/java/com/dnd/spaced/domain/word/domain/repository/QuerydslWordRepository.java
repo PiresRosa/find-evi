@@ -9,7 +9,7 @@ import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
-import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedCommentSortConditionException;
+import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedWordSortConditionException;
 import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -145,7 +145,7 @@ public class QuerydslWordRepository implements WordRepository {
         String sortCondition = order.getProperty();
 
         if (!SORT_CONDITION.equals(sortCondition)) {
-            throw new UnsupportedCommentSortConditionException();
+            throw new UnsupportedWordSortConditionException();
         }
 
         String sortOrder = order.getDirection().toString();

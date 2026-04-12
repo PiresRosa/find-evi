@@ -46,6 +46,8 @@ public class Word extends BaseTimeEntity {
 
     private int viewCount = 0;
 
+    private int commentCount = 0;
+
     @Builder
     private Word(
             String name,
@@ -65,6 +67,14 @@ public class Word extends BaseTimeEntity {
         this.meaning = meaning;
         this.category = Category.findBy(categoryName);
         this.example = example;
+    }
+
+    public void addComment() {
+        this.commentCount++;
+    }
+
+    public void deleteComment() {
+        this.commentCount--;
     }
 
     private void validateContent(String name, String meaning, String example) {

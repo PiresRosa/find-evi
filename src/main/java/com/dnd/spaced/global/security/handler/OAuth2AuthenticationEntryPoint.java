@@ -28,12 +28,12 @@ public class OAuth2AuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         PrintWriter writer = response.getWriter();
-        ExceptionResponse exceptioNResponse = new ExceptionResponse(
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
                 "UNAUTHORIZED",
                 "로그인이 필요한 기능입니다."
         );
 
-        writer.println(objectMapper.writeValueAsString(exceptioNResponse));
+        writer.println(objectMapper.writeValueAsString(exceptionResponse));
         writer.flush();
     }
 }

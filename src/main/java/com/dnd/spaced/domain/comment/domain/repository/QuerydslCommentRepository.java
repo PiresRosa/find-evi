@@ -107,6 +107,11 @@ public class QuerydslCommentRepository implements CommentRepository {
                            .fetch();
     }
 
+    @Override
+    public boolean existsBy(Long commentId) {
+        return commentCrudRepository.existsById(commentId);
+    }
+
     private BooleanExpression calculateFindAllBooleanExpression(CommentConditionDto dto) {
         Order order = findOrder(dto.pageable());
 

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -33,9 +34,24 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     private ResponseEntity<ExceptionDto> handleException(Exception ex) {
         logger.error(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
 
-        ExceptionDto exceptionDto = new ExceptionDto("INTERNAL_SERVER_ERROR", "예상치 못한 예외가 발생했습니다.");
+        ExceptionTranslator translator = ExceptionTranslator.find(ExceptionCode.INTERNAL_SERVER_ERROR);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(translator.translate());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingPathVariable(
+            MissingPathVariableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        logger.warn(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
+
+        ExceptionDto exceptionDto = new ExceptionDto("INVALID_PATH_VARIABLE", "path variable을 입력해주세요.");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(exceptionDto);
     }
 

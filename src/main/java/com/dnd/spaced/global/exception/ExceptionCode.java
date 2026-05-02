@@ -1,7 +1,9 @@
 package com.dnd.spaced.global.exception;
 
 public enum ExceptionCode {
+    INTERNAL_SERVER_ERROR,
     VALIDATION_ERROR,
+    INVALID_PATH_VARIABLE,
     INVALID_EMAIL,
     INVALID_NICKNAME,
     INVALID_PROFILE_IMAGE,

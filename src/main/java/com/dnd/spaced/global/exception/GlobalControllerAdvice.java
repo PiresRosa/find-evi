@@ -49,10 +49,10 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     ) {
         logger.warn(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
 
-        ExceptionDto exceptionDto = new ExceptionDto("INVALID_PATH_VARIABLE", "path variable을 입력해주세요.");
+        ExceptionTranslator translator = ExceptionTranslator.find(ExceptionCode.INVALID_PATH_VARIABLE);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(exceptionDto);
+                             .body(translator.translate());
     }
 
     @Override

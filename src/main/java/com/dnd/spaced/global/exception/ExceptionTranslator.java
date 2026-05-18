@@ -11,10 +11,20 @@ import org.springframework.validation.FieldError;
 
 @Getter
 public enum ExceptionTranslator {
+    EXCEPTION(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ExceptionCode.INTERNAL_SERVER_ERROR,
+            "예상치 못한 예외가 발생했습니다."
+    ),
     METHOD_ARGUMENT_NOT_VALID_EXCEPTION(
             HttpStatus.BAD_REQUEST,
             ExceptionCode.VALIDATION_ERROR,
             "유효한 파라미터 값을 입력해주세요."
+    ),
+    INVALID_PATH_VARIABLE_EXCEPTION(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_PATH_VARIABLE,
+            "유효한 path variable 값을 입력해주세요."
     ),
     INVALID_TOKEN_EXCEPTION(
             HttpStatus.UNAUTHORIZED,
@@ -130,6 +140,21 @@ public enum ExceptionTranslator {
             HttpStatus.BAD_REQUEST,
             ExceptionCode.INVALID_CONTENT,
             "댓글은 최소 1글자, 최대 100글자여야 합니다."
+    ),
+    INVALID_REASON_NAME(
+            HttpStatus.BAD_REQUEST,
+            ExceptionCode.INVALID_REASON_NAME,
+            "유효한 신고 사유를 입력해주세요."
+    ),
+    FORBIDDEN_REPORT_ACCOUNT_EXCEPTION(
+            HttpStatus.FORBIDDEN,
+            ExceptionCode.FORBIDDEN_REPORT_ACCOUNT,
+            "신고하기 위한 권한이 없습니다."
+    ),
+    REPORTED_COMMENT_NOT_FOUND_EXCEPTION(
+            HttpStatus.NOT_FOUND,
+            ExceptionCode.REPORTED_COMMENT_NOT_FOUND,
+            "신고 대상 댓글을 찾지 못했습니다."
     )
     ;
 

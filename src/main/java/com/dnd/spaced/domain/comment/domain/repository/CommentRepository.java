@@ -19,4 +19,6 @@ public interface CommentRepository {
     List<CommentInfoWithLikeDto> findAllBy(CommentConditionDto dto);
 
     List<PopularCommentInfoDto> findPopularAllBy(Pageable pageable, Long accountId);
+
+    boolean existsBy(Long commentId);
 }

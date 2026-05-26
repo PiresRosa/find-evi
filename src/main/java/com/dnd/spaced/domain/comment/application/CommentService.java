@@ -9,6 +9,7 @@ import com.dnd.spaced.domain.comment.application.dto.request.DeleteCommentInfoDt
 import com.dnd.spaced.domain.comment.application.dto.request.UpdateCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultipleCommentInfoDto;
 import com.dnd.spaced.domain.comment.application.dto.response.MultiplePopularCommentInfoDto;
+import com.dnd.spaced.domain.comment.application.exception.CommentNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.CommentWordNotFoundException;
 import com.dnd.spaced.domain.comment.application.exception.ForbiddenDeleteCommentException;
 import com.dnd.spaced.domain.comment.application.exception.ForbiddenUpdateCommentException;
@@ -144,6 +145,6 @@ public class CommentService {
 
     private Comment findComment(Long commentId) {
         return commentRepository.findBy(commentId)
-                                .orElseThrow(CommentWordNotFoundException::new);
+                                .orElseThrow(CommentNotFoundException::new);
     }
 }

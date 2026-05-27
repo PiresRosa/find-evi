@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class CommentController {
+public class CommentController implements SwaggerCommentController {
 
     private final UrlProperties urlProperties;
     private final CommentService commentService;

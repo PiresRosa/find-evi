@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
 
-        if (authentication instanceof AnonymousAuthenticationToken) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             store.set(new AuthAccountInfo(null));
             return true;
         }

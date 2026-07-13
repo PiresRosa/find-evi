@@ -1,5 +1,6 @@
 package com.dnd.spaced.global.config;
 
+import com.dnd.spaced.global.config.properties.ImageStorePathProperties;
 import com.dnd.spaced.global.config.properties.UrlProperties;
 import com.dnd.spaced.global.interceptor.AuthInterceptor;
 import com.dnd.spaced.global.resolver.auth.AuthAccountInfoArgumentResolver;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(UrlProperties.class)
+@EnableConfigurationProperties(value = {UrlProperties.class, ImageStorePathProperties.class})
 public class AppConfig implements WebMvcConfigurer {
 
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";

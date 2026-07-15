@@ -1,6 +1,7 @@
 package com.dnd.spaced.global.exception;
 
 import com.dnd.spaced.global.exception.dto.ExceptionDto;
+import java.net.MalformedURLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -38,6 +39,16 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(translator.translate());
+    }
+
+    @ExceptionHandler(MalformedURLException.class)
+    private ResponseEntity<ExceptionDto> handleMalformedURLException(MalformedURLException ex) {
+        logger.warn(String.format(LOG_FORMAT, ex.getClass().getSimpleName()), ex);
+
+        ExceptionDto exceptionDto = new ExceptionDto("IMAGE_ERROR", "이미지 조회 과정 중 문제가 발생했습니다.");
+
+        return ResponseEntity.badRequest()
+                             .body(exceptionDto);
     }
 
     @Override

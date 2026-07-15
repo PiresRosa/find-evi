@@ -76,6 +76,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/refresh-token").permitAll()
                     .requestMatchers(HttpMethod.GET, "/comments/popular").permitAll()
                     .requestMatchers(HttpMethod.GET, "/words/{wordId}/comments").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/images/{name}").permitAll()
                     .requestMatchers(HttpMethod.GET, "/learnings/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/learnings/**").permitAll()
                     .anyRequest().authenticated()

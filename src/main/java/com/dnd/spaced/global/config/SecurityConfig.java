@@ -77,6 +77,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/comments/popular").permitAll()
                     .requestMatchers(HttpMethod.GET, "/words/{wordId}/comments").permitAll()
                     .requestMatchers(HttpMethod.GET, "/images/{name}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/learnings/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/learnings/**").permitAll()
                     .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))

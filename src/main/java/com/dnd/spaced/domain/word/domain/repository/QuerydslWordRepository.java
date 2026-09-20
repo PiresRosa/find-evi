@@ -9,15 +9,19 @@ import com.dnd.spaced.domain.word.domain.repository.dto.WordRepositoryMapper;
 import com.dnd.spaced.domain.word.domain.repository.dto.request.WordConditionDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordCandidateDto;
 import com.dnd.spaced.domain.word.domain.repository.dto.response.WordInfoWithBookmarkDto;
+import com.dnd.spaced.domain.word.domain.repository.dto.response.WordSearchDto;
 import com.dnd.spaced.domain.word.domain.repository.exception.UnsupportedWordSortConditionException;
+import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.global.repository.OrderByNull;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import org.springframework.data.domain.PageImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -120,6 +124,47 @@ public class QuerydslWordRepository implements WordRepository {
                     .execute();
     }
 
+    @Override
+    public Page<WordSearchDto> searchWords(WordSearchRequest request) {
+        List<WordSearchDto> result = queryFactory
+                .select(
+                        Projections.constructor(
+                                WordSearchDto.class,
+                                word.id,
+                                word.name,
+                                word.pronunciation.korean,
+                                word.pronunciation.english,
+                                word.meaning,
+                                word.category,
+                                word.viewCount,
+                                word.commentCount
+                        )
+                )
+                .from(word)
+                .leftJoin(bookmark).on(word.id.eq(bookmark.wordId))
+                .where(
+                        nameContains(request.name()),
+                        pronunciationContains(request.pronunciation()),
+                        categoryEq(request.category())
+                )
+                .orderBy(word.name.asc())
+                .offset(request.pageable().getOffset())
+                .limit(request.pageable().getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(word.count())
+                .from(word)
+                .where(
+                        nameContains(request.name()),
+                        pronunciationContains(request.pronunciation()),
+                        categoryEq(request.category())
+                )
+                .fetchOne();
+
+        return new PageImpl<>(result, request.pageable(), total);
+    }
+
     private BooleanExpression eqCategory(String categoryName) {
         if (IGNORE_CATEGORY.equals(categoryName)) {
             return null;
@@ -162,5 +207,21 @@ public class QuerydslWordRepository implements WordRepository {
                        .get()
                        .findAny()
                        .orElse(null);
+    }
+
+    private BooleanExpression nameContains(String name) {
+        if (name == null) return null;
+        return word.name.containsIgnoreCase(name);
+    }
+
+    private BooleanExpression pronunciationContains(String pronunciation) {
+        if (pronunciation == null) return null;
+        return word.pronunciation.korean.containsIgnoreCase(pronunciation)
+                .or(word.pronunciation.english.containsIgnoreCase(pronunciation));
+    }
+
+    private BooleanExpression categoryEq(String category) {
+        if ("전체".equals(category)) return null;
+        return word.category.eq(Category.findBy(category));
     }
 }

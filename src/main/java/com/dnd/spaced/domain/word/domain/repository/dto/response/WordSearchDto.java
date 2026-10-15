@@ -1,12 +1,15 @@
 package com.dnd.spaced.domain.word.domain.repository.dto.response;
 
+import com.dnd.spaced.domain.word.domain.Category;
+import com.dnd.spaced.domain.word.domain.Pronunciation;
+
 public record WordSearchDto(
         Long id,
         String name,
-        Pronunciation pronunciationInfo,
+        Pronunciation pronunciation,
         String meaning,
-        String category,
-        Long viewCount,
-        Long commentCount,
-        Boolean isMarked
+        Category category,
+        Integer viewCount,
+        Integer commentCount,
+        Boolean isBookmarked
 ) {}

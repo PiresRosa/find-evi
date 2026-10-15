@@ -137,12 +137,12 @@ public class QuerydslWordRepository implements WordRepository {
                                 WordSearchDto.class,
                                 word.id,
                                 word.name,
-                                word.pronunciation.korean,
-                                word.pronunciation.english,
+                                word.pronunciation,
                                 word.meaning,
                                 word.category,
                                 word.viewCount,
-                                word.commentCount
+                                word.commentCount,
+                                bookmark.id.isNotNull()
                         )
                 )
                 .from(word)
@@ -160,6 +160,7 @@ public class QuerydslWordRepository implements WordRepository {
         long total = queryFactory
                 .select(word.count())
                 .from(word)
+                .leftJoin(bookmark).on(word.id.eq(bookmark.wordId))
                 .where(
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),

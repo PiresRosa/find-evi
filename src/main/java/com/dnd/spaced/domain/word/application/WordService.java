@@ -44,7 +44,11 @@ public class WordService {
 
     public List<MultipleWordInfoDto> findAllBy(WordConditionInfoDto dto) {
         Long accountId = findAccountId(dto.email());
-        WordConditionDto wordConditionDto = WordRepositoryMapper.to(dto.categoryName(), dto.lastWordName(), dto.pageable());
+        WordConditionDto wordConditionDto = WordRepositoryMapper.to(
+                dto.categoryName(),
+                dto.lastWordName(),
+                dto.pageable()
+        );
         List<WordInfoWithBookmarkDto> result = wordRepository.findAllBy(wordConditionDto, accountId);
 
         return WordServiceMapper.to(result);

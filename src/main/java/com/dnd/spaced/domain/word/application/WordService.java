@@ -82,15 +82,7 @@ public class WordService {
 
     public WordSearchResponse search(WordSearchRequest request) {
         Page<WordSearchDto> resultPage = wordRepository.searchWords(request);
-        validateSearchResults(resultPage);
-
         return WordServiceMapper.to(resultPage);
-    }
-
-    private void validateSearchResults(Page<WordSearchDto> resultPage) {
-        if (resultPage.getTotalElements() == 0) {
-            throw new WordNotFoundException();
-        }
     }
 
     private Long findAccountId(String email) {

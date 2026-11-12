@@ -86,6 +86,8 @@ public class WordService {
     }
 
     private Long findAccountId(String email) {
-        return accountRepository.findBy(email).map(Account::getId).orElse(UNAUTHORIZED_ACCOUNT_ID);
+        return accountRepository.findBy(email)
+                .map(Account::getId)
+                .orElse(UNAUTHORIZED_ACCOUNT_ID);
     }
 }

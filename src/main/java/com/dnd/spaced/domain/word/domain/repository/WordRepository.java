@@ -23,5 +23,5 @@ public interface WordRepository {
 
     void updateViewCount(Long wordId);
 
-    Page<WordSearchDto> searchWords(WordSearchRequest request);
+    Page<WordSearchDto> searchWords(WordSearchRequest request, Long accountId);
 }

@@ -130,7 +130,7 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public Page<WordSearchDto> searchWords(WordSearchRequest request) {
+    public Page<WordSearchDto> searchWords(WordSearchRequest request, Long accountId) {
         List<WordSearchDto> result = queryFactory
                 .select(
                         Projections.constructor(
@@ -146,7 +146,9 @@ public class QuerydslWordRepository implements WordRepository {
                         )
                 )
                 .from(word)
-                .leftJoin(bookmark).on(word.id.eq(bookmark.wordId))
+                .leftJoin(bookmark).on(
+                        word.id.eq(bookmark.wordId).and(bookmark.accountId.eq(accountId))
+                )
                 .where(
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),
@@ -160,7 +162,9 @@ public class QuerydslWordRepository implements WordRepository {
         long total = queryFactory
                 .select(word.count())
                 .from(word)
-                .leftJoin(bookmark).on(word.id.eq(bookmark.wordId))
+                .leftJoin(bookmark).on(
+                        word.id.eq(bookmark.wordId).and(bookmark.accountId.eq(accountId))
+                )
                 .where(
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),

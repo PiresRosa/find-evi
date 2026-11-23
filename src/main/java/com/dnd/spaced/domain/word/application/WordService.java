@@ -80,8 +80,9 @@ public class WordService {
         return WordServiceMapper.from(result);
     }
 
-    public WordSearchResponse search(WordSearchRequest request) {
-        Page<WordSearchDto> resultPage = wordRepository.searchWords(request);
+    public WordSearchResponse search(WordSearchRequest request, String email) {
+        Long accountId = findAccountId(email);
+        Page<WordSearchDto> resultPage = wordRepository.searchWords(request, accountId);
         return WordServiceMapper.to(resultPage);
     }
 

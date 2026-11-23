@@ -82,9 +82,10 @@ public class WordController {
             @RequestParam(required = false) String pronunciation,
             @RequestParam(required = false) String lastWordName,
             @RequestParam(defaultValue = "전체") String category,
-            Pageable pageable
+            Pageable pageable,
+            @AuthAccount AuthAccountInfo accountInfo
     ) {
         WordSearchRequest request = new WordSearchRequest(name, pronunciation, lastWordName, category, pageable);
-        return ResponseEntity.ok(wordService.search(request));
+        return ResponseEntity.ok(wordService.search(request, accountInfo.email()));
     }
 }

@@ -220,7 +220,9 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     private BooleanExpression nameContains(String name) {
-        if (name == null) return null;
+        if (name == null) {
+              return null;
+        }
         return word.name.containsIgnoreCase(name);
     }
 

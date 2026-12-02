@@ -45,4 +45,8 @@ public final class WordServiceMapper {
     public static WordSearchResponse to(Page<WordSearchDto> page) {
         return new WordSearchResponse(page.getContent(), page.getTotalElements());
     }
+
+    public static WordSearchResponse search(List<WordSearchDto> wordSearchDtos) {
+        return new WordSearchResponse(wordSearchDtos, wordSearchDtos.size());
+    }
 }

@@ -21,12 +21,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
 
-import org.springframework.data.domain.PageImpl;
-
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -130,8 +127,8 @@ public class QuerydslWordRepository implements WordRepository {
     }
 
     @Override
-    public Page<WordSearchDto> searchWords(WordSearchRequest request, Long accountId) {
-        List<WordSearchDto> result = queryFactory
+    public List<WordSearchDto> searchWords(WordSearchRequest request, Long accountId) {
+        return queryFactory
                 .select(
                         Projections.constructor(
                                 WordSearchDto.class,
@@ -152,27 +149,12 @@ public class QuerydslWordRepository implements WordRepository {
                 .where(
                         nameContains(request.name()),
                         pronunciationContains(request.pronunciation()),
-                        categoryEq(request.category())
+                        categoryEq(request.category()),
+                        ltLastWordName(request.lastWordName())
                 )
                 .orderBy(word.name.asc())
-                .offset(request.pageable().getOffset())
                 .limit(request.pageable().getPageSize())
                 .fetch();
-
-        long total = queryFactory
-                .select(word.count())
-                .from(word)
-                .leftJoin(bookmark).on(
-                        word.id.eq(bookmark.wordId).and(bookmark.accountId.eq(accountId))
-                )
-                .where(
-                        nameContains(request.name()),
-                        pronunciationContains(request.pronunciation()),
-                        categoryEq(request.category())
-                )
-                .fetchOne();
-
-        return new PageImpl<>(result, request.pageable(), total);
     }
 
     private BooleanExpression eqCategory(String categoryName) {

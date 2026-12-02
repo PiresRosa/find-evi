@@ -26,7 +26,6 @@ import com.dnd.spaced.domain.word.presentation.dto.request.WordSearchRequest;
 import com.dnd.spaced.domain.word.presentation.dto.response.WordSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,8 +81,8 @@ public class WordService {
 
     public WordSearchResponse search(WordSearchRequest request, String email) {
         Long accountId = findAccountId(email);
-        Page<WordSearchDto> resultPage = wordRepository.searchWords(request, accountId);
-        return WordServiceMapper.to(resultPage);
+        List<WordSearchDto> results = wordRepository.searchWords(request, accountId);
+        return WordServiceMapper.search(results);
     }
 
     private Long findAccountId(String email) {
